@@ -1,0 +1,12 @@
+name = "bloomie-house"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Asset configuration for serving static files like images
+[assets]
+# If you have a public directory with your logo
+# directory = "./public"
+
+# Or configure workers site if you have assets
+# [site]
+# bucket = "./public"
