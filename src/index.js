@@ -21,6 +21,7 @@ export default {
   <url><loc>https://bloomiehouse.com.au/website-design</loc><priority>0.8</priority></url>
   <url><loc>https://bloomiehouse.com.au/digital-templates</loc><priority>0.8</priority></url>
   <url><loc>https://bloomiehouse.com.au/contact</loc><priority>0.6</priority></url>
+  <url><loc>https://bloomiehouse.com.au/full-custom</loc><priority>0.7</priority></url>
 </urlset>`, { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' } });
 
       case '/website-design':
@@ -32,9 +33,12 @@ export default {
       case '/contact':
         return htmlResponse(contactPage);
 
+      case '/full-custom':
+        return htmlResponse(fullCustomPage);
+
       case '/favicon.ico':
       case '/favicon.png':
-        return Response.redirect('https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png', 301);
+        return Response.redirect('https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png', 301);
 
       case '/logo-long-house-green-background-transparent.png':
         try {
@@ -75,11 +79,11 @@ const homepage = `<!DOCTYPE html>
   <meta name="keywords" content="website templates, Wix templates, Shopify themes, small business website, cafe website template, beauty salon website, Australian web design">
   <meta property="og:title" content="Bloomie House — Website Templates for Brands That Mean Business">
   <meta property="og:description" content="Premium Wix Studio & Shopify templates for Australian small businesses. Ready to launch in 24 hours.">
-  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <meta property="og:url" content="https://bloomiehouse.com.au">
   <meta name="twitter:card" content="summary">
-  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
-  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <link rel="canonical" href="https://bloomiehouse.com.au">
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -750,7 +754,7 @@ const homepage = `<!DOCTYPE html>
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
-    <img src="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png" alt="Bloomie House">
+    <img src="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png" alt="Bloomie House">
   </a>
   <ul class="nav-center">
     <li><a href="#shop">Templates</a></li>
@@ -1038,7 +1042,7 @@ const homepage = `<!DOCTYPE html>
         <li>30 days post-launch support</li>
       </ul>
       <div class="service-price">From $897 <span>AUD</span></div>
-      <a href="mailto:hello@bloomiehouse.com.au" class="btn-service outline">Let's Chat</a>
+      <a href="/full-custom" class="btn-service outline">Let's Chat</a>
     </div>
   </div>
 </div>
@@ -1137,7 +1141,7 @@ const homepage = `<!DOCTYPE html>
 <footer>
   <div class="footer-grid">
     <div>
-      <img src="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png" alt="Bloomie House" style="height:56px;width:auto;margin-bottom:12px;display:block;">
+      <img src="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png" alt="Bloomie House" style="height:56px;width:auto;margin-bottom:12px;display:block;">
       <p class="footer-about">Bloomie House is a boutique web design studio based in Hobart, Australia. No brand is too new. No business is too small. We build for founders ready to show up — and ship worldwide.</p>
       <a href="mailto:hello@bloomiehouse.com.au" class="footer-email">hello@bloomiehouse.com.au</a>
     </div>
@@ -1346,15 +1350,15 @@ const websiteDesignPage = `<!DOCTYPE html>
   <meta name="keywords" content="website design Australia, custom website Hobart, Wix Studio designer, Shopify designer, small business website design, one day website, web design Tasmania">
   <meta property="og:title" content="Website Design — Bloomie House">
   <meta property="og:description" content="Custom website design for Australian small businesses. Done-for-you Wix Studio & Shopify setup. Live in 24 hours from $397.">
-  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <meta property="og:url" content="https://bloomiehouse.com.au/website-design">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Website Design — Bloomie House">
   <meta name="twitter:description" content="Custom website design for Australian small businesses. Done-for-you Wix Studio & Shopify setup. Live in 24 hours from $397.">
   <link rel="canonical" href="https://bloomiehouse.com.au/website-design">
-  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
-  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
@@ -1407,15 +1411,15 @@ const digitalTemplatesPage = `<!DOCTYPE html>
   <meta name="keywords" content="digital templates Australia, Wix templates, Shopify themes, Canva templates, branding kit, small business templates, website templates download, Australian digital products">
   <meta property="og:title" content="Digital Templates — Bloomie House">
   <meta property="og:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. Buy, personalise, launch — this week. From $79 AUD.">
-  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <meta property="og:url" content="https://bloomiehouse.com.au/digital-templates">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Digital Templates — Bloomie House">
   <meta name="twitter:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. From $79 AUD.">
   <link rel="canonical" href="https://bloomiehouse.com.au/digital-templates">
-  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
-  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
@@ -1467,15 +1471,15 @@ const contactPage = `<!DOCTYPE html>
   <meta name="keywords" content="contact Bloomie House, web design enquiry, website design Hobart, book website designer, Australian web design studio">
   <meta property="og:title" content="Contact Us — Bloomie House">
   <meta property="og:description" content="Chat with the Bloomie House team about your website project. Custom design, template setup & more. Based in Hobart, Australia.">
-  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <meta property="og:url" content="https://bloomiehouse.com.au/contact">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Contact Us — Bloomie House">
   <meta name="twitter:description" content="Chat with the Bloomie House team about your website project. Based in Hobart, Australia.">
   <link rel="canonical" href="https://bloomiehouse.com.au/contact">
-  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
-  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
@@ -1544,5 +1548,59 @@ const contactPage = `<!DOCTYPE html>
       setTimeout(() => { formMessage.style.display = 'none'; }, 5000);
     }
   <\/script>
+</body>
+</html>`;
+
+const fullCustomPage = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Custom Website Build — Bloomie House</title>
+  <meta name="description" content="Get a fully custom website built from scratch by Bloomie House. Up to 6 pages, brand strategy session, SEO foundation & 30 days support. From $897 AUD.">
+  <meta name="keywords" content="custom website build Australia, bespoke web design, custom Wix website, custom Shopify store, web design Hobart, full custom website">
+  <meta property="og:title" content="Full Custom Website Build — Bloomie House">
+  <meta property="og:description" content="A fully custom website built from scratch for your brand. Up to 6 pages, brand strategy session, SEO setup & 30 days support. From $897 AUD.">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au/full-custom">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Full Custom Website Build — Bloomie House">
+  <meta name="twitter:description" content="A fully custom website built from scratch for your brand. From $897 AUD.">
+  <link rel="canonical" href="https://bloomiehouse.com.au/full-custom">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    ${sharedStyles}
+    .page-hero { text-align: center; padding: 10rem 2rem 3rem; }
+    .page-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--primary); margin-bottom: 1.5rem; }
+    .page-hero p { font-size: 1.2rem; color: var(--text-light); max-width: 700px; margin: 0 auto; line-height: 1.8; }
+    .includes-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 900px; margin: 3rem auto; padding: 0 2rem; }
+    .include-item { text-align: center; padding: 1.5rem; }
+    .include-icon { font-size: 2rem; color: var(--sage); margin-bottom: 1rem; }
+    .include-item h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .include-item p { color: var(--text-light); font-size: 0.95rem; }
+    .form-wrapper { background: white; border: 1px solid var(--mid); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.05); max-width: 900px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  ${sharedHeader}
+  <section class="page-hero">
+    <h1>Full Custom Build</h1>
+    <p>Built from scratch for your brand — your vision, your voice, no template limits. Tell us about your project below and we'll be in touch.</p>
+  </section>
+  <section class="section" style="min-height:auto; padding-top: 0;">
+    <div class="includes-list">
+      <div class="include-item"><div class="include-icon">🎨</div><h4>Custom Design</h4><p>Unique layouts tailored to your brand identity</p></div>
+      <div class="include-item"><div class="include-icon">📄</div><h4>Up to 6 Pages</h4><p>Home, About, Services, Portfolio, Blog & more</p></div>
+      <div class="include-item"><div class="include-icon">🔍</div><h4>SEO Foundation</h4><p>Built-in structure to help you rank on Google</p></div>
+      <div class="include-item"><div class="include-icon">💬</div><h4>30 Days Support</h4><p>Post-launch help so you're never left stranded</p></div>
+    </div>
+    <div class="form-wrapper">
+      <script type="text/javascript" src="https://form.jotform.com/jsform/253192865445869"><\/script>
+    </div>
+  </section>
+  ${sharedFooter}
 </body>
 </html>`;
