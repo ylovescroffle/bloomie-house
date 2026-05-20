@@ -32,6 +32,10 @@ export default {
       case '/contact':
         return htmlResponse(contactPage);
 
+      case '/favicon.ico':
+      case '/favicon.png':
+        return Response.redirect('https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png', 301);
+
       case '/logo-long-house-green-background-transparent.png':
         try {
           const logoResponse = await fetch(new URL('/logo-long-house-green-background-transparent.png', request.url).href);
@@ -1338,6 +1342,19 @@ const websiteDesignPage = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Website Design — Bloomie House</title>
+  <meta name="description" content="Custom website design services for Australian small businesses. One Day Website setup from $397. Wix Studio & Shopify specialists based in Hobart, Tasmania.">
+  <meta name="keywords" content="website design Australia, custom website Hobart, Wix Studio designer, Shopify designer, small business website design, one day website, web design Tasmania">
+  <meta property="og:title" content="Website Design — Bloomie House">
+  <meta property="og:description" content="Custom website design for Australian small businesses. Done-for-you Wix Studio & Shopify setup. Live in 24 hours from $397.">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au/website-design">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Website Design — Bloomie House">
+  <meta name="twitter:description" content="Custom website design for Australian small businesses. Done-for-you Wix Studio & Shopify setup. Live in 24 hours from $397.">
+  <link rel="canonical" href="https://bloomiehouse.com.au/website-design">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
@@ -1386,6 +1403,19 @@ const digitalTemplatesPage = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Templates — Bloomie House</title>
+  <meta name="description" content="Instant-download digital templates for Australian small businesses. Wix Studio & Shopify website templates, Canva kits, and branding packs. Templates from $79 AUD.">
+  <meta name="keywords" content="digital templates Australia, Wix templates, Shopify themes, Canva templates, branding kit, small business templates, website templates download, Australian digital products">
+  <meta property="og:title" content="Digital Templates — Bloomie House">
+  <meta property="og:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. Buy, personalise, launch — this week. From $79 AUD.">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au/digital-templates">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Digital Templates — Bloomie House">
+  <meta name="twitter:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. From $79 AUD.">
+  <link rel="canonical" href="https://bloomiehouse.com.au/digital-templates">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
@@ -1433,6 +1463,19 @@ const contactPage = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us — Bloomie House</title>
+  <meta name="description" content="Get in touch with Bloomie House. Chat with us about custom website design, template setup, or any project. Based in Hobart, Australia — serving founders worldwide.">
+  <meta name="keywords" content="contact Bloomie House, web design enquiry, website design Hobart, book website designer, Australian web design studio">
+  <meta property="og:title" content="Contact Us — Bloomie House">
+  <meta property="og:description" content="Chat with the Bloomie House team about your website project. Custom design, template setup & more. Based in Hobart, Australia.">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au/contact">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Contact Us — Bloomie House">
+  <meta name="twitter:description" content="Chat with the Bloomie House team about your website project. Based in Hobart, Australia.">
+  <link rel="canonical" href="https://bloomiehouse.com.au/contact">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
