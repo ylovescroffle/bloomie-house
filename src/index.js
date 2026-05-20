@@ -122,14 +122,15 @@ const homepage = `<!DOCTYPE html>
       height: 64px;
     }
     .nav-logo {
-      font-family: 'Fraunces', serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--black);
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      letter-spacing: -0.01em;
     }
-    .nav-logo span { color: var(--terracotta); }
+    .nav-logo img {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
     .nav-center {
       display: flex;
       gap: 32px;
@@ -724,7 +725,9 @@ const homepage = `<!DOCTYPE html>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">bloomie<span>.</span>house</a>
+  <a href="#" class="nav-logo">
+    <img src="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png" alt="Bloomie House">
+  </a>
   <ul class="nav-center">
     <li><a href="#shop">Templates</a></li>
     <li><a href="#services">Services</a></li>
@@ -1110,7 +1113,7 @@ const homepage = `<!DOCTYPE html>
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-brand-name">bloomie<span>.</span>house</div>
+      <img src="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png" alt="Bloomie House" style="height:56px;width:auto;margin-bottom:12px;display:block;">
       <p class="footer-about">Bloomie House is a boutique web design studio based in Hobart, Australia. No brand is too new. No business is too small. We build for founders ready to show up — and ship worldwide.</p>
       <a href="mailto:hello@bloomiehouse.com.au" class="footer-email">hello@bloomiehouse.com.au</a>
     </div>
