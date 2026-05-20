@@ -14,6 +14,15 @@ export default {
       case '':
         return htmlResponse(homepage);
 
+      case '/sitemap.xml':
+        return new Response(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://bloomiehouse.com.au/</loc><priority>1.0</priority></url>
+  <url><loc>https://bloomiehouse.com.au/website-design</loc><priority>0.8</priority></url>
+  <url><loc>https://bloomiehouse.com.au/digital-templates</loc><priority>0.8</priority></url>
+  <url><loc>https://bloomiehouse.com.au/contact</loc><priority>0.6</priority></url>
+</urlset>`, { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' } });
+
       case '/website-design':
         return htmlResponse(websiteDesignPage);
 
@@ -58,6 +67,17 @@ const homepage = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bloomie House — Website Templates for Brands That Mean Business</title>
+  <meta name="description" content="Premium Wix Studio & Shopify website templates for cafes, beauty studios, tradies, boutiques & more. Buy, personalise, launch — this week. Based in Hobart, Australia.">
+  <meta name="keywords" content="website templates, Wix templates, Shopify themes, small business website, cafe website template, beauty salon website, Australian web design">
+  <meta property="og:title" content="Bloomie House — Website Templates for Brands That Mean Business">
+  <meta property="og:description" content="Premium Wix Studio & Shopify templates for Australian small businesses. Ready to launch in 24 hours.">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="canonical" href="https://bloomiehouse.com.au">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
