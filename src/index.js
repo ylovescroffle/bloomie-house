@@ -21,6 +21,7 @@ export default {
   <url><loc>https://bloomiehouse.com.au/website-design</loc><priority>0.8</priority></url>
   <url><loc>https://bloomiehouse.com.au/digital-templates</loc><priority>0.8</priority></url>
   <url><loc>https://bloomiehouse.com.au/contact</loc><priority>0.6</priority></url>
+  <url><loc>https://bloomiehouse.com.au/full-custom</loc><priority>0.7</priority></url>
 </urlset>`, { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' } });
 
       case '/website-design':
@@ -31,6 +32,9 @@ export default {
 
       case '/contact':
         return htmlResponse(contactPage);
+
+      case '/full-custom':
+        return htmlResponse(fullCustomPage);
 
       case '/favicon.ico':
       case '/favicon.png':
@@ -1038,7 +1042,7 @@ const homepage = `<!DOCTYPE html>
         <li>30 days post-launch support</li>
       </ul>
       <div class="service-price">From $897 <span>AUD</span></div>
-      <a href="https://form.jotform.com/haiyen0304/website-design-discovery" target="_blank" rel="noopener" class="btn-service outline">Let's Chat</a>
+      <a href="/full-custom" class="btn-service outline">Let's Chat</a>
     </div>
   </div>
 </div>
@@ -1544,5 +1548,59 @@ const contactPage = `<!DOCTYPE html>
       setTimeout(() => { formMessage.style.display = 'none'; }, 5000);
     }
   <\/script>
+</body>
+</html>`;
+
+const fullCustomPage = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Custom Website Build — Bloomie House</title>
+  <meta name="description" content="Get a fully custom website built from scratch by Bloomie House. Up to 6 pages, brand strategy session, SEO foundation & 30 days support. From $897 AUD.">
+  <meta name="keywords" content="custom website build Australia, bespoke web design, custom Wix website, custom Shopify store, web design Hobart, full custom website">
+  <meta property="og:title" content="Full Custom Website Build — Bloomie House">
+  <meta property="og:description" content="A fully custom website built from scratch for your brand. Up to 6 pages, brand strategy session, SEO setup & 30 days support. From $897 AUD.">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au/full-custom">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Full Custom Website Build — Bloomie House">
+  <meta name="twitter:description" content="A fully custom website built from scratch for your brand. From $897 AUD.">
+  <link rel="canonical" href="https://bloomiehouse.com.au/full-custom">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    ${sharedStyles}
+    .page-hero { text-align: center; padding: 10rem 2rem 3rem; }
+    .page-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--primary); margin-bottom: 1.5rem; }
+    .page-hero p { font-size: 1.2rem; color: var(--text-light); max-width: 700px; margin: 0 auto; line-height: 1.8; }
+    .includes-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 900px; margin: 3rem auto; padding: 0 2rem; }
+    .include-item { text-align: center; padding: 1.5rem; }
+    .include-icon { font-size: 2rem; color: var(--sage); margin-bottom: 1rem; }
+    .include-item h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .include-item p { color: var(--text-light); font-size: 0.95rem; }
+    .form-wrapper { background: white; border: 1px solid var(--mid); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.05); max-width: 900px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  ${sharedHeader}
+  <section class="page-hero">
+    <h1>Full Custom Build</h1>
+    <p>Built from scratch for your brand — your vision, your voice, no template limits. Tell us about your project below and we'll be in touch.</p>
+  </section>
+  <section class="section" style="min-height:auto; padding-top: 0;">
+    <div class="includes-list">
+      <div class="include-item"><div class="include-icon">🎨</div><h4>Custom Design</h4><p>Unique layouts tailored to your brand identity</p></div>
+      <div class="include-item"><div class="include-icon">📄</div><h4>Up to 6 Pages</h4><p>Home, About, Services, Portfolio, Blog & more</p></div>
+      <div class="include-item"><div class="include-icon">🔍</div><h4>SEO Foundation</h4><p>Built-in structure to help you rank on Google</p></div>
+      <div class="include-item"><div class="include-icon">💬</div><h4>30 Days Support</h4><p>Post-launch help so you're never left stranded</p></div>
+    </div>
+    <div class="form-wrapper">
+      <script type="text/javascript" src="https://form.jotform.com/jsform/253192865445869"><\/script>
+    </div>
+  </section>
+  ${sharedFooter}
 </body>
 </html>`;
