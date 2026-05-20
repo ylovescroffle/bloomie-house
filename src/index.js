@@ -32,6 +32,10 @@ export default {
       case '/contact':
         return htmlResponse(contactPage);
 
+      case '/favicon.ico':
+      case '/favicon.png':
+        return Response.redirect('https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png', 301);
+
       case '/logo-long-house-green-background-transparent.png':
         try {
           const logoResponse = await fetch(new URL('/logo-long-house-green-background-transparent.png', request.url).href);
@@ -1338,6 +1342,8 @@ const websiteDesignPage = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Website Design — Bloomie House</title>
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
@@ -1386,6 +1392,8 @@ const digitalTemplatesPage = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Templates — Bloomie House</title>
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
@@ -1433,6 +1441,8 @@ const contactPage = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us — Bloomie House</title>
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     ${sharedStyles}
