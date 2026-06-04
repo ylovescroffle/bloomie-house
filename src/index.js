@@ -1335,7 +1335,7 @@ const sharedHeader = `
 <header class="header">
   <div class="logo">
     <a href="/">
-      <img src="/logo-long-house-green-background-transparent.png" alt="Bloomie House">
+      <img src="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-long-house-green-background-transparent.png" alt="Bloomie House">
     </a>
   </div>
   <nav>
