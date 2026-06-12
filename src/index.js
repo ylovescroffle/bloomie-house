@@ -1617,6 +1617,24 @@ const fullCustomPage = `<!DOCTYPE html>
 // ── TEMPLATES DATA ──
 const templateData = [
   {
+    slug: 'coaching-service',
+    name: 'Coaching Service',
+    niche: 'Coaching & Consulting',
+    platform: 'Canva',
+    badge: 'New',
+    price: 37,
+    originalPrice: null,
+    mockClass: 'mock-coaching',
+    images: [
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-1.png',
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-2.png',
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-3.png',
+    ],
+    description: 'A clean, high-converting landing page template for coaches, consultants, and service providers. Built in Canva — fully editable, no design skills needed. Ready to publish in under an hour.',
+    features: ['Fully editable in Canva', 'High-converting layout', 'Service & pricing sections', 'Testimonials block', 'Call-to-action sections', 'Mobile-friendly design'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
     slug: 'the-brew',
     name: 'The Brew',
     niche: 'Cafe & Coffee Shop',
@@ -1821,10 +1839,10 @@ const templatesPage = `<!DOCTYPE html>
     <div class="templates-grid">
       ${templateData.map(t => `
       <a href="/templates/${t.slug}" class="tpl-card">
-        <div class="tpl-thumb ${t.mockClass}">
+        <div class="tpl-thumb ${t.mockClass}" style="${t.images ? 'background:none;' : ''}">
+          ${t.images ? `<img src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;display:block;">` : `<div class="tpl-thumb-label">${t.name}</div>`}
           <span class="tpl-platform-badge">${t.platform}</span>
           <span class="tpl-sale-badge">${t.badge}</span>
-          <div class="tpl-thumb-label">${t.name}</div>
         </div>
         <div class="tpl-info">
           <div class="tpl-niche">${t.niche}</div>
@@ -1988,13 +2006,15 @@ function templateDetailPage(t) {
   ${sharedHeader}
   <div class="detail-layout">
     <div class="detail-images">
-      <div class="detail-main-img ${t.mockClass}">
-        <span class="detail-main-img-label">${t.name}</span>
+      <div class="detail-main-img ${t.mockClass}" style="${t.images ? 'background:none;display:block;' : ''}">
+        ${t.images
+          ? `<img id="main-img" src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+          : `<span class="detail-main-img-label">${t.name}</span>`}
       </div>
       <div class="detail-thumbs">
-        <div class="detail-thumb ${t.mockClass}"></div>
-        <div class="detail-thumb ${t.mockClass}" style="opacity:0.5;filter:saturate(0.6)"></div>
-        <div class="detail-thumb ${t.mockClass}" style="opacity:0.4;filter:saturate(0.4)"></div>
+        ${t.images
+          ? t.images.map((src, i) => `<img src="${src}" alt="${t.name} screenshot ${i+1}" class="detail-thumb" style="width:100%;height:100%;object-fit:cover;cursor:pointer;opacity:${i===0?'1':'0.65'};" onclick="document.getElementById('main-img').src=this.src;document.querySelectorAll('.detail-thumbs img').forEach(x=>x.style.opacity='0.65');this.style.opacity='1';">`).join('')
+          : `<div class="detail-thumb ${t.mockClass}"></div><div class="detail-thumb ${t.mockClass}" style="opacity:0.5;filter:saturate(0.6)"></div><div class="detail-thumb ${t.mockClass}" style="opacity:0.4;filter:saturate(0.4)"></div>`}
       </div>
     </div>
     <div class="detail-info">
