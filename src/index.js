@@ -36,6 +36,9 @@ export default {
       case '/full-custom':
         return htmlResponse(fullCustomPage);
 
+      case '/templates':
+        return htmlResponse(templatesPage);
+
       case '/favicon.ico':
       case '/favicon.png':
         return Response.redirect('https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png', 301);
@@ -53,8 +56,14 @@ export default {
           return new Response('Logo not found', { status: 404 });
         }
 
-      default:
+      default: {
+        if (pathname.startsWith('/templates/')) {
+          const slug = pathname.slice('/templates/'.length);
+          const tpl = templateData.find(t => t.slug === slug);
+          if (tpl) return htmlResponse(templateDetailPage(tpl));
+        }
         return new Response('Not Found', { status: 404 });
+      }
     }
   },
 };
@@ -1326,7 +1335,7 @@ const sharedHeader = `
 <header class="header">
   <div class="logo">
     <a href="/">
-      <img src="/logo-long-house-green-background-transparent.png" alt="Bloomie House">
+      <img src="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-long-house-green-background-transparent.png" alt="Bloomie House">
     </a>
   </div>
   <nav>
@@ -1604,3 +1613,431 @@ const fullCustomPage = `<!DOCTYPE html>
   ${sharedFooter}
 </body>
 </html>`;
+
+// ── TEMPLATES DATA ──
+const templateData = [
+  {
+    slug: 'coaching-service',
+    name: 'Coaching Service',
+    niche: 'Coaching & Consulting',
+    platform: 'Canva',
+    badge: 'New',
+    price: 37,
+    originalPrice: null,
+    mockClass: 'mock-coaching',
+    images: [
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-1.png',
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-2.png',
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-3.png',
+    ],
+    description: 'A clean, high-converting landing page template for coaches, consultants, and service providers. Built in Canva — fully editable, no design skills needed. Ready to publish in under an hour.',
+    features: ['Fully editable in Canva', 'High-converting layout', 'Service & pricing sections', 'Testimonials block', 'Call-to-action sections', 'Mobile-friendly design'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-brew',
+    name: 'The Brew',
+    niche: 'Cafe & Coffee Shop',
+    platform: 'Wix Studio',
+    badge: '20% OFF',
+    price: 79,
+    originalPrice: 97,
+    mockClass: 'mock-cafe',
+    description: 'A warm, editorial template built for cafes, coffee roasters, and food-forward brands. Showcases your menu, story, and atmosphere with rich typography and a full-bleed hero.',
+    features: ['Full menu section', 'Online booking integration', 'Instagram feed', 'Google Maps embed', 'Mobile-optimised'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-studio',
+    name: 'The Studio',
+    niche: 'Beauty & Lash Studio',
+    platform: 'Wix Studio',
+    badge: 'Bestseller',
+    price: 79,
+    originalPrice: 97,
+    mockClass: 'mock-beauty',
+    description: 'Our most-loved template — designed for beauty studios, lash techs, brow bars, and skin clinics. Elegant, feminine, and conversion-focused with a built-in booking flow.',
+    features: ['Service & pricing cards', 'Online booking section', 'Before & after gallery', 'Testimonials slider', 'Contact form'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-tradie',
+    name: 'The Tradie',
+    niche: 'Trades & Services',
+    platform: 'Shopify',
+    badge: 'New',
+    price: 97,
+    originalPrice: null,
+    mockClass: 'mock-tradie',
+    description: 'A bold, trust-building template for tradies, builders, electricians, and service businesses. Lead-gen focused with a prominent quote request form and project gallery.',
+    features: ['Quote request form', 'Services & pricing section', 'Project portfolio grid', 'Google Reviews widget', 'Click-to-call button'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-flow',
+    name: 'The Flow',
+    niche: 'Wellness & Yoga',
+    platform: 'Wix Studio',
+    badge: '20% OFF',
+    price: 79,
+    originalPrice: 97,
+    mockClass: 'mock-yoga',
+    description: 'A soft, serene template for yoga studios, wellness coaches, pilates, and holistic practitioners. Calming palette, class schedule section, and a gentle booking experience.',
+    features: ['Class schedule & timetable', 'Teacher profiles', 'Membership / pricing plans', 'Blog / journal section', 'Newsletter opt-in'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-boutique',
+    name: 'The Boutique',
+    niche: 'Boutique & Retail',
+    platform: 'Shopify',
+    badge: '20% OFF',
+    price: 97,
+    originalPrice: 127,
+    mockClass: 'mock-boutique',
+    description: 'A luxe, scroll-stopping Shopify theme for fashion boutiques, homewares, and lifestyle brands. Full ecommerce ready with editorial lookbook sections and a minimal cart experience.',
+    features: ['Full Shopify ecommerce', 'Lookbook / editorial section', 'Announcement bar', 'Product quick-view', 'Size guide popup'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+];
+
+// ── TEMPLATES LISTING PAGE ──
+const templatesPage = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates — Bloomie House</title>
+  <meta name="description" content="Browse premium Wix Studio & Shopify website templates for Australian small businesses. Cafes, beauty studios, tradies, boutiques & more from $79 AUD.">
+  <meta property="og:title" content="Templates — Bloomie House">
+  <meta property="og:description" content="Premium website templates from $79 AUD. Buy, personalise, launch this week.">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au/templates">
+  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://bloomiehouse.com.au/templates">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    ${sharedStyles}
+    .templates-hero {
+      padding: 12rem 4rem 5rem;
+      text-align: center;
+      background: var(--light);
+    }
+    .templates-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 300;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+    .templates-hero p {
+      font-size: 1.15rem;
+      color: var(--text-light);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    .templates-grid-section {
+      padding: 4rem 4rem 8rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2.5rem;
+    }
+    .tpl-card {
+      background: white;
+      border: 1px solid var(--mid);
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .tpl-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.10); }
+    .tpl-thumb {
+      aspect-ratio: 4/3;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mock-cafe    { background: linear-gradient(135deg, #6B4226 0%, #9E6B47 50%, #C8A07A 100%); }
+    .mock-beauty  { background: linear-gradient(135deg, #C8A09A 0%, #E8C8C2 50%, #F5EAE8 100%); }
+    .mock-tradie  { background: linear-gradient(135deg, #2C3E2D 0%, #4A5D4A 50%, #7A8F7A 100%); }
+    .mock-yoga    { background: linear-gradient(135deg, #8B9D7F 0%, #B8C8AC 50%, #E0EAD8 100%); }
+    .mock-boutique{ background: linear-gradient(135deg, #BFA080 0%, #D4B898 50%, #EDE0D0 100%); }
+    .tpl-thumb-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 2px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .tpl-platform-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: rgba(255,255,255,0.92);
+      color: var(--primary);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+    }
+    .tpl-sale-badge {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: var(--primary);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+    }
+    .tpl-info { padding: 1.5rem; }
+    .tpl-niche {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--text-light); margin-bottom: 0.4rem;
+    }
+    .tpl-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; font-weight: 400; color: var(--primary); margin-bottom: 0.75rem;
+    }
+    .tpl-price { display: flex; align-items: baseline; gap: 0.5rem; }
+    .tpl-price-current { font-size: 1.2rem; font-weight: 500; color: var(--primary); }
+    .tpl-price-original { font-size: 0.95rem; color: var(--text-light); text-decoration: line-through; }
+    .tpl-cta {
+      display: block; margin-top: 1.2rem; padding: 0.75rem 1.5rem;
+      background: var(--primary); color: white; text-align: center;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.8px;
+      text-transform: uppercase; border: 1px solid var(--primary);
+      transition: all 0.25s ease; text-decoration: none;
+    }
+    .tpl-cta:hover { background: transparent; color: var(--primary); }
+    @media (max-width: 768px) {
+      .templates-hero { padding: 9rem 2rem 3rem; }
+      .templates-hero h1 { font-size: 2.8rem; }
+      .templates-grid-section { padding: 2rem 1.5rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+  ${sharedHeader}
+  <div class="templates-hero">
+    <h1>Our Templates</h1>
+    <p>Designed for Australian small businesses. Buy, personalise, and launch your website this week.</p>
+  </div>
+  <div class="templates-grid-section">
+    <div class="templates-grid">
+      ${templateData.map(t => `
+      <a href="/templates/${t.slug}" class="tpl-card">
+        <div class="tpl-thumb ${t.mockClass}" style="${t.images ? 'background:none;' : ''}">
+          ${t.images ? `<img src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;display:block;">` : `<div class="tpl-thumb-label">${t.name}</div>`}
+          <span class="tpl-platform-badge">${t.platform}</span>
+          <span class="tpl-sale-badge">${t.badge}</span>
+        </div>
+        <div class="tpl-info">
+          <div class="tpl-niche">${t.niche}</div>
+          <div class="tpl-name">${t.name}</div>
+          <div class="tpl-price">
+            <span class="tpl-price-current">$${t.price} AUD</span>
+            ${t.originalPrice ? `<span class="tpl-price-original">$${t.originalPrice}</span>` : ''}
+          </div>
+          <span class="tpl-cta">View Template →</span>
+        </div>
+      </a>`).join('')}
+    </div>
+  </div>
+  ${sharedFooter}
+</body>
+</html>`;
+
+// ── TEMPLATE DETAIL PAGE ──
+function templateDetailPage(t) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${t.name} — Bloomie House</title>
+  <meta name="description" content="${t.description}">
+  <meta property="og:title" content="${t.name} — Bloomie House">
+  <meta property="og:description" content="${t.description}">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au/templates/${t.slug}">
+  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://bloomiehouse.com.au/templates/${t.slug}">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    ${sharedStyles}
+    .detail-layout {
+      padding: 10rem 4rem 6rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .detail-images { position: sticky; top: 8rem; }
+    .detail-main-img {
+      aspect-ratio: 4/3;
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .mock-cafe    { background: linear-gradient(135deg, #6B4226 0%, #9E6B47 50%, #C8A07A 100%); }
+    .mock-beauty  { background: linear-gradient(135deg, #C8A09A 0%, #E8C8C2 50%, #F5EAE8 100%); }
+    .mock-tradie  { background: linear-gradient(135deg, #2C3E2D 0%, #4A5D4A 50%, #7A8F7A 100%); }
+    .mock-yoga    { background: linear-gradient(135deg, #8B9D7F 0%, #B8C8AC 50%, #E0EAD8 100%); }
+    .mock-boutique{ background: linear-gradient(135deg, #BFA080 0%, #D4B898 50%, #EDE0D0 100%); }
+    .detail-main-img-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 4px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.3);
+    }
+    .detail-thumbs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .detail-thumb {
+      aspect-ratio: 4/3;
+      border-radius: 2px;
+      opacity: 0.7;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .detail-thumb:hover { opacity: 1; }
+    .detail-thumb.mock-cafe    { background: linear-gradient(160deg, #6B4226, #C8A07A); }
+    .detail-thumb.mock-beauty  { background: linear-gradient(160deg, #C8A09A, #F5EAE8); }
+    .detail-thumb.mock-tradie  { background: linear-gradient(160deg, #2C3E2D, #7A8F7A); }
+    .detail-thumb.mock-yoga    { background: linear-gradient(160deg, #8B9D7F, #E0EAD8); }
+    .detail-thumb.mock-boutique{ background: linear-gradient(160deg, #BFA080, #EDE0D0); }
+    .breadcrumb {
+      font-size: 0.8rem; color: var(--text-light);
+      letter-spacing: 0.5px; margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--text-light); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--primary); }
+    .detail-niche {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-light); margin-bottom: 0.75rem;
+    }
+    .detail-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 300; color: var(--primary);
+      line-height: 1.1; margin-bottom: 1.25rem; letter-spacing: -1px;
+    }
+    .detail-platform {
+      display: inline-block; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 1px; text-transform: uppercase;
+      background: var(--mid); color: var(--primary);
+      padding: 0.3rem 0.8rem; margin-bottom: 1.5rem;
+    }
+    .detail-price-row {
+      display: flex; align-items: baseline;
+      gap: 0.75rem; margin-bottom: 1.75rem;
+    }
+    .detail-price { font-size: 2rem; font-weight: 500; color: var(--primary); }
+    .detail-price-original { font-size: 1.2rem; color: var(--text-light); text-decoration: line-through; }
+    .detail-badge {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; background: var(--primary);
+      color: white; padding: 0.25rem 0.65rem;
+    }
+    .detail-description {
+      font-size: 1rem; color: var(--text); line-height: 1.9;
+      margin-bottom: 2rem; border-top: 1px solid var(--mid); padding-top: 2rem;
+    }
+    .detail-features { margin-bottom: 2.5rem; }
+    .detail-features h4 {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--primary); margin-bottom: 1rem;
+    }
+    .detail-features ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .detail-features li {
+      font-size: 0.95rem; color: var(--text);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .detail-features li::before { content: '❆'; color: var(--sage); font-size: 0.65rem; }
+    .btn-buy {
+      display: block; width: 100%; padding: 1.1rem 2rem;
+      background: var(--primary); color: white; text-align: center;
+      text-decoration: none; font-size: 0.9rem; font-weight: 500;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      border: 2px solid var(--primary); transition: all 0.25s ease; margin-bottom: 1rem;
+    }
+    .btn-buy:hover { background: transparent; color: var(--primary); }
+    .btn-back {
+      display: block; width: 100%; padding: 0.9rem 2rem;
+      background: transparent; color: var(--text-light); text-align: center;
+      text-decoration: none; font-size: 0.85rem; letter-spacing: 0.5px;
+      border: 1px solid var(--mid); transition: all 0.25s ease;
+    }
+    .btn-back:hover { border-color: var(--primary); color: var(--primary); }
+    .detail-note {
+      font-size: 0.8rem; color: var(--text-light);
+      margin-top: 1.25rem; line-height: 1.6;
+    }
+    @media (max-width: 900px) {
+      .detail-layout { grid-template-columns: 1fr; padding: 9rem 2rem 4rem; gap: 3rem; }
+      .detail-images { position: static; }
+      .detail-name { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+  ${sharedHeader}
+  <div class="detail-layout">
+    <div class="detail-images">
+      <div class="detail-main-img ${t.mockClass}" style="${t.images ? 'background:none;display:block;' : ''}">
+        ${t.images
+          ? `<img id="main-img" src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+          : `<span class="detail-main-img-label">${t.name}</span>`}
+      </div>
+      <div class="detail-thumbs">
+        ${t.images
+          ? t.images.map((src, i) => `<img src="${src}" alt="${t.name} screenshot ${i+1}" class="detail-thumb" style="width:100%;height:100%;object-fit:cover;cursor:pointer;opacity:${i===0?'1':'0.65'};" onclick="document.getElementById('main-img').src=this.src;document.querySelectorAll('.detail-thumbs img').forEach(x=>x.style.opacity='0.65');this.style.opacity='1';">`).join('')
+          : `<div class="detail-thumb ${t.mockClass}"></div><div class="detail-thumb ${t.mockClass}" style="opacity:0.5;filter:saturate(0.6)"></div><div class="detail-thumb ${t.mockClass}" style="opacity:0.4;filter:saturate(0.4)"></div>`}
+      </div>
+    </div>
+    <div class="detail-info">
+      <div class="breadcrumb"><a href="/templates">Templates</a> / ${t.name}</div>
+      <div class="detail-niche">${t.niche}</div>
+      <h1 class="detail-name">${t.name}</h1>
+      <span class="detail-platform">${t.platform}</span>
+      <div class="detail-price-row">
+        <span class="detail-price">$${t.price} AUD</span>
+        ${t.originalPrice ? `<span class="detail-price-original">$${t.originalPrice}</span>` : ''}
+        <span class="detail-badge">${t.badge}</span>
+      </div>
+      <div class="detail-description">${t.description}</div>
+      <div class="detail-features">
+        <h4>What's Included</h4>
+        <ul>${t.features.map(f => `<li>${f}</li>`).join('')}</ul>
+      </div>
+      <a href="${t.etsy}" target="_blank" rel="noopener" class="btn-buy">Buy Now on Etsy →</a>
+      <a href="/templates" class="btn-back">← Back to Templates</a>
+      <p class="detail-note">Delivered instantly via Etsy. Includes setup guide and 30-day email support.</p>
+    </div>
+  </div>
+  ${sharedFooter}
+</body>
+</html>`;
+}
