@@ -77,6 +77,93 @@ function htmlResponse(html) {
   });
 }
 
+// ── TEMPLATES DATA ──
+const templateData = [
+  {
+    slug: 'coaching-service',
+    name: 'Coaching Service',
+    niche: 'Coaching & Consulting',
+    platform: 'Canva',
+    badge: 'New',
+    price: 37,
+    originalPrice: null,
+    mockClass: 'mock-coaching',
+    images: [
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-1.png',
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-2.png',
+      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-3.png',
+    ],
+    description: 'A clean, high-converting landing page template for coaches, consultants, and service providers. Built in Canva — fully editable, no design skills needed. Ready to publish in under an hour.',
+    features: ['Fully editable in Canva', 'High-converting layout', 'Service & pricing sections', 'Testimonials block', 'Call-to-action sections', 'Mobile-friendly design'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-brew',
+    name: 'The Brew',
+    niche: 'Cafe &amp; Coffee Shop',
+    platform: 'Wix Studio',
+    badge: '20% OFF',
+    price: 79,
+    originalPrice: 97,
+    mockClass: 'mock-cafe',
+    description: 'A warm, editorial template built for cafes, coffee roasters, and food-forward brands. Showcases your menu, story, and atmosphere with rich typography and a full-bleed hero.',
+    features: ['Full menu section', 'Online booking integration', 'Instagram feed', 'Google Maps embed', 'Mobile-optimised'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-studio',
+    name: 'The Studio',
+    niche: 'Beauty &amp; Lash Studio',
+    platform: 'Wix Studio',
+    badge: 'Bestseller',
+    price: 79,
+    originalPrice: 97,
+    mockClass: 'mock-beauty',
+    description: 'Our most-loved template — designed for beauty studios, lash techs, brow bars, and skin clinics. Elegant, feminine, and conversion-focused with a built-in booking flow.',
+    features: ['Service & pricing cards', 'Online booking section', 'Before & after gallery', 'Testimonials slider', 'Contact form'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-tradie',
+    name: 'The Tradie',
+    niche: 'Trades &amp; Services',
+    platform: 'Shopify',
+    badge: 'New',
+    price: 97,
+    originalPrice: null,
+    mockClass: 'mock-tradie',
+    description: 'A bold, trust-building template for tradies, builders, electricians, and service businesses. Lead-gen focused with a prominent quote request form and project gallery.',
+    features: ['Quote request form', 'Services & pricing section', 'Project portfolio grid', 'Google Reviews widget', 'Click-to-call button'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-flow',
+    name: 'The Flow',
+    niche: 'Wellness &amp; Yoga',
+    platform: 'Wix Studio',
+    badge: '20% OFF',
+    price: 79,
+    originalPrice: 97,
+    mockClass: 'mock-yoga',
+    description: 'A soft, serene template for yoga studios, wellness coaches, pilates, and holistic practitioners. Calming palette, class schedule section, and a gentle booking experience.',
+    features: ['Class schedule & timetable', 'Teacher profiles', 'Membership / pricing plans', 'Blog / journal section', 'Newsletter opt-in'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+  {
+    slug: 'the-boutique',
+    name: 'The Boutique',
+    niche: 'Boutique &amp; Retail',
+    platform: 'Shopify',
+    badge: '20% OFF',
+    price: 97,
+    originalPrice: 127,
+    mockClass: 'mock-boutique',
+    description: 'A luxe, scroll-stopping Shopify theme for fashion boutiques, homewares, and lifestyle brands. Full ecommerce ready with editorial lookbook sections and a minimal cart experience.',
+    features: ['Full Shopify ecommerce', 'Lookbook / editorial section', 'Announcement bar', 'Product quick-view', 'Size guide popup'],
+    etsy: 'https://www.etsy.com/shop/bloomiehouse',
+  },
+];
+
 // ── HOMEPAGE ──
 const homepage = `<!DOCTYPE html>
 <html lang="en">
@@ -855,90 +942,23 @@ const homepage = `<!DOCTYPE html>
     </select>
   </div>
   <div class="product-grid">
-    <!-- Card 1 -->
+    ${templateData.map(t => `
     <div class="product-card reveal">
-      <div class="product-thumb mock-cafe">
-        <span class="platform-badge">Wix Studio</span>
-        <span class="sale-badge">20% OFF</span>
-        <div class="product-thumb-label">The Brew</div>
+      <div class="product-thumb ${t.mockClass}" style="${t.images ? 'background:none;' : ''}">
+        ${t.images ? `<img src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;display:block;">` : `<div class="product-thumb-label">${t.name}</div>`}
+        <span class="platform-badge">${t.platform}</span>
+        <span class="sale-badge">${t.badge}</span>
       </div>
       <div class="product-info">
-        <div class="product-niche">Cafe &amp; Coffee Shop</div>
-        <div class="product-name">The Brew</div>
+        <div class="product-niche">${t.niche}</div>
+        <div class="product-name">${t.name}</div>
         <div class="product-price">
-          <span class="price-current">$79</span>
-          <span class="price-original">$97</span>
+          <span class="price-current">$${t.price}</span>
+          ${t.originalPrice ? `<span class="price-original">$${t.originalPrice}</span>` : ''}
         </div>
-        <a href="https://bloomlashbar.etsy.com" target="_blank" rel="noopener" class="btn-find-more">Find Out More</a>
+        <a href="/templates/${t.slug}" class="btn-find-more">Find Out More</a>
       </div>
-    </div>
-    <!-- Card 2 -->
-    <div class="product-card reveal">
-      <div class="product-thumb mock-beauty">
-        <span class="platform-badge">Wix Studio</span>
-        <span class="sale-badge">Bestseller</span>
-        <div class="product-thumb-label">The Studio</div>
-      </div>
-      <div class="product-info">
-        <div class="product-niche">Beauty &amp; Lash Studio</div>
-        <div class="product-name">The Studio</div>
-        <div class="product-price">
-          <span class="price-current">$79</span>
-          <span class="price-original">$97</span>
-        </div>
-        <a href="https://bloomlashbar.etsy.com" target="_blank" rel="noopener" class="btn-find-more">Find Out More</a>
-      </div>
-    </div>
-    <!-- Card 3 -->
-    <div class="product-card reveal">
-      <div class="product-thumb mock-tradie">
-        <span class="platform-badge">Shopify</span>
-        <span class="sale-badge">New</span>
-        <div class="product-thumb-label">The Tradie</div>
-      </div>
-      <div class="product-info">
-        <div class="product-niche">Trades &amp; Services</div>
-        <div class="product-name">The Tradie</div>
-        <div class="product-price">
-          <span class="price-current">$97</span>
-        </div>
-        <a href="https://bloomlashbar.etsy.com" target="_blank" rel="noopener" class="btn-find-more">Find Out More</a>
-      </div>
-    </div>
-    <!-- Card 4 -->
-    <div class="product-card reveal">
-      <div class="product-thumb mock-yoga">
-        <span class="platform-badge">Wix Studio</span>
-        <span class="sale-badge">20% OFF</span>
-        <div class="product-thumb-label">The Flow</div>
-      </div>
-      <div class="product-info">
-        <div class="product-niche">Wellness &amp; Yoga</div>
-        <div class="product-name">The Flow</div>
-        <div class="product-price">
-          <span class="price-current">$79</span>
-          <span class="price-original">$97</span>
-        </div>
-        <a href="https://bloomlashbar.etsy.com" target="_blank" rel="noopener" class="btn-find-more">Find Out More</a>
-      </div>
-    </div>
-    <!-- Card 5 -->
-    <div class="product-card reveal">
-      <div class="product-thumb mock-boutique">
-        <span class="platform-badge">Shopify</span>
-        <span class="sale-badge">20% OFF</span>
-        <div class="product-thumb-label">The Boutique</div>
-      </div>
-      <div class="product-info">
-        <div class="product-niche">Boutique &amp; Retail</div>
-        <div class="product-name">The Boutique</div>
-        <div class="product-price">
-          <span class="price-current">$97</span>
-          <span class="price-original">$127</span>
-        </div>
-        <a href="https://bloomlashbar.etsy.com" target="_blank" rel="noopener" class="btn-find-more">Find Out More</a>
-      </div>
-    </div>
+    </div>`).join('')}
   </div>
   <div class="view-all-wrap">
     <a href="https://bloomlashbar.etsy.com" target="_blank" rel="noopener" class="btn-primary">View All Templates →</a>
@@ -1614,92 +1634,7 @@ const fullCustomPage = `<!DOCTYPE html>
 </body>
 </html>`;
 
-// ── TEMPLATES DATA ──
-const templateData = [
-  {
-    slug: 'coaching-service',
-    name: 'Coaching Service',
-    niche: 'Coaching & Consulting',
-    platform: 'Canva',
-    badge: 'New',
-    price: 37,
-    originalPrice: null,
-    mockClass: 'mock-coaching',
-    images: [
-      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-1.png',
-      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-2.png',
-      'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-3.png',
-    ],
-    description: 'A clean, high-converting landing page template for coaches, consultants, and service providers. Built in Canva — fully editable, no design skills needed. Ready to publish in under an hour.',
-    features: ['Fully editable in Canva', 'High-converting layout', 'Service & pricing sections', 'Testimonials block', 'Call-to-action sections', 'Mobile-friendly design'],
-    etsy: 'https://www.etsy.com/shop/bloomiehouse',
-  },
-  {
-    slug: 'the-brew',
-    name: 'The Brew',
-    niche: 'Cafe & Coffee Shop',
-    platform: 'Wix Studio',
-    badge: '20% OFF',
-    price: 79,
-    originalPrice: 97,
-    mockClass: 'mock-cafe',
-    description: 'A warm, editorial template built for cafes, coffee roasters, and food-forward brands. Showcases your menu, story, and atmosphere with rich typography and a full-bleed hero.',
-    features: ['Full menu section', 'Online booking integration', 'Instagram feed', 'Google Maps embed', 'Mobile-optimised'],
-    etsy: 'https://www.etsy.com/shop/bloomiehouse',
-  },
-  {
-    slug: 'the-studio',
-    name: 'The Studio',
-    niche: 'Beauty & Lash Studio',
-    platform: 'Wix Studio',
-    badge: 'Bestseller',
-    price: 79,
-    originalPrice: 97,
-    mockClass: 'mock-beauty',
-    description: 'Our most-loved template — designed for beauty studios, lash techs, brow bars, and skin clinics. Elegant, feminine, and conversion-focused with a built-in booking flow.',
-    features: ['Service & pricing cards', 'Online booking section', 'Before & after gallery', 'Testimonials slider', 'Contact form'],
-    etsy: 'https://www.etsy.com/shop/bloomiehouse',
-  },
-  {
-    slug: 'the-tradie',
-    name: 'The Tradie',
-    niche: 'Trades & Services',
-    platform: 'Shopify',
-    badge: 'New',
-    price: 97,
-    originalPrice: null,
-    mockClass: 'mock-tradie',
-    description: 'A bold, trust-building template for tradies, builders, electricians, and service businesses. Lead-gen focused with a prominent quote request form and project gallery.',
-    features: ['Quote request form', 'Services & pricing section', 'Project portfolio grid', 'Google Reviews widget', 'Click-to-call button'],
-    etsy: 'https://www.etsy.com/shop/bloomiehouse',
-  },
-  {
-    slug: 'the-flow',
-    name: 'The Flow',
-    niche: 'Wellness & Yoga',
-    platform: 'Wix Studio',
-    badge: '20% OFF',
-    price: 79,
-    originalPrice: 97,
-    mockClass: 'mock-yoga',
-    description: 'A soft, serene template for yoga studios, wellness coaches, pilates, and holistic practitioners. Calming palette, class schedule section, and a gentle booking experience.',
-    features: ['Class schedule & timetable', 'Teacher profiles', 'Membership / pricing plans', 'Blog / journal section', 'Newsletter opt-in'],
-    etsy: 'https://www.etsy.com/shop/bloomiehouse',
-  },
-  {
-    slug: 'the-boutique',
-    name: 'The Boutique',
-    niche: 'Boutique & Retail',
-    platform: 'Shopify',
-    badge: '20% OFF',
-    price: 97,
-    originalPrice: 127,
-    mockClass: 'mock-boutique',
-    description: 'A luxe, scroll-stopping Shopify theme for fashion boutiques, homewares, and lifestyle brands. Full ecommerce ready with editorial lookbook sections and a minimal cart experience.',
-    features: ['Full Shopify ecommerce', 'Lookbook / editorial section', 'Announcement bar', 'Product quick-view', 'Size guide popup'],
-    etsy: 'https://www.etsy.com/shop/bloomiehouse',
-  },
-];
+// (templateData defined above homepage — this duplicate removed)
 
 // ── TEMPLATES LISTING PAGE ──
 const templatesPage = `<!DOCTYPE html>
