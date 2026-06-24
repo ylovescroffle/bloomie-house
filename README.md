@@ -56,6 +56,46 @@ Deploy to Cloudflare Workers:
 npm run deploy
 ```
 
+## AI Chatbot (Groq)
+
+The site includes a floating AI chat widget ("Bloomie") on every page, powered by
+[Groq](https://groq.com). The Groq API key stays **server-side** in the Worker — the
+browser only talks to the `/api/chat` route, never to Groq directly.
+
+### How it works
+
+- `src/index.js` exposes a `POST /api/chat` route (`handleChat`) that forwards the
+  conversation to Groq's OpenAI-compatible Chat Completions API and returns the reply.
+- The chat UI (`chatWidget`) is injected into every HTML page automatically by
+  `htmlResponse()`, so there's nothing to add per page.
+- The assistant's persona and business knowledge live in `CHAT_SYSTEM_PROMPT`.
+
+### Setup
+
+1. Create a free Groq API key at https://console.groq.com/keys
+
+2. Add it as a Cloudflare Worker **secret** (production):
+
+   ```bash
+   npx wrangler secret put GROQ_API_KEY
+   # paste your key when prompted
+   ```
+
+3. For **local development**, create a `.dev.vars` file in the project root
+   (already gitignored — never commit it):
+
+   ```
+   GROQ_API_KEY=your_key_here
+   ```
+
+4. (Optional) Change the model in `wrangler.toml` via the `GROQ_MODEL` var.
+   Defaults to `llama-3.3-70b-versatile`.
+
+5. Run `npm run dev` and click the 💬 button in the bottom-right corner to test.
+
+If `GROQ_API_KEY` is missing, the widget still appears but replies with a friendly
+"not configured yet" message instead of crashing.
+
 ## Customization
 
 ### Update Etsy Shop URL
