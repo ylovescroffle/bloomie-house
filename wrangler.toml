@@ -1,3 +1,12 @@
 name = "bloomie-house"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
+
+# Chatbot (Groq) configuration
+# The GROQ_API_KEY must be set as a SECRET (never commit it):
+#   npx wrangler secret put GROQ_API_KEY
+# For local dev, put it in a .dev.vars file (already gitignored):
+#   GROQ_API_KEY=your_key_here
+[vars]
+# Optional: override the Groq model. Defaults to llama-3.3-70b-versatile in code.
+GROQ_MODEL = "llama-3.3-70b-versatile"

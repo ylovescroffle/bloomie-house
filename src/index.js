@@ -24,6 +24,9 @@ export default {
   <url><loc>https://bloomiehouse.com.au/full-custom</loc><priority>0.7</priority></url>
 </urlset>`, { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' } });
 
+      case '/api/chat':
+        return handleChat(request, env);
+
       case '/website-design':
         return htmlResponse(websiteDesignPage);
 
@@ -69,13 +72,222 @@ export default {
 };
 
 function htmlResponse(html) {
-  return new Response(html, {
+  // Inject the chat widget right before the closing body tag on every page
+  const withWidget = html.includes('</body>')
+    ? html.replace('</body>', chatWidget + '</body>')
+    : html + chatWidget;
+  return new Response(withWidget, {
     headers: {
       'Content-Type': 'text/html;charset=UTF-8',
       'Cache-Control': 'public, max-age=3600',
     },
   });
 }
+
+function jsonResponse(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+  });
+}
+
+// ── CHATBOT (Groq) ──
+// System prompt gives the assistant its persona + business knowledge.
+const CHAT_SYSTEM_PROMPT = `You are "Bloomie", the friendly AI assistant for Bloomie House — a studio based in Hobart, Australia that sells premium Wix Studio & Shopify website templates and offers full custom web design for small businesses (cafes, beauty studios, tradies, boutiques and more).
+
+Your job:
+- Help visitors understand Bloomie House's products and services.
+- Recommend whether a ready-made template or a full custom build suits their needs.
+- Answer questions about pricing, timelines, and the process in a warm, concise, on-brand voice.
+- Encourage visitors to browse templates (/templates), book a website-design discovery call (/website-design), or use the contact form (/contact).
+
+Style: warm, modern, encouraging, never pushy. Keep replies short (2-4 sentences) unless asked for detail. Use plain language. If you don't know a specific detail (exact price, availability), say so honestly and point them to the contact form. Never invent prices or promises you're unsure about. You only discuss Bloomie House and web design topics.`;
+
+async function handleChat(request, env) {
+  if (request.method !== 'POST') {
+    return jsonResponse({ error: 'Method not allowed.' }, 405);
+  }
+  if (!env || !env.GROQ_API_KEY) {
+    return jsonResponse({ error: 'The assistant is not configured yet.' }, 503);
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid request body.' }, 400);
+  }
+
+  // Sanitise the conversation: only keep valid user/assistant turns, cap length & count.
+  const incoming = Array.isArray(body.messages) ? body.messages : [];
+  const history = incoming
+    .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+    .slice(-12)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, 2000) }));
+
+  if (history.length === 0) {
+    return jsonResponse({ error: 'No message provided.' }, 400);
+  }
+
+  const messages = [{ role: 'system', content: CHAT_SYSTEM_PROMPT }, ...history];
+
+  try {
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+        messages,
+        temperature: 0.6,
+        max_tokens: 600,
+      }),
+    });
+
+    if (!groqRes.ok) {
+      return jsonResponse({ error: 'The assistant is unavailable right now. Please try again shortly.' }, 502);
+    }
+
+    const data = await groqRes.json();
+    const reply = data?.choices?.[0]?.message?.content?.trim();
+    return jsonResponse({ reply: reply || "Sorry, I didn't quite catch that — could you rephrase?" });
+  } catch {
+    return jsonResponse({ error: 'Something went wrong reaching the assistant.' }, 500);
+  }
+}
+
+// ── CHAT WIDGET (injected into every page) ──
+const chatWidget = `
+<style>
+  #bloomie-chat-btn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 9998;
+    width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer;
+    background: #D67D9A; color: #fff; font-size: 26px; line-height: 60px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18); transition: transform .2s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #bloomie-chat-btn:hover { transform: scale(1.06); }
+  #bloomie-chat-panel {
+    position: fixed; bottom: 92px; right: 20px; z-index: 9999;
+    width: 360px; max-width: calc(100vw - 40px); height: 520px; max-height: calc(100vh - 120px);
+    background: #FAFAF8; border-radius: 18px; box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+    display: none; flex-direction: column; overflow: hidden;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  #bloomie-chat-panel.open { display: flex; }
+  .bloomie-chat-header {
+    background: #C8D5B0; color: #111; padding: 16px 18px;
+    font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 17px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .bloomie-chat-header small { display: block; font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 12px; opacity: .7; margin-top: 2px; }
+  .bloomie-chat-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #111; line-height: 1; }
+  .bloomie-chat-log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .bloomie-msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; }
+  .bloomie-msg.user { align-self: flex-end; background: #D67D9A; color: #fff; border-bottom-right-radius: 4px; }
+  .bloomie-msg.bot { align-self: flex-start; background: #F0EBE3; color: #111; border-bottom-left-radius: 4px; }
+  .bloomie-msg.typing { font-style: italic; opacity: .7; }
+  .bloomie-chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid rgba(0,0,0,.08); background: #FAFAF8; }
+  .bloomie-chat-input input {
+    flex: 1; border: 1px solid rgba(0,0,0,.15); border-radius: 22px; padding: 10px 14px;
+    font-size: 14px; font-family: inherit; outline: none;
+  }
+  .bloomie-chat-input input:focus { border-color: #D67D9A; }
+  .bloomie-chat-input button {
+    border: none; background: #111; color: #fff; border-radius: 22px; padding: 0 16px;
+    font-size: 14px; cursor: pointer; font-family: inherit;
+  }
+  .bloomie-chat-input button:disabled { opacity: .5; cursor: default; }
+</style>
+<button id="bloomie-chat-btn" aria-label="Open chat">\u{1F4AC}</button>
+<div id="bloomie-chat-panel" role="dialog" aria-label="Chat with Bloomie">
+  <div class="bloomie-chat-header">
+    <div>Chat with Bloomie<small>AI assistant · usually replies instantly</small></div>
+    <button class="bloomie-chat-close" aria-label="Close chat">&times;</button>
+  </div>
+  <div class="bloomie-chat-log" id="bloomie-chat-log"></div>
+  <form class="bloomie-chat-input" id="bloomie-chat-form">
+    <input id="bloomie-chat-text" type="text" placeholder="Ask about templates, pricing..." autocomplete="off" />
+    <button type="submit" id="bloomie-chat-send">Send</button>
+  </form>
+</div>
+<script>
+(function () {
+  var btn = document.getElementById('bloomie-chat-btn');
+  var panel = document.getElementById('bloomie-chat-panel');
+  var closeBtn = panel.querySelector('.bloomie-chat-close');
+  var log = document.getElementById('bloomie-chat-log');
+  var form = document.getElementById('bloomie-chat-form');
+  var input = document.getElementById('bloomie-chat-text');
+  var sendBtn = document.getElementById('bloomie-chat-send');
+  var messages = [];
+  var greeted = false;
+
+  function addBubble(role, text) {
+    var div = document.createElement('div');
+    div.className = 'bloomie-msg ' + (role === 'user' ? 'user' : 'bot');
+    div.textContent = text;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+    return div;
+  }
+
+  function openPanel() {
+    panel.classList.add('open');
+    if (!greeted) {
+      addBubble('bot', "Hi! I'm Bloomie \u{1F33C} Ask me anything about our website templates, custom design, pricing or how to get started.");
+      greeted = true;
+    }
+    input.focus();
+  }
+  function closePanel() { panel.classList.remove('open'); }
+
+  btn.addEventListener('click', function () {
+    panel.classList.contains('open') ? closePanel() : openPanel();
+  });
+  closeBtn.addEventListener('click', closePanel);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var text = input.value.trim();
+    if (!text) return;
+    addBubble('user', text);
+    messages.push({ role: 'user', content: text });
+    input.value = '';
+    sendBtn.disabled = true;
+
+    var typing = addBubble('bot', 'Bloomie is typing…');
+    typing.classList.add('typing');
+
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: messages })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        typing.remove();
+        if (res.ok && res.d.reply) {
+          addBubble('bot', res.d.reply);
+          messages.push({ role: 'assistant', content: res.d.reply });
+        } else {
+          addBubble('bot', (res.d && res.d.error) || 'Sorry, something went wrong.');
+        }
+      })
+      .catch(function () {
+        typing.remove();
+        addBubble('bot', "I couldn't connect just now. Please try again or use our contact form.");
+      })
+      .finally(function () {
+        sendBtn.disabled = false;
+        input.focus();
+      });
+  });
+})();
+</script>
+`;
 
 // ── HOMEPAGE ──
 const homepage = `<!DOCTYPE html>
