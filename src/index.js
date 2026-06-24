@@ -105,7 +105,7 @@ const homepage = `<!DOCTYPE html>
       --white: #FAFAF8;
       --cream: #F5F0E8;
       --sage: #C8D5B0;
-      --terracotta: #D4724A;
+      --pink: #D67D9A;
       --sand: #E8DDD0;
       --charcoal: #2C2C2C;
       --muted: #7A7570;
@@ -183,7 +183,7 @@ const homepage = `<!DOCTYPE html>
       letter-spacing: 0.04em;
       transition: color 0.2s;
     }
-    .nav-center a:hover { color: var(--terracotta); }
+    .nav-center a:hover { color: var(--pink); }
     .nav-right { display: flex; align-items: center; gap: 20px; }
     .nav-cart {
       width: 36px;
@@ -199,7 +199,7 @@ const homepage = `<!DOCTYPE html>
       cursor: pointer;
     }
     .btn-nav {
-      background: var(--terracotta);
+      background: var(--pink);
       color: var(--white);
       padding: 9px 20px;
       font-size: 12px;
@@ -234,7 +234,7 @@ const homepage = `<!DOCTYPE html>
       font-size: 11px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--terracotta);
+      color: var(--pink);
       margin-bottom: 20px;
     }
     .hero-eyebrow::before {
@@ -242,7 +242,7 @@ const homepage = `<!DOCTYPE html>
       display: block;
       width: 28px;
       height: 1px;
-      background: var(--terracotta);
+      background: var(--pink);
     }
     .hero-title {
       font-family: 'Fraunces', serif;
@@ -252,7 +252,7 @@ const homepage = `<!DOCTYPE html>
       letter-spacing: -0.03em;
       margin-bottom: 24px;
     }
-    .hero-title em { font-style: italic; font-weight: 300; color: var(--terracotta); display: block; }
+    .hero-title em { font-style: italic; font-weight: 300; color: var(--pink); display: block; }
     .hero-title strong { display: block; }
     .hero-sub {
       font-size: 16px;
@@ -345,7 +345,7 @@ const homepage = `<!DOCTYPE html>
       margin-bottom: 40px;
       letter-spacing: -0.02em;
     }
-    .section-title em { font-style: italic; font-weight: 300; color: var(--terracotta); }
+    .section-title em { font-style: italic; font-weight: 300; color: var(--pink); }
 
     .cat-grid {
       display: grid;
@@ -395,7 +395,7 @@ const homepage = `<!DOCTYPE html>
       text-transform: uppercase;
       transition: background 0.2s;
     }
-    .cat-card:hover .cat-btn { background: var(--terracotta); }
+    .cat-card:hover .cat-btn { background: var(--pink); }
 
     /* ── TEMPLATE SHOP ── */
     .shop { padding: 20px 40px 80px; background: var(--white); }
@@ -433,7 +433,7 @@ const homepage = `<!DOCTYPE html>
     .product-grid:active { cursor: grabbing; }
     .product-grid::-webkit-scrollbar { height: 4px; }
     .product-grid::-webkit-scrollbar-track { background: var(--sand); border-radius: 2px; }
-    .product-grid::-webkit-scrollbar-thumb { background: var(--terracotta); border-radius: 2px; }
+    .product-grid::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 2px; }
 
     .product-card {
       background: var(--white);
@@ -488,7 +488,7 @@ const homepage = `<!DOCTYPE html>
       position: absolute;
       top: 10px;
       right: 10px;
-      background: var(--terracotta);
+      background: var(--pink);
       color: var(--white);
       border-radius: 100px;
       padding: 4px 10px;
@@ -519,14 +519,14 @@ const homepage = `<!DOCTYPE html>
       border-radius: 100px;
       transition: background 0.2s;
     }
-    .btn-find-more:hover { background: var(--terracotta); }
+    .btn-find-more:hover { background: var(--pink); }
 
     .view-all-wrap { text-align: center; margin-top: 48px; }
 
     /* ── FEATURES ── */
     .features-section { background: var(--cream); padding: 80px 40px; }
     .features-header { text-align: center; margin-bottom: 56px; }
-    .features-header .section-label { color: var(--terracotta); }
+    .features-header .section-label { color: var(--pink); }
 
     .features-grid {
       display: grid;
@@ -573,7 +573,7 @@ const homepage = `<!DOCTYPE html>
     }
     .service-card:hover { border-color: rgba(200,213,176,0.3); }
     .service-card.featured {
-      background: var(--terracotta);
+      background: var(--pink);
       border-color: transparent;
     }
     .service-card.featured .service-num,
@@ -586,7 +586,7 @@ const homepage = `<!DOCTYPE html>
       top: 20px;
       right: 20px;
       background: var(--white);
-      color: var(--terracotta);
+      color: var(--pink);
       font-size: 10px;
       font-weight: 500;
       letter-spacing: 0.1em;
@@ -698,7 +698,7 @@ const homepage = `<!DOCTYPE html>
       margin-bottom: 32px;
     }
     .footer-brand-name { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
-    .footer-brand-name span { color: var(--terracotta); }
+    .footer-brand-name span { color: var(--pink); }
     .footer-about { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.65; margin-bottom: 20px; max-width: 280px; }
     .footer-email { font-size: 13px; color: var(--sage); text-decoration: none; }
     .footer-col h4 { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 16px; }
