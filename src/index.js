@@ -1248,7 +1248,7 @@ const homepage = `<!DOCTYPE html>
         <li>14 days post-launch support</li>
       </ul>
       <div class="service-price">$397 <span class="orig">$497</span></div>
-      <a href="mailto:hello@bloomiehouse.com.au" class="btn-service dark">Book Now →</a>
+      <a href="https://form.jotform.com/haiyen0304/website-design-discovery" target="_blank" rel="noopener noreferrer" class="btn-service dark">Book Now →</a>
     </div>
     <div class="service-card reveal">
       <div class="service-num">03 — Custom Build</div>
