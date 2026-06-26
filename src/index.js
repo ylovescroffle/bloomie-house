@@ -19,7 +19,7 @@ export default {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://bloomiehouse.com.au/</loc><priority>1.0</priority></url>
   <url><loc>https://bloomiehouse.com.au/website-design</loc><priority>0.8</priority></url>
-  <url><loc>https://bloomiehouse.com.au/digital-templates</loc><priority>0.8</priority></url>
+  <url><loc>https://bloomiehouse.com.au/all-templates</loc><priority>0.8</priority></url>
   <url><loc>https://bloomiehouse.com.au/contact</loc><priority>0.6</priority></url>
   <url><loc>https://bloomiehouse.com.au/full-custom</loc><priority>0.7</priority></url>
 </urlset>`, { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' } });
@@ -30,6 +30,7 @@ export default {
       case '/website-design':
         return htmlResponse(websiteDesignPage);
 
+      case '/all-templates':
       case '/digital-templates':
         return htmlResponse(digitalTemplatesPage);
 
@@ -1263,7 +1264,7 @@ const homepage = `<!DOCTYPE html>
         <li>30 days post-launch support</li>
       </ul>
       <div class="service-price">From $897 <span>AUD</span></div>
-      <a href="/full-custom" class="btn-service outline">Let's Chat</a>
+      <a href="/full-custom" class="btn-service outline">View Details →</a>
     </div>
   </div>
 </div>
@@ -1553,7 +1554,7 @@ const sharedHeader = `
   <nav>
     <a href="/">Home</a>
     <a href="/website-design">Website Design</a>
-    <a href="/digital-templates">Digital Templates</a>
+    <a href="/all-templates">Digital Templates</a>
     <a href="/contact">Contact</a>
   </nav>
 </header>
@@ -1867,12 +1868,12 @@ const digitalTemplatesPage = `<!DOCTYPE html>
   <meta property="og:title" content="Digital Templates — Bloomie House">
   <meta property="og:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. Buy, personalise, launch — this week. From $37 AUD.">
   <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
-  <meta property="og:url" content="https://bloomiehouse.com.au/digital-templates">
+  <meta property="og:url" content="https://bloomiehouse.com.au/all-templates">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Digital Templates — Bloomie House">
   <meta name="twitter:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. From $37 AUD.">
-  <link rel="canonical" href="https://bloomiehouse.com.au/digital-templates">
+  <link rel="canonical" href="https://bloomiehouse.com.au/all-templates">
   <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
