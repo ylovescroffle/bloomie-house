@@ -8,6 +8,11 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
+    // Redirect workers.dev preview URLs to the canonical domain
+    if (url.hostname.endsWith('workers.dev')) {
+      return Response.redirect(`https://bloomiehouse.com.au${pathname}${url.search}`, 301);
+    }
+
     // Route handling
     switch (pathname) {
       case '/':
