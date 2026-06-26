@@ -1622,65 +1622,7 @@ const websiteDesignPage = `<!DOCTYPE html>
 </body>
 </html>`;
 
-const digitalTemplatesPage = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Templates — Bloomie House</title>
-  <meta name="description" content="Instant-download digital templates for Australian small businesses. Wix Studio & Shopify website templates, Canva kits, and branding packs. Templates from $79 AUD.">
-  <meta name="keywords" content="digital templates Australia, Wix templates, Shopify themes, Canva templates, branding kit, small business templates, website templates download, Australian digital products">
-  <meta property="og:title" content="Digital Templates — Bloomie House">
-  <meta property="og:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. Buy, personalise, launch — this week. From $79 AUD.">
-  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
-  <meta property="og:url" content="https://bloomiehouse.com.au/digital-templates">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Digital Templates — Bloomie House">
-  <meta name="twitter:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. From $79 AUD.">
-  <link rel="canonical" href="https://bloomiehouse.com.au/digital-templates">
-  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
-  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    ${sharedStyles}
-    .templates-hero { text-align: center; padding: 10rem 2rem 5rem; }
-    .templates-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--primary); margin-bottom: 1.5rem; }
-    .templates-hero p { font-size: 1.2rem; color: var(--text-light); max-width: 700px; margin: 0 auto 3rem; line-height: 1.8; }
-    .etsy-cta { max-width: 800px; margin: 4rem auto; padding: 4rem; background: white; border: 1px solid var(--mid); text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
-    .etsy-cta h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--primary); margin-bottom: 1.5rem; }
-    .etsy-cta p { font-size: 1.1rem; color: var(--text-light); margin-bottom: 2.5rem; line-height: 1.8; }
-    .etsy-button { display: inline-block; padding: 1.2rem 3.5rem; background: var(--sage); color: white; text-decoration: none; font-size: 1rem; letter-spacing: 1px; transition: all 0.3s ease; border: 2px solid var(--sage); font-weight: 500; }
-    .etsy-button:hover { background: transparent; color: var(--sage); }
-    .template-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1000px; margin: 4rem auto; padding: 0 2rem; }
-    .template-type { padding: 2.5rem; background: white; border: 1px solid var(--mid); text-align: center; transition: all 0.3s ease; }
-    .template-type:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); border-color: var(--sage); }
-    .template-type h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 1rem; }
-    .template-type p { color: var(--text-light); line-height: 1.7; }
-    .template-icon { font-size: 3rem; margin-bottom: 1rem; }
-  </style>
-</head>
-<body>
-  ${sharedHeader}
-  <section class="templates-hero">
-    <h1>Digital Templates</h1>
-    <p>Ready-to-use digital resources designed to streamline your business operations and enhance your online presence.</p>
-  </section>
-  <section class="section" style="min-height:auto;">
-    <div class="template-types">
-      <div class="template-type"><div class="template-icon">📋</div><h3>Business Templates</h3><p>Professional templates for proposals, invoices, contracts, and more.</p></div>
-      <div class="template-type"><div class="template-icon">🎨</div><h3>Marketing Materials</h3><p>Social media templates, email designs, and brand assets.</p></div>
-      <div class="template-type"><div class="template-icon">📚</div><h3>Digital Products</h3><p>PLR/MRR content, guides, workbooks, and educational resources.</p></div>
-    </div>
-    <div class="etsy-cta">
-      <h2>Shop Our Collection</h2>
-      <p>Browse our full collection of digital templates and resources on Etsy. Each template is professionally designed and ready to download instantly.</p>
-      <a href="https://www.etsy.com/shop/bloomiehouse" class="etsy-button" target="_blank" rel="noopener noreferrer">VISIT OUR ETSY SHOP</a>
-    </div>
-  </section>
-  ${sharedFooter}
-</body>
-</html>`;
+// digitalTemplatesPage is defined after templateData below
 
 const contactPage = `<!DOCTYPE html>
 <html lang="en">
@@ -1912,6 +1854,166 @@ const templateData = [
     etsy: 'https://www.etsy.com/shop/bloomiehouse',
   },
 ];
+
+// ── DIGITAL TEMPLATES PAGE ──
+const digitalTemplatesPage = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Templates — Bloomie House</title>
+  <meta name="description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. Buy, personalise, and launch your website this week. From $37 AUD.">
+  <meta name="keywords" content="digital templates Australia, Wix templates, Shopify themes, Canva templates, branding kit, small business templates, website templates download, Australian digital products">
+  <meta property="og:title" content="Digital Templates — Bloomie House">
+  <meta property="og:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. Buy, personalise, launch — this week. From $37 AUD.">
+  <meta property="og:image" content="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <meta property="og:url" content="https://bloomiehouse.com.au/digital-templates">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Digital Templates — Bloomie House">
+  <meta name="twitter:description" content="Premium Wix Studio, Shopify & Canva templates for Australian small businesses. From $37 AUD.">
+  <link rel="canonical" href="https://bloomiehouse.com.au/digital-templates">
+  <link rel="icon" type="image/png" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link rel="apple-touch-icon" href="https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    ${sharedStyles}
+    .dt-hero { text-align: center; padding: 12rem 2rem 5rem; background: var(--light); }
+    .dt-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 300; color: var(--primary); margin-bottom: 1.5rem; letter-spacing: -1px; }
+    .dt-hero p { font-size: 1.15rem; color: var(--text-light); max-width: 580px; margin: 0 auto 3rem; line-height: 1.8; }
+    .dt-hero-badges { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
+    .dt-badge { font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; }
+    .dt-badge::before { content: '—'; color: var(--sage); }
+    .dt-filters { display: flex; gap: 0; justify-content: center; padding: 3rem 2rem 0; flex-wrap: wrap; }
+    .dt-filter-btn { padding: 0.7rem 2rem; border: 1px solid var(--mid); background: transparent; font-family: 'Work Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); cursor: pointer; transition: all 0.25s ease; margin: 0 -1px 0 0; }
+    .dt-filter-btn:hover { background: var(--light); color: var(--primary); }
+    .dt-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); z-index: 1; position: relative; }
+    .dt-grid-section { padding: 3rem 4rem 8rem; max-width: 1300px; margin: 0 auto; }
+    .dt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2.5rem; }
+    .tpl-card { background: white; border: 1px solid var(--mid); overflow: hidden; transition: transform 0.25s ease, box-shadow 0.25s ease; text-decoration: none; color: inherit; display: block; }
+    .tpl-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.10); }
+    .tpl-card.hidden { display: none; }
+    .tpl-thumb { aspect-ratio: 4/3; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .mock-cafe { background: linear-gradient(135deg, #6B4226 0%, #9E6B47 50%, #C8A07A 100%); }
+    .mock-beauty { background: linear-gradient(135deg, #C8A09A 0%, #E8C8C2 50%, #F5EAE8 100%); }
+    .mock-tradie { background: linear-gradient(135deg, #2C3E2D 0%, #4A5D4A 50%, #7A8F7A 100%); }
+    .mock-yoga { background: linear-gradient(135deg, #8B9D7F 0%, #B8C8AC 50%, #E0EAD8 100%); }
+    .mock-boutique { background: linear-gradient(135deg, #BFA080 0%, #D4B898 50%, #EDE0D0 100%); }
+    .mock-coaching { background: linear-gradient(135deg, #D4A8BE 0%, #E8C8D8 50%, #F5EAF0 100%); }
+    .tpl-thumb-label { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: rgba(255,255,255,0.9); letter-spacing: 2px; text-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .tpl-platform-badge { position: absolute; top: 1rem; left: 1rem; background: rgba(255,255,255,0.92); color: var(--primary); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; padding: 0.3rem 0.7rem; }
+    .tpl-sale-badge { position: absolute; top: 1rem; right: 1rem; background: var(--primary); color: white; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; padding: 0.3rem 0.7rem; }
+    .tpl-info { padding: 1.5rem; }
+    .tpl-niche { font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.4rem; }
+    .tpl-name { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; color: var(--primary); margin-bottom: 0.75rem; }
+    .tpl-price { display: flex; align-items: baseline; gap: 0.5rem; }
+    .tpl-price-current { font-size: 1.2rem; font-weight: 500; color: var(--primary); }
+    .tpl-price-original { font-size: 0.95rem; color: var(--text-light); text-decoration: line-through; }
+    .tpl-cta { display: block; margin-top: 1.2rem; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-align: center; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; border: 1px solid var(--primary); transition: all 0.25s ease; text-decoration: none; }
+    .tpl-cta:hover { background: transparent; color: var(--primary); }
+    .dt-platforms { background: var(--cream, #F5F0E8); padding: 6rem 4rem; }
+    .dt-platforms h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: var(--primary); text-align: center; margin-bottom: 0.75rem; }
+    .dt-platforms-sub { text-align: center; color: var(--text-light); font-size: 1.05rem; margin-bottom: 3.5rem; }
+    .dt-platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto; }
+    .dt-platform-card { background: white; border: 1px solid var(--mid); padding: 2.5rem; text-align: center; transition: box-shadow 0.25s ease; }
+    .dt-platform-card:hover { box-shadow: 0 12px 36px rgba(0,0,0,0.07); }
+    .dt-platform-icon { font-size: 1.5rem; margin-bottom: 1rem; color: var(--sage); }
+    .dt-platform-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; color: var(--primary); margin-bottom: 0.75rem; }
+    .dt-platform-card p { font-size: 0.95rem; color: var(--text-light); line-height: 1.75; }
+    .dt-bottom-cta { text-align: center; padding: 6rem 2rem; background: var(--primary); }
+    .dt-bottom-cta h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; color: white; margin-bottom: 1rem; }
+    .dt-bottom-cta p { color: rgba(255,255,255,0.72); font-size: 1.05rem; max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.8; }
+    .dt-etsy-btn { display: inline-block; padding: 1rem 3rem; border: 2px solid white; color: white; text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s ease; }
+    .dt-etsy-btn:hover { background: white; color: var(--primary); }
+    @media (max-width: 768px) {
+      .dt-hero { padding: 9rem 2rem 3rem; }
+      .dt-filters { padding: 2rem 1.5rem 0; gap: 0.5rem; }
+      .dt-filter-btn { margin: 0; }
+      .dt-grid-section { padding: 2rem 1.5rem 5rem; }
+      .dt-platforms { padding: 4rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  ${sharedHeader}
+  <section class="dt-hero">
+    <h1>Digital Templates</h1>
+    <p>Premium website templates for Australian small businesses. Buy, personalise, and launch your site — this week.</p>
+    <div class="dt-hero-badges">
+      <span class="dt-badge">From $37 AUD</span>
+      <span class="dt-badge">Instant Download</span>
+      <span class="dt-badge">No Design Skills Needed</span>
+    </div>
+  </section>
+  <div class="dt-filters">
+    <button class="dt-filter-btn active" onclick="filterTemplates(this, 'all')">All Templates</button>
+    <button class="dt-filter-btn" onclick="filterTemplates(this, 'Wix Studio')">Wix Studio</button>
+    <button class="dt-filter-btn" onclick="filterTemplates(this, 'Shopify')">Shopify</button>
+    <button class="dt-filter-btn" onclick="filterTemplates(this, 'Canva')">Canva</button>
+  </div>
+  <div class="dt-grid-section">
+    <div class="dt-grid" id="templatesGrid">
+      ${templateData.map(t => `
+      <a href="/templates/${t.slug}" class="tpl-card" data-platform="${t.platform}">
+        <div class="tpl-thumb ${t.mockClass}" style="${t.images ? 'background:none;' : ''}">
+          ${t.images ? `<img src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;display:block;">` : `<div class="tpl-thumb-label">${t.name}</div>`}
+          <span class="tpl-platform-badge">${t.platform}</span>
+          <span class="tpl-sale-badge">${t.badge}</span>
+        </div>
+        <div class="tpl-info">
+          <div class="tpl-niche">${t.niche}</div>
+          <div class="tpl-name">${t.name}</div>
+          <div class="tpl-price">
+            <span class="tpl-price-current">$${t.price} AUD</span>
+            ${t.originalPrice ? `<span class="tpl-price-original">$${t.originalPrice}</span>` : ''}
+          </div>
+          <span class="tpl-cta">View Template →</span>
+        </div>
+      </a>`).join('')}
+    </div>
+  </div>
+  <section class="dt-platforms">
+    <h2>Choose Your Platform</h2>
+    <p class="dt-platforms-sub">Every template is built for one platform — pick the one that fits your business.</p>
+    <div class="dt-platform-grid">
+      <div class="dt-platform-card">
+        <div class="dt-platform-icon">◆</div>
+        <h3>Wix Studio</h3>
+        <p>Drag-and-drop simplicity with professional results. Perfect for service-based businesses, studios, and creatives who want full control — no code required.</p>
+      </div>
+      <div class="dt-platform-card">
+        <div class="dt-platform-icon">◈</div>
+        <h3>Shopify</h3>
+        <p>Built for selling online. Ideal for product-based businesses, boutiques, and tradies who need a powerful ecommerce or lead-gen engine.</p>
+      </div>
+      <div class="dt-platform-card">
+        <div class="dt-platform-icon">✦</div>
+        <h3>Canva</h3>
+        <p>Accessible and instant. Great for landing pages, lead magnets, and digital products — editable by anyone in minutes, no design experience needed.</p>
+      </div>
+    </div>
+  </section>
+  <section class="dt-bottom-cta">
+    <h2>Browse the Full Collection</h2>
+    <p>All templates are available on our Etsy shop — instant download, every time.</p>
+    <a href="https://www.etsy.com/shop/bloomiehouse" class="dt-etsy-btn" target="_blank" rel="noopener noreferrer">Shop on Etsy</a>
+  </section>
+  ${sharedFooter}
+  <script>
+    function filterTemplates(btn, platform) {
+      document.querySelectorAll('.dt-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tpl-card').forEach(card => {
+        if (platform === 'all' || card.dataset.platform === platform) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+  <\/script>
+</body>
+</html>`;
 
 // ── TEMPLATES LISTING PAGE ──
 const templatesPage = `<!DOCTYPE html>
