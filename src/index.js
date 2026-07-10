@@ -326,6 +326,280 @@ function productFaqs(t) {
   return base;
 }
 
+function productAudience(t) {
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    return {
+      intro: 'Built for lash educators who want a credible, ready-to-teach curriculum — without spending months writing it.',
+      fits: [
+        { icon: '🎓', title: 'Lash trainers & academies', desc: 'Running or launching 1:1 or group Korean lash lift courses' },
+        { icon: '✨', title: 'Solo lash artists going pro', desc: 'Adding training income alongside your treatment menu' },
+        { icon: '📖', title: 'Educators who resell manuals', desc: 'Canva-editable with your logo — teach under your brand' },
+        { icon: '🇰🇷', title: 'Korean lash lift specialists', desc: 'Technique-focused curriculum your students actually need' },
+      ],
+      notFor: 'Not ideal if you need a live website template — this is a training manual, not a site design.',
+    };
+  }
+  const byCategory = {
+    canva: {
+      intro: `A ${t.niche.toLowerCase()} template for founders who want a polished online presence fast — without hiring an agency.`,
+      fits: [
+        { icon: '🚀', title: 'New business owners', desc: 'Launching your first site and need it live this week' },
+        { icon: '💅', title: `${t.niche} professionals`, desc: 'Your work is premium — your website should look the part' },
+        { icon: '🎨', title: 'Non-designers', desc: 'Comfortable editing in Canva, not code or Figma' },
+        { icon: '💰', title: 'Budget-conscious brands', desc: `Professional look from $${t.price} AUD, not $3k+ custom` },
+      ],
+      notFor: 'Not ideal if you need a fully coded custom build or complex ecommerce logic.',
+    },
+    wix: {
+      intro: `Designed for ${t.niche.toLowerCase()} businesses that book clients online and need a soft-luxury, conversion-ready site.`,
+      fits: [
+        { icon: '📅', title: 'Service businesses', desc: 'Salons, studios & clinics that rely on online booking' },
+        { icon: '✨', title: 'Beauty & wellness brands', desc: 'Elegant layout that matches a premium in-person experience' },
+        { icon: '📱', title: 'Mobile-first businesses', desc: 'Most clients find you on Instagram — this converts on phone' },
+        { icon: '⏱️', title: 'Busy owners', desc: 'Install in Wix Studio, swap branding, publish in days' },
+      ],
+      notFor: 'Not ideal if you are not on Wix Studio or need deep custom development.',
+    },
+    shopify: {
+      intro: `For ${t.niche.toLowerCase()} brands ready to sell online with a trust-building, lead-gen focused layout.`,
+      fits: [
+        { icon: '🔧', title: 'Tradies & service pros', desc: 'Quote requests, reviews & portfolio — built to win jobs' },
+        { icon: '🛒', title: 'Small product sellers', desc: 'Shopify-ready structure when you are ready to add products' },
+        { icon: '📈', title: 'Growing local businesses', desc: 'Look established before you have a big marketing budget' },
+        { icon: '⚡', title: 'Fast movers', desc: 'Skip months of theme research — start with a proven layout' },
+      ],
+      notFor: 'Not ideal if you need a non-Shopify platform or enterprise-scale catalog.',
+    },
+  };
+  return byCategory[t.category] || byCategory.canva;
+}
+
+function productTestimonials(t) {
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    return [
+      { text: 'Finally have a manual I can brand and hand to students. Saved me weeks of writing.', who: 'Lash educator, Melbourne' },
+      { text: 'My 1:1 training feels so much more professional now — students love the layout.', who: 'Korean lash lift trainer' },
+      { text: 'Worth every dollar. Edited in Canva in one afternoon and started teaching next week.', who: 'Academy owner, Sydney' },
+    ];
+  }
+  return [
+    { text: `Exactly what my ${t.niche.toLowerCase()} business needed — live in a weekend, not months.`, who: 'Small business owner, Hobart' },
+    { text: 'Clean, aesthetic, and easy to customise. Clients keep complimenting the site.', who: `${t.platform} user, Australia` },
+    { text: 'Best template purchase I have made. The layout just converts — more enquiries straight away.', who: 'Bloomie House customer' },
+  ];
+}
+
+function productBeforeAfter(t) {
+  const pains = productPainPoints(t).slice(0, 3);
+  return pains.map((p) => ({
+    before: p.pain,
+    after: p.fix,
+  }));
+}
+
+function productPostPurchaseSteps(t) {
+  const editStep =
+    t.category === 'canva'
+      ? {
+          time: '15–60 min',
+          title: 'Open & personalise in Canva',
+          detail:
+            'Click the Canva link from your download. Swap your logo, brand colours, photos, and business name. No design skills needed — everything is drag-and-drop.',
+        }
+      : t.category === 'wix'
+        ? {
+            time: '1–3 hours',
+            title: 'Duplicate into Wix Studio',
+            detail:
+              'Follow the setup guide to add the template to your Wix account. Replace placeholder text and images, connect your booking tool, and preview on mobile.',
+          }
+        : {
+            time: '1–3 hours',
+            title: 'Install on Shopify',
+            detail:
+              'Upload the theme files to your Shopify store. Configure your homepage sections, add services or products, and connect your domain.',
+          };
+
+  const extra =
+    t.slug === 'korean-lash-lift-training-manual'
+      ? {
+          time: 'Same day',
+          title: 'Brand your training manual',
+          detail:
+            'Add your academy logo and name in Canva. Export as PDF for students or share the Canva link for digital access.',
+        }
+      : {
+          time: '30 min',
+          title: 'Connect your essentials',
+          detail:
+            'Link your contact form, booking button, Instagram, and Google Maps. Test on your phone before sharing the URL.',
+        };
+
+  return [
+    {
+      time: 'Instant',
+      title: 'Checkout on Etsy',
+      detail:
+        'Click Buy on Etsy, complete secure payment, and wait for your Etsy confirmation email — usually within minutes.',
+    },
+    {
+      time: '1–5 min',
+      title: 'Download your files',
+      detail:
+        'Open the Etsy email → Downloads → save the template link, setup guide PDF, and any bonus files to your device.',
+    },
+    editStep,
+    extra,
+    {
+      time: 'This week',
+      title: 'Publish & start converting',
+      detail:
+        t.slug === 'korean-lash-lift-training-manual'
+          ? 'Start enrolling students with a professional manual you own — or bundle it into your course price.'
+          : 'Share your new URL on Instagram, Google Business Profile, and email signature. Start taking bookings or enquiries.',
+    },
+    {
+      time: '30 days',
+      title: 'Email support included',
+      detail:
+        'Stuck on setup? Email hello@bloomiehouse.com.au — we help with template questions for 30 days after purchase.',
+    },
+  ];
+}
+
+function productAudienceHtml(t) {
+  const a = productAudience(t);
+  const cards = a.fits
+    .map(
+      (f, i) =>
+        `<article class="audience-card pdp-reveal" style="--reveal-delay:${i * 70}ms">
+          <span class="audience-icon" aria-hidden="true">${f.icon}</span>
+          <h3>${f.title}</h3>
+          <p>${f.desc}</p>
+        </article>`
+    )
+    .join('');
+  return `
+<section class="pdp-audience section" style="background:var(--cream);">
+  <p class="section-label pdp-reveal">Who it's for</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Is this template <em>right for you</em>?</h2>
+  <p class="audience-intro pdp-reveal" style="--reveal-delay:100ms">${a.intro}</p>
+  <div class="audience-grid">${cards}</div>
+  <p class="audience-not pdp-reveal" style="--reveal-delay:200ms"><strong>Not the best fit?</strong> ${a.notFor}</p>
+</section>`;
+}
+
+function productShowcaseCarouselHtml(t) {
+  const rollImgs = (() => {
+    let imgs = t.images?.length ? [...t.images] : [`${MOCK}/studio-hero.jpg`, `${MOCK}/luxspa-devices.jpg`];
+    while (imgs.length < 8) imgs = imgs.concat(t.images || imgs);
+    return imgs.slice(0, 10);
+  })();
+  const colA = rollImgs.filter((_, i) => i % 2 === 0);
+  const colB = rollImgs.filter((_, i) => i % 2 === 1);
+  const rollCell = (src, h) =>
+    `<div class="roll-cell" style="height:${h}px"><img src="${src}" alt="" loading="lazy"></div>`;
+  const colHtml = (imgs, cls) => {
+    const cells = imgs.map((src, i) => rollCell(src, 120 + (i % 3) * 36)).join('');
+    return `<div class="roll-col ${cls}"><div class="roll-track">${cells}${cells}</div></div>`;
+  };
+  const testis = productTestimonials(t);
+  const bubbles = testis
+    .map(
+      (x, i) =>
+        `<div class="testi-bubble pdp-reveal" style="--reveal-delay:${i * 100}ms">
+          <p>"${x.text}"</p>
+          <span>— ${x.who}</span>
+        </div>`
+    )
+    .join('');
+  const ba = productBeforeAfter(t);
+  const baRows = ba
+    .map(
+      (row, i) =>
+        `<div class="ba-row pdp-reveal" style="--reveal-delay:${i * 80}ms">
+          <div class="ba-before"><span class="ba-tag">Before</span><p>${row.before}</p></div>
+          <div class="ba-arrow" aria-hidden="true">→</div>
+          <div class="ba-after"><span class="ba-tag ba-tag-after">After</span><p>${row.after}</p></div>
+        </div>`
+    )
+    .join('');
+
+  return `
+<section class="pdp-showcase section">
+  <p class="section-label pdp-reveal">See it in action</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Preview · proof · <em>results</em></h2>
+  <div class="showcase-carousel pdp-reveal" style="--reveal-delay:120ms" id="showcaseCarousel">
+    <div class="showcase-tabs" role="tablist">
+      <button type="button" class="showcase-tab active" data-slide="0" role="tab" aria-selected="true">Template preview</button>
+      <button type="button" class="showcase-tab" data-slide="1" role="tab" aria-selected="false">Testimonials</button>
+      <button type="button" class="showcase-tab" data-slide="2" role="tab" aria-selected="false">Before &amp; after</button>
+    </div>
+    <div class="showcase-viewport">
+      <div class="showcase-track" id="showcaseTrack">
+        <div class="showcase-slide showcase-slide-roll" role="tabpanel">
+          <p class="showcase-slide-label">Roll through the template</p>
+          <div class="roll-board">${colHtml(colA, 'roll-col-up')}${colHtml(colB, 'roll-col-down')}</div>
+        </div>
+        <div class="showcase-slide showcase-slide-testi" role="tabpanel">
+          <div class="testi-head">
+            <h3>What <em>creators</em> say</h3>
+            <p>Real feedback from beauty &amp; small business owners.</p>
+            <div class="testi-stats">
+              <div><strong class="tabular-nums">500+</strong><span>downloads</span></div>
+              <div><strong>★ 5.0</strong><span>avg. rating</span></div>
+              <div><strong class="tabular-nums">30</strong><span>day support</span></div>
+            </div>
+          </div>
+          <div class="testi-bubbles">${bubbles}</div>
+        </div>
+        <div class="showcase-slide showcase-slide-ba" role="tabpanel">
+          <h3 class="ba-title">Before vs <em>after</em> you buy</h3>
+          <p class="ba-sub">The shift our customers describe — from stuck to launched.</p>
+          <div class="ba-rows">${baRows}</div>
+        </div>
+      </div>
+      <button type="button" class="showcase-nav showcase-prev" id="showcasePrev" aria-label="Previous slide">‹</button>
+      <button type="button" class="showcase-nav showcase-next" id="showcaseNext" aria-label="Next slide">›</button>
+    </div>
+    <div class="showcase-dots" id="showcaseDots">
+      <button type="button" class="showcase-dot active" data-slide="0" aria-label="Slide 1"></button>
+      <button type="button" class="showcase-dot" data-slide="1" aria-label="Slide 2"></button>
+      <button type="button" class="showcase-dot" data-slide="2" aria-label="Slide 3"></button>
+    </div>
+  </div>
+</section>`;
+}
+
+function productProcessHtml(t) {
+  const steps = productPostPurchaseSteps(t);
+  const rows = steps
+    .map(
+      (s, i) =>
+        `<li class="process-step pdp-reveal" style="--reveal-delay:${i * 70}ms">
+          <div class="process-marker"><span class="process-num tabular-nums">${i + 1}</span></div>
+          <div class="process-body">
+            <span class="process-time">${s.time}</span>
+            <strong>${s.title}</strong>
+            <p>${s.detail}</p>
+          </div>
+        </li>`
+    )
+    .join('');
+  const buyLabel = t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →';
+  return `
+<section class="pdp-process section" style="background:var(--cream);">
+  <p class="section-label pdp-reveal">After you buy</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Your path from <em>purchase</em> to launch</h2>
+  <p class="process-intro pdp-reveal" style="--reveal-delay:100ms">No guesswork — here is exactly what happens after you checkout on Etsy, step by step.</p>
+  <ol class="process-timeline">${rows}</ol>
+  <div class="process-cta pdp-reveal" style="--reveal-delay:200ms">
+    <a class="btn btn-pink" href="${t.etsy}" target="_blank" rel="noopener">${buyLabel}</a>
+    <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Prefer we set it up? Book now</a>
+  </div>
+</section>`;
+}
+
 function productFunnelHtml(t) {
   const pains = productPainPoints(t);
   const painCards = pains
@@ -343,13 +617,8 @@ function productFunnelHtml(t) {
 <section class="pdp-funnel section">
   <p class="section-label pdp-reveal">Why this template</p>
   <h2 class="section-title pdp-reveal" style="--reveal-delay:80ms">Stop losing time.<br>Start <em>launching</em>.</h2>
-  <p class="pdp-funnel-intro pdp-reveal" style="--reveal-delay:140ms">Most small businesses stall because the website never ships. This template removes the guesswork — so you can focus on clients, not Canva tabs at midnight.</p>
+  <p class="pdp-funnel-intro pdp-reveal" style="--reveal-delay:140ms">Most small businesses stall because the website never ships. This template removes the guesswork — so you can focus on clients, not late-night DIY.</p>
   <div class="pain-grid">${painCards}</div>
-  <div class="funnel-steps pdp-reveal" style="--reveal-delay:200ms">
-    <div class="funnel-step"><span class="funnel-num">1</span><div><strong>Buy on Etsy</strong><p>Secure checkout · instant digital delivery</p></div></div>
-    <div class="funnel-step"><span class="funnel-num">2</span><div><strong>Personalise</strong><p>Swap your logo, colours &amp; photos in ${t.platform}</p></div></div>
-    <div class="funnel-step"><span class="funnel-num">3</span><div><strong>Launch &amp; convert</strong><p>Go live and start booking, selling, or teaching</p></div></div>
-  </div>
   <div class="pdp-funnel-cta pdp-reveal" style="--reveal-delay:260ms">
     <div>
       <p class="funnel-cta-price"><span class="price-current tabular-nums">$${t.price} AUD</span>${t.originalPrice ? `<span class="price-original tabular-nums">$${t.originalPrice}</span>` : ''}</p>
@@ -1548,9 +1817,145 @@ function productPage(t) {
     to { opacity:1; transform:translateY(0); }
   }
   .pdp-faq-footer { margin-top:1.75rem; color:var(--muted); font-size:.92rem; }
+  .audience-intro { color:var(--muted); max-width:40rem; line-height:1.75; margin-bottom:1.5rem; }
+  .audience-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-bottom:1.25rem;
+  }
+  .audience-card {
+    background:#fff; border-radius:16px; padding:1.25rem; box-shadow:var(--shadow-border);
+    transition-property: transform, box-shadow; transition-duration:200ms;
+  }
+  .audience-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
+  .audience-icon { font-size:1.5rem; display:block; margin-bottom:.5rem; }
+  .audience-card h3 { font-family:Fraunces,serif; font-size:1.05rem; margin-bottom:.35rem; }
+  .audience-card p { font-size:.88rem; color:var(--muted); line-height:1.6; text-wrap:pretty; }
+  .audience-not { font-size:.9rem; color:var(--muted); padding:1rem 1.15rem; background:rgba(255,255,255,.65); border-radius:12px; text-wrap:pretty; }
+  .showcase-carousel { max-width:900px; margin:0 auto; }
+  .showcase-tabs { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:1rem; }
+  .showcase-tab {
+    border:none; background:#fff; border-radius:999px; padding:.55rem 1rem; font-family:inherit;
+    font-size:.8rem; cursor:pointer; box-shadow:var(--shadow-border); color:var(--muted);
+    transition-property: background-color, color, box-shadow, transform;
+    transition-duration:150ms;
+  }
+  .showcase-tab.active { background:var(--black); color:#fff; box-shadow:none; }
+  .showcase-tab:active { transform:scale(0.96); }
+  .showcase-viewport {
+    position:relative; overflow:hidden; border-radius:20px; background:#fff;
+    box-shadow:var(--shadow-border); min-height:380px;
+  }
+  .showcase-track {
+    display:flex; width:300%; transition: transform 450ms cubic-bezier(0.2,0,0,1);
+  }
+  .showcase-slide {
+    width:33.333%; flex-shrink:0; padding:1.5rem 1.75rem 1.75rem; box-sizing:border-box;
+  }
+  .showcase-slide-label { font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.75rem; }
+  .roll-board {
+    display:grid; grid-template-columns:1fr 1fr; gap:.65rem; height:300px; overflow:hidden;
+    border-radius:14px; background:var(--cream); padding:.5rem;
+  }
+  .roll-col { overflow:hidden; border-radius:10px; }
+  .roll-track { display:flex; flex-direction:column; gap:.5rem; }
+  .roll-col-up .roll-track { animation: rollUp 22s linear infinite; }
+  .roll-col-down .roll-track { animation: rollDown 26s linear infinite; }
+  @keyframes rollUp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+  }
+  @keyframes rollDown {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); }
+  }
+  .roll-cell { border-radius:10px; overflow:hidden; flex-shrink:0; box-shadow:var(--shadow-border); }
+  .roll-cell img { width:100%; height:100%; object-fit:cover; }
+  .testi-head h3 { font-family:Fraunces,serif; font-size:1.5rem; margin-bottom:.25rem; }
+  .testi-head h3 em { font-style:italic; color:var(--pink); font-weight:300; }
+  .testi-head p { color:var(--muted); font-size:.9rem; margin-bottom:1rem; }
+  .testi-stats {
+    display:flex; gap:1.25rem; flex-wrap:wrap; margin-bottom:1.25rem;
+  }
+  .testi-stats div { text-align:center; }
+  .testi-stats strong { display:block; font-family:Fraunces,serif; font-size:1.35rem; }
+  .testi-stats span { font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .testi-bubbles { display:grid; gap:.65rem; }
+  .testi-bubble {
+    background:var(--cream); border-radius:16px 16px 16px 4px; padding:.9rem 1.1rem;
+    box-shadow:var(--shadow-border); max-width:95%;
+  }
+  .testi-bubble:nth-child(even) { border-radius:16px 16px 4px 16px; margin-left:auto; }
+  .testi-bubble p { font-size:.9rem; line-height:1.55; margin-bottom:.35rem; text-wrap:pretty; }
+  .testi-bubble span { font-size:.78rem; color:var(--muted); }
+  .ba-title { font-family:Fraunces,serif; font-size:1.4rem; margin-bottom:.25rem; }
+  .ba-title em { font-style:italic; color:var(--pink); font-weight:300; }
+  .ba-sub { color:var(--muted); font-size:.9rem; margin-bottom:1.25rem; }
+  .ba-rows { display:grid; gap:.75rem; }
+  .ba-row {
+    display:grid; grid-template-columns:1fr auto 1fr; gap:.5rem; align-items:stretch;
+  }
+  .ba-before, .ba-after {
+    border-radius:14px; padding:1rem; font-size:.88rem; line-height:1.55; text-wrap:pretty;
+  }
+  .ba-before { background:#fff5f5; box-shadow:var(--shadow-border); }
+  .ba-after { background:#f0faf0; box-shadow:var(--shadow-border); }
+  .ba-tag {
+    display:inline-block; font-size:.65rem; letter-spacing:.12em; text-transform:uppercase;
+    font-weight:600; color:#c44; margin-bottom:.4rem;
+  }
+  .ba-tag-after { color:#2d6a4f; }
+  .ba-arrow { display:grid; place-items:center; color:var(--pink); font-size:1.2rem; font-weight:700; }
+  .ba-before p, .ba-after p { color:var(--charcoal); }
+  .showcase-nav {
+    position:absolute; top:50%; transform:translateY(-50%); width:36px; height:36px; border-radius:50%;
+    border:none; background:rgba(255,255,255,.95); font-size:1.1rem; cursor:pointer; z-index:2;
+    box-shadow:var(--shadow-border-hover);
+    transition-property: transform; transition-duration:150ms;
+  }
+  .showcase-nav:active { transform:translateY(-50%) scale(0.96); }
+  .showcase-prev { left:8px; }
+  .showcase-next { right:8px; padding-left:2px; }
+  .showcase-dots { display:flex; justify-content:center; gap:.45rem; margin-top:1rem; }
+  .showcase-dot {
+    width:8px; height:8px; border-radius:50%; border:none; padding:0; background:rgba(0,0,0,.15); cursor:pointer;
+    transition-property: transform, background-color; transition-duration:150ms;
+  }
+  .showcase-dot.active { background:var(--pink); transform:scale(1.2); }
+  .process-intro { color:var(--muted); max-width:38rem; line-height:1.75; margin-bottom:1.75rem; }
+  .process-timeline {
+    list-style:none; display:grid; gap:0; max-width:720px; margin:0 auto 2rem;
+    position:relative;
+  }
+  .process-timeline::before {
+    content:''; position:absolute; left:19px; top:12px; bottom:12px; width:2px;
+    background:linear-gradient(180deg, var(--pink), rgba(214,125,154,.2));
+  }
+  .process-step {
+    display:flex; gap:1.15rem; padding:0 0 1.5rem; position:relative;
+  }
+  .process-marker { flex-shrink:0; z-index:1; }
+  .process-num {
+    width:40px; height:40px; border-radius:50%; background:var(--black); color:#fff;
+    display:grid; place-items:center; font-size:.85rem; font-weight:600;
+    box-shadow:0 0 0 4px var(--cream);
+  }
+  .process-time {
+    display:inline-block; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--pink); margin-bottom:.2rem;
+  }
+  .process-body strong { display:block; font-family:Fraunces,serif; font-size:1.1rem; margin-bottom:.35rem; }
+  .process-body p { font-size:.9rem; color:var(--muted); line-height:1.7; text-wrap:pretty; }
+  .process-cta { display:flex; gap:.65rem; flex-wrap:wrap; justify-content:center; }
+  @media (max-width:640px) {
+    .ba-row { grid-template-columns:1fr; }
+    .ba-arrow { transform:rotate(90deg); justify-self:center; }
+    .showcase-slide { padding:1.15rem; }
+    .roll-board { height:260px; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .pdp-reveal { opacity:1; transform:none; filter:none; transition:none; }
     .faq-item p { animation:none; }
+    .roll-col-up .roll-track, .roll-col-down .roll-track { animation:none; }
+    .showcase-track { transition:none; }
   }
   .pdp-actions { display:flex; flex-wrap:wrap; gap:.7rem; margin:1.5rem 0 1rem; }
   .pdp-features { margin-top:1.75rem; }
@@ -1624,7 +2029,10 @@ function productPage(t) {
     </div>
   </div>
 </div>
+${productAudienceHtml(t)}
+${productShowcaseCarouselHtml(t)}
 ${productFunnelHtml(t)}
+${productProcessHtml(t)}
 ${productFaqHtml(t)}
 <section class="section" style="padding-top:0;">
   <h2 class="section-title pdp-reveal">You may also <em>like</em></h2>
@@ -1748,6 +2156,54 @@ ${productFaqHtml(t)}
     }
   } else {
     document.querySelectorAll('.pdp-reveal').forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  var showcase = document.getElementById('showcaseCarousel');
+  if(showcase){
+    var track = document.getElementById('showcaseTrack');
+    var slide = 0;
+    var total = 3;
+    var timer;
+    function goTo(n){
+      slide = (n + total) % total;
+      if(track) track.style.transform = 'translateX(-' + (slide * (100 / total)) + '%)';
+      showcase.querySelectorAll('.showcase-dot').forEach(function(d, i){
+        d.classList.toggle('active', i === slide);
+      });
+      showcase.querySelectorAll('.showcase-tab').forEach(function(tab, i){
+        tab.classList.toggle('active', i === slide);
+        tab.setAttribute('aria-selected', i === slide ? 'true' : 'false');
+      });
+    }
+    function next(){ goTo(slide + 1); }
+    function startAuto(){
+      clearInterval(timer);
+      if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        timer = setInterval(next, 5500);
+      }
+    }
+    showcase.querySelectorAll('[data-slide]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        goTo(parseInt(btn.getAttribute('data-slide'), 10) || 0);
+        startAuto();
+      });
+    });
+    var sp = document.getElementById('showcasePrev');
+    var sn = document.getElementById('showcaseNext');
+    if(sp) sp.addEventListener('click', function(){ goTo(slide - 1); startAuto(); });
+    if(sn) sn.addEventListener('click', function(){ goTo(slide + 1); startAuto(); });
+    showcase.addEventListener('mouseenter', function(){ clearInterval(timer); });
+    showcase.addEventListener('mouseleave', startAuto);
+    var sx = 0;
+    showcase.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, { passive:true });
+    showcase.addEventListener('touchend', function(e){
+      var dx = e.changedTouches[0].clientX - sx;
+      if(Math.abs(dx) < 40) return;
+      goTo(dx < 0 ? slide + 1 : slide - 1);
+      startAuto();
+    }, { passive:true });
+    goTo(0);
+    startAuto();
   }
 })();
 </script>`;
