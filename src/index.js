@@ -15,6 +15,7 @@ const JOTFORM_CUSTOM = 'https://form.jotform.com/jsform/253192865445869';
 const SITE = 'https://bloomiehouse.com.au';
 
 const MOCK = '/mockups';
+const AVATARS = `${MOCK}/avatars`;
 
 const templateData = [
   {
@@ -385,21 +386,21 @@ function productAudience(t) {
 function productTestimonials(t) {
   if (t.slug === 'korean-lash-lift-training-manual') {
     return [
-      { name: 'Mia T.', city: 'Melbourne', text: 'Finally have a manual I can brand and hand to students. Saved me weeks of writing.', highlight: 'Saved me weeks' },
-      { name: 'Jess L.', city: 'Sydney', text: 'My 1:1 training feels so much more professional now — students love the layout.', highlight: 'so much more professional' },
-      { name: 'Hana K.', city: 'Brisbane', text: 'Worth every dollar. Edited in Canva in one afternoon and started teaching next week.', highlight: 'started teaching next week' },
-      { name: 'Priya S.', city: 'Perth', text: 'Exactly what my academy needed. The curriculum structure is spot-on for Korean lash lift.', highlight: 'spot-on for Korean lash lift' },
-      { name: 'Ella R.', city: 'Hobart', text: 'Best purchase for my training business. Students ask where I got the manual!', highlight: 'Best purchase' },
-      { name: 'Sophie W.', city: 'Adelaide', text: 'Clean, aesthetic, easy to customise. I added my logo and launched my course the same week.', highlight: 'launched my course' },
+      { name: 'Mia T.', city: 'Melbourne', avatar: `${AVATARS}/avatar-mia.jpg`, text: 'Finally have a manual I can brand and hand to students. Saved me weeks of writing.', highlight: 'Saved me weeks' },
+      { name: 'Jess L.', city: 'Sydney', avatar: `${AVATARS}/avatar-jess.jpg`, text: 'My 1:1 training feels so much more professional now — students love the layout.', highlight: 'so much more professional' },
+      { name: 'Naomi W.', city: 'Brisbane', avatar: `${AVATARS}/avatar-naomi.jpg`, text: 'Worth every dollar. Edited in Canva in one afternoon and started teaching next week.', highlight: 'started teaching next week' },
+      { name: 'Ella R.', city: 'Perth', avatar: `${AVATARS}/avatar-ella.jpg`, text: 'Exactly what my academy needed. The curriculum structure is spot-on for Korean lash lift.', highlight: 'spot-on for Korean lash lift' },
+      { name: 'Amara J.', city: 'Hobart', avatar: `${AVATARS}/avatar-amara.jpg`, text: 'Best purchase for my training business. Students ask where I got the manual!', highlight: 'Best purchase' },
+      { name: 'Sophie W.', city: 'Adelaide', avatar: `${AVATARS}/avatar-sophie.jpg`, text: 'Clean, aesthetic, easy to customise. I added my logo and launched my course the same week.', highlight: 'launched my course' },
     ];
   }
   return [
-    { name: 'Chloe M.', city: 'Melbourne', text: `Exactly what my ${t.niche.toLowerCase()} business needed — live in a weekend, not months.`, highlight: 'live in a weekend' },
-    { name: 'Amy N.', city: 'Sydney', text: 'Clean, aesthetic, and easy to customise. Clients keep complimenting the site.', highlight: 'easy to customise' },
-    { name: 'Kate B.', city: 'Brisbane', text: 'Best template purchase I have made. The layout just converts — more enquiries straight away.', highlight: 'more enquiries' },
-    { name: 'Linh P.', city: 'Hobart', text: 'Your templates are beyond my expectations — bought so many before but nothing comes close.', highlight: 'beyond my expectations' },
-    { name: 'Sarah D.', city: 'Perth', text: 'Just joined and wow… everything is so aesthetic and easy to work with. You thought of everything!', highlight: 'so aesthetic' },
-    { name: 'Ruby F.', city: 'Canberra', text: 'Feeling ready to start my business properly. Professional look without the agency price tag.', highlight: 'ready to start my business' },
+    { name: 'Chloe M.', city: 'Melbourne', avatar: `${AVATARS}/avatar-chloe.jpg`, text: `Exactly what my ${t.niche.toLowerCase()} business needed — live in a weekend, not months.`, highlight: 'live in a weekend' },
+    { name: 'Amy N.', city: 'Sydney', avatar: `${AVATARS}/avatar-amy.jpg`, text: 'Clean, aesthetic, and easy to customise. Clients keep complimenting the site.', highlight: 'easy to customise' },
+    { name: 'Kate B.', city: 'Brisbane', avatar: `${AVATARS}/avatar-kate.jpg`, text: 'Best template purchase I have made. The layout just converts — more enquiries straight away.', highlight: 'more enquiries' },
+    { name: 'Zara H.', city: 'Hobart', avatar: `${AVATARS}/avatar-zara.jpg`, text: 'Your templates are beyond my expectations — bought so many before but nothing comes close.', highlight: 'beyond my expectations' },
+    { name: 'Sarah D.', city: 'Perth', avatar: `${AVATARS}/avatar-sarah.jpg`, text: 'Just joined and wow… everything is so aesthetic and easy to work with. You thought of everything!', highlight: 'so aesthetic' },
+    { name: 'Jade K.', city: 'Canberra', avatar: `${AVATARS}/avatar-jade.jpg`, text: 'Feeling ready to start my business properly. Professional look without the agency price tag.', highlight: 'ready to start my business' },
   ];
 }
 
@@ -541,9 +542,10 @@ function productTestimonialsHtml(t) {
     const text = x.highlight
       ? x.text.replace(x.highlight, `<em class="testi-hl">${x.highlight}</em>`)
       : x.text;
-    const initial = x.name.charAt(0);
     return `<div class="testi-card">
-      <div class="testi-avatar" aria-hidden="true">${initial}</div>
+      <div class="testi-avatar">
+        <img src="${x.avatar}" alt="" width="40" height="40" loading="lazy" decoding="async">
+      </div>
       <div class="testi-card-body">
         <p>"${text}"</p>
         <span>${x.name} · ${x.city}</span>
@@ -690,15 +692,17 @@ function productValueStackHtml(t) {
 
 function productSocialProofPopupHtml(t) {
   const buyers = [
-    { name: 'Mia T.', product: t.name, city: 'Melbourne', ago: '2 min' },
-    { name: 'Jess L.', product: 'LuxSpa Beauty & Nails', city: 'Sydney', ago: '6 min' },
-    { name: 'Chloe M.', product: 'Korean Lash Lift Manual', city: 'Brisbane', ago: '11 min' },
-    { name: 'Amy N.', product: 'The Studio', city: 'Perth', ago: '18 min' },
-    { name: 'Kate B.', product: t.name, city: 'Hobart', ago: '24 min' },
+    { name: 'Mia T.', product: t.name, city: 'Melbourne', ago: '2 min', avatar: `${AVATARS}/avatar-mia.jpg` },
+    { name: 'Jess L.', product: 'LuxSpa Beauty & Nails', city: 'Sydney', ago: '6 min', avatar: `${AVATARS}/avatar-jess.jpg` },
+    { name: 'Naomi W.', product: 'Korean Lash Lift Manual', city: 'Brisbane', ago: '11 min', avatar: `${AVATARS}/avatar-naomi.jpg` },
+    { name: 'Amy N.', product: 'The Studio', city: 'Perth', ago: '18 min', avatar: `${AVATARS}/avatar-amy.jpg` },
+    { name: 'Kate B.', product: t.name, city: 'Hobart', ago: '24 min', avatar: `${AVATARS}/avatar-kate.jpg` },
   ];
   return `
 <div class="social-proof-popup" id="socialProofPopup" role="status" aria-live="polite" hidden>
-  <div class="social-proof-avatar" id="socialProofAvatar" aria-hidden="true">M</div>
+  <div class="social-proof-avatar" id="socialProofAvatar">
+    <img id="socialProofAvatarImg" src="${AVATARS}/avatar-mia.jpg" alt="" width="44" height="44" loading="lazy" decoding="async">
+  </div>
   <div class="social-proof-text">
     <strong id="socialProofName">Mia T.</strong>
     <span id="socialProofAction">purchased ${t.name}</span>
@@ -713,7 +717,7 @@ function productSocialProofPopupHtml(t) {
   if(!popup || !buyers.length) return;
   var idx = 0;
   var dismissed = false;
-  var avatar = document.getElementById('socialProofAvatar');
+  var avatarImg = document.getElementById('socialProofAvatarImg');
   var nameEl = document.getElementById('socialProofName');
   var actionEl = document.getElementById('socialProofAction');
   var metaEl = document.getElementById('socialProofMeta');
@@ -722,7 +726,7 @@ function productSocialProofPopupHtml(t) {
     if(dismissed) return;
     var b = buyers[idx % buyers.length];
     idx++;
-    if(avatar) avatar.textContent = b.name.charAt(0);
+    if(avatarImg && b.avatar) avatarImg.src = b.avatar;
     if(nameEl) nameEl.textContent = b.name;
     if(actionEl) actionEl.textContent = 'purchased ' + b.product;
     if(metaEl) metaEl.textContent = b.city + ' · ' + b.ago + ' ago';
@@ -2028,9 +2032,11 @@ function productPage(t) {
     background:#fff; border-radius:18px; padding:1rem 1.1rem; box-shadow:var(--shadow-border);
   }
   .testi-avatar {
-    width:40px; height:40px; border-radius:50%; flex-shrink:0;
-    background:linear-gradient(135deg, var(--pink), #e8b4c4); color:#fff;
-    display:grid; place-items:center; font-weight:600; font-size:.9rem;
+    width:40px; height:40px; border-radius:50%; flex-shrink:0; overflow:hidden;
+    box-shadow:0 0 0 2px #fff, var(--shadow-border);
+  }
+  .testi-avatar img {
+    width:100%; height:100%; object-fit:cover; display:block;
   }
   .testi-card-body p { font-size:.88rem; line-height:1.55; margin-bottom:.35rem; text-wrap:pretty; }
   .testi-hl { font-style:normal; color:#9b7ec8; font-weight:500; }
@@ -2216,9 +2222,11 @@ function productPage(t) {
   .social-proof-popup.is-visible { transform:translateX(0); opacity:1; }
   .social-proof-popup.is-leaving { transform:translateX(-120%); opacity:0; }
   .social-proof-avatar {
-    width:44px; height:44px; border-radius:50%; flex-shrink:0;
-    background:linear-gradient(135deg, var(--sage), var(--pink)); color:#fff;
-    display:grid; place-items:center; font-weight:600; font-size:1rem;
+    width:44px; height:44px; border-radius:50%; flex-shrink:0; overflow:hidden;
+    box-shadow:0 0 0 2px #fff, var(--shadow-border);
+  }
+  .social-proof-avatar img {
+    width:100%; height:100%; object-fit:cover; display:block;
   }
   .social-proof-text { display:grid; gap:.1rem; min-width:0; }
   .social-proof-text strong { font-size:.88rem; }
