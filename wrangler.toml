@@ -2,6 +2,18 @@ name = "bloomie-house"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
+# Custom domain routing — serve all paths on bloomiehouse.com.au via this Worker.
+# Without bloomiehouse.com.au/*, only / reaches the Worker; other paths fall through
+# to the zone origin and 301 to http://global_errors.all.com/.
+# Requires the domain zone on Cloudflare (NS already point here).
+[[routes]]
+pattern = "bloomiehouse.com.au/*"
+zone_name = "bloomiehouse.com.au"
+
+[[routes]]
+pattern = "www.bloomiehouse.com.au/*"
+zone_name = "bloomiehouse.com.au"
+
 # Chatbot (Groq) configuration
 # The GROQ_API_KEY must be set as a SECRET (never commit it):
 #   npx wrangler secret put GROQ_API_KEY
