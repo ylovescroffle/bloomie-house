@@ -7,8 +7,9 @@ const LOGO =
   'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png';
 const LOGO_LONG =
   'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-long-house-green-background-transparent.png';
-const ETSY_SHOP = 'https://www.etsy.com/shop/bloomiehouse';
+const ETSY_SHOP = 'https://bloomlashbar.etsy.com';
 const ETSY_ALT = 'https://bloomlashbar.etsy.com';
+const ETSY_KOREAN_LASH_MANUAL = 'https://bloomlashbar.etsy.com';
 const JOTFORM_DISCOVERY = 'https://form.jotform.com/haiyen0304/website-design-discovery';
 const JOTFORM_CUSTOM = 'https://form.jotform.com/jsform/253192865445869';
 const SITE = 'https://bloomiehouse.com.au';
@@ -16,6 +17,33 @@ const SITE = 'https://bloomiehouse.com.au';
 const MOCK = '/mockups';
 
 const templateData = [
+  {
+    slug: 'korean-lash-lift-training-manual',
+    name: 'Korean Lash Lift & Tint Training Manual',
+    niche: 'Lash Training',
+    platform: 'Canva',
+    category: 'canva',
+    badge: 'Bestseller',
+    price: 10.48,
+    originalPrice: 52.4,
+    mockClass: 'mock-beauty',
+    images: [
+      `${MOCK}/korean-lash-lift-hero.jpg`,
+      `${MOCK}/korean-lash-lift-pages.jpg`,
+      `${MOCK}/korean-lash-lift-inside.jpg`,
+      `${MOCK}/korean-lash-lift-features.jpg`,
+    ],
+    description:
+      'A professional 200+ page Canva training manual for Korean lash lift & tint educators. Fully editable — add your logo, brand your academy, and start teaching with resell-ready curriculum.',
+    features: [
+      '200+ page editable Canva manual',
+      'Korean lash lift & tint curriculum',
+      'Resell rights for trainers & academies',
+      'Theory, technique & aftercare sections',
+      'Instant digital delivery via Etsy',
+    ],
+    etsy: ETSY_KOREAN_LASH_MANUAL,
+  },
   {
     slug: 'wedding-rsvp',
     name: 'Wedding Invitation RSVP',
@@ -766,15 +794,22 @@ function cartScript(catalogJson) {
         thumb+
         '<div class="cart-meta"><h3><a href="/templates/'+t.slug+'" style="text-decoration:none;">'+t.name+'</a></h3><p>'+t.platform+' · '+t.niche+'</p>'+
         '<div style="margin-top:.55rem;"><input class="qty" type="number" min="1" value="'+(item.qty||1)+'" data-qty="'+t.slug+'">'+
-        '<button class="btn btn-ghost" type="button" data-remove="'+t.slug+'" style="padding:.45rem .8rem;font-size:.8rem;">Remove</button></div></div>'+
+        '<button class="btn btn-ghost" type="button" data-remove="'+t.slug+'" style="padding:.45rem .8rem;font-size:.8rem;">Remove</button>'+
+        (t.etsy ? '<a class="btn btn-ghost" href="'+t.etsy+'" target="_blank" rel="noopener" style="padding:.45rem .8rem;font-size:.8rem;margin-left:.35rem;">Buy on Etsy →</a>' : '')+
+        '</div></div>'+
         '<div style="font-family:Fraunces,serif;font-weight:700;">$'+line+' AUD</div></div>';
     }).join('');
+    var checkoutUrl = '${ETSY_SHOP}';
+    if(items.length === 1){
+      var one = bySlug(items[0].slug);
+      if(one && one.etsy) checkoutUrl = one.etsy;
+    }
     root.innerHTML = rows +
       '<div class="cart-summary"><div><div style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);">Estimated total</div>'+
       '<div style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;">$'+total+' AUD</div></div>'+
       '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">'+
       '<a class="btn btn-ghost" href="/shop">Keep shopping</a>'+
-      '<a class="btn btn-pink" href="${ETSY_SHOP}" target="_blank" rel="noopener">Checkout on Etsy →</a>'+
+      '<a class="btn btn-pink" href="'+checkoutUrl+'" target="_blank" rel="noopener">Checkout on Etsy →</a>'+
       '</div></div>'+
       '<p class="cart-note">Bloomie House uses Etsy for payment &amp; delivery. Your cart here is a shopping list — open Etsy to complete purchase for each template (or browse the full shop).</p>';
 
@@ -1029,20 +1064,27 @@ function shopPage(platform) {
 }
 
 function productPage(t) {
-  const galleryMain = t.images?.[0]
-    ? `<button type="button" class="pdp-zoom" data-lightbox="${t.images[0]}" aria-label="Enlarge image">
-         <img id="mainImg" src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:contain;">
-         <span class="zoom-hint">Click to enlarge</span>
-       </button>`
-    : `<span class="product-thumb-label" style="font-size:2.4rem;">${t.name}</span>`;
-  const thumbs = t.images
-    ? t.images
-        .map(
-          (src, i) =>
-            `<button type="button" class="thumb-btn" data-src="${src}" style="border:none;padding:0;border-radius:12px;overflow:hidden;cursor:pointer;opacity:${i === 0 ? 1 : 0.65};background:var(--cream);"><img src="${src}" alt="${t.name} ${i + 1}" style="width:100%;aspect-ratio:1/1;object-fit:contain;"></button>`
-        )
-        .join('')
-    : '';
+  const hasGallery = Boolean(t.images?.length);
+  const galleryMain = hasGallery
+    ? `<div class="pdp-gallery" id="pdpGallery">
+         <div class="pdp-main product-thumb ${t.mockClass}" style="background:var(--cream);">
+           <button type="button" class="pdp-nav pdp-prev" id="pdpPrev" aria-label="Previous image">‹</button>
+           <button type="button" class="pdp-zoom" id="pdpZoom" data-lightbox="${t.images[0]}" aria-label="Enlarge image">
+             <img id="mainImg" src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:contain;">
+             <span class="zoom-hint">Click to enlarge</span>
+           </button>
+           <button type="button" class="pdp-nav pdp-next" id="pdpNext" aria-label="Next image">›</button>
+           <span class="pdp-counter" id="pdpCounter">1 / ${t.images.length}</span>
+         </div>
+         ${t.images.length > 1 ? `<div class="pdp-dots" id="pdpDots">${t.images.map((_, i) => `<button type="button" class="pdp-dot${i === 0 ? ' active' : ''}" data-idx="${i}" aria-label="Image ${i + 1}"></button>`).join('')}</div>` : ''}
+         <div class="pdp-thumbs">${t.images
+           .map(
+             (src, i) =>
+               `<button type="button" class="thumb-btn" data-src="${src}" data-idx="${i}" style="border:none;padding:0;border-radius:12px;overflow:hidden;cursor:pointer;opacity:${i === 0 ? 1 : 0.65};background:var(--cream);"><img src="${src}" alt="${t.name} ${i + 1}" style="width:100%;aspect-ratio:1/1;object-fit:contain;"></button>`
+           )
+           .join('')}</div>
+       </div>`
+    : `<div class="pdp-main product-thumb ${t.mockClass}"><span class="product-thumb-label" style="font-size:2.4rem;">${t.name}</span></div>`;
   const related = templateData
     .filter((x) => x.slug !== t.slug)
     .slice(0, 3)
@@ -1053,13 +1095,30 @@ function productPage(t) {
 <style>
   .pdp { display:grid; grid-template-columns:1.05fr .95fr; gap:3rem; padding:3rem 4vw 4rem; max-width:1200px; margin:0 auto; align-items:start; }
   .pdp-main { aspect-ratio:1/1; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--cream); position:relative; }
+  .pdp-gallery { display:flex; flex-direction:column; gap:.75rem; }
   .pdp-zoom { display:block; width:100%; height:100%; border:none; padding:0; background:transparent; cursor:zoom-in; position:relative; }
+  .pdp-nav {
+    position:absolute; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%;
+    border:none; background:rgba(255,255,255,.92); font-size:1.25rem; cursor:pointer; z-index:2;
+    box-shadow:0 4px 16px rgba(0,0,0,.12); display:grid; place-items:center; line-height:1;
+  }
+  .pdp-prev { left:10px; }
+  .pdp-next { right:10px; }
+  .pdp-counter {
+    position:absolute; bottom:12px; left:12px; background:rgba(17,17,17,.72); color:#fff;
+    font-size:.72rem; letter-spacing:.06em; padding:.35rem .65rem; border-radius:999px; pointer-events:none;
+  }
+  .pdp-dots { display:flex; justify-content:center; gap:.45rem; flex-wrap:wrap; }
+  .pdp-dot {
+    width:8px; height:8px; border-radius:50%; border:none; padding:0; background:var(--border); cursor:pointer;
+  }
+  .pdp-dot.active { background:var(--pink); transform:scale(1.15); }
   .zoom-hint {
     position:absolute; bottom:12px; right:12px; background:rgba(17,17,17,.72); color:#fff;
     font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; padding:.4rem .7rem; border-radius:999px;
     pointer-events:none; opacity:.9;
   }
-  .pdp-thumbs { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:.6rem; margin-top:.75rem; }
+  .pdp-thumbs { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:.6rem; }
   .breadcrumb { font-size:.85rem; color:var(--muted); margin-bottom:1rem; }
   .breadcrumb a { color:var(--muted); text-decoration:none; }
   .breadcrumb a:hover { color:var(--pink); }
@@ -1088,13 +1147,17 @@ function productPage(t) {
   }
   .lightbox-prev { left:1rem; }
   .lightbox-next { right:1rem; }
+  .lightbox-counter {
+    position:fixed; bottom:1.25rem; left:50%; transform:translateX(-50%);
+    background:rgba(255,255,255,.92); color:var(--charcoal); font-size:.8rem;
+    padding:.45rem .85rem; border-radius:999px; z-index:3001; pointer-events:none;
+  }
   @media (max-width:900px){ .pdp { grid-template-columns:1fr; gap:1.75rem; padding-top:1.5rem; } }
 </style>
 <div class="pdp">
   <div>
-    <div class="pdp-main product-thumb ${t.mockClass}" style="${t.images ? 'background:var(--cream);display:block;' : ''}">${galleryMain}</div>
-    ${thumbs ? `<div class="pdp-thumbs">${thumbs}</div>` : ''}
-    <p style="font-size:.8rem;color:var(--muted);margin-top:.6rem;">Tip: click the image to view full size</p>
+    ${galleryMain}
+    ${hasGallery ? '<p style="font-size:.8rem;color:var(--muted);margin-top:.25rem;">Tip: swipe or use arrows · click to view full size</p>' : ''}
   </div>
   <div>
     <div class="breadcrumb"><a href="/shop">Shop</a> / ${t.name}</div>
@@ -1109,7 +1172,7 @@ function productPage(t) {
     <p style="color:var(--muted);line-height:1.8;margin-top:.5rem;">${t.description}</p>
     <div class="pdp-actions">
       <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
-      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">Buy now on Etsy →</a>
+      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →'}</a>
       <a class="btn btn-ghost" href="/cart">View cart</a>
     </div>
     <p style="font-size:.85rem;color:var(--muted);">Instant delivery via Etsy · setup guide included · 30-day email support</p>
@@ -1128,6 +1191,7 @@ function productPage(t) {
   <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">‹</button>
   <img id="lightboxImg" src="" alt="">
   <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">›</button>
+  <span class="lightbox-counter" id="lightboxCounter"></span>
 </div>
 <script>
 (function(){
@@ -1135,9 +1199,34 @@ function productPage(t) {
   var idx = 0;
   var box = document.getElementById('lightbox');
   var boxImg = document.getElementById('lightboxImg');
-  function openAt(i){
+  var boxCounter = document.getElementById('lightboxCounter');
+  var mainImg = document.getElementById('mainImg');
+  var zoomBtn = document.getElementById('pdpZoom');
+  var pdpCounter = document.getElementById('pdpCounter');
+  var pdpGallery = document.getElementById('pdpGallery');
+
+  function syncUI(){
+    if(!gallery.length) return;
+    var src = gallery[idx];
+    if(mainImg) mainImg.src = src;
+    if(zoomBtn) zoomBtn.setAttribute('data-lightbox', src);
+    if(pdpCounter) pdpCounter.textContent = (idx + 1) + ' / ' + gallery.length;
+    if(boxCounter) boxCounter.textContent = (idx + 1) + ' / ' + gallery.length;
+    document.querySelectorAll('.thumb-btn').forEach(function(btn, i){
+      btn.style.opacity = i === idx ? '1' : '0.65';
+    });
+    document.querySelectorAll('.pdp-dot').forEach(function(dot, i){
+      dot.classList.toggle('active', i === idx);
+    });
+  }
+  function showAt(i){
     if(!gallery.length) return;
     idx = (i + gallery.length) % gallery.length;
+    syncUI();
+  }
+  function openAt(i){
+    if(!gallery.length) return;
+    showAt(i);
     boxImg.src = gallery[idx];
     box.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -1146,35 +1235,57 @@ function productPage(t) {
     box.classList.remove('open');
     document.body.style.overflow = '';
   }
-  document.querySelectorAll('.thumb-btn').forEach(function(btn, i){
+  document.querySelectorAll('.thumb-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
-      var img=document.getElementById('mainImg');
-      if(img) img.src=btn.dataset.src;
-      var zoom=document.querySelector('.pdp-zoom');
-      if(zoom) zoom.setAttribute('data-lightbox', btn.dataset.src);
-      document.querySelectorAll('.thumb-btn').forEach(function(b){ b.style.opacity='0.65'; });
-      btn.style.opacity='1';
-      idx = i;
+      showAt(parseInt(btn.dataset.idx, 10) || 0);
     });
   });
+  document.querySelectorAll('.pdp-dot').forEach(function(dot){
+    dot.addEventListener('click', function(){
+      showAt(parseInt(dot.dataset.idx, 10) || 0);
+    });
+  });
+  var prev = document.getElementById('pdpPrev');
+  var next = document.getElementById('pdpNext');
+  if(prev) prev.addEventListener('click', function(e){ e.stopPropagation(); showAt(idx - 1); });
+  if(next) next.addEventListener('click', function(e){ e.stopPropagation(); showAt(idx + 1); });
   document.querySelectorAll('[data-lightbox]').forEach(function(el){
     el.addEventListener('click', function(e){
       e.preventDefault();
-      var src = el.getAttribute('data-lightbox');
-      var i = gallery.indexOf(src);
-      openAt(i >= 0 ? i : 0);
+      openAt(idx);
     });
   });
   document.getElementById('lightboxClose').addEventListener('click', function(e){ e.stopPropagation(); close(); });
-  document.getElementById('lightboxPrev').addEventListener('click', function(e){ e.stopPropagation(); openAt(idx-1); });
-  document.getElementById('lightboxNext').addEventListener('click', function(e){ e.stopPropagation(); openAt(idx+1); });
+  document.getElementById('lightboxPrev').addEventListener('click', function(e){ e.stopPropagation(); openAt(idx - 1); });
+  document.getElementById('lightboxNext').addEventListener('click', function(e){ e.stopPropagation(); openAt(idx + 1); });
   box.addEventListener('click', function(e){ if(e.target===box) close(); });
   document.addEventListener('keydown', function(e){
     if(!box.classList.contains('open')) return;
     if(e.key==='Escape') close();
-    if(e.key==='ArrowLeft') openAt(idx-1);
-    if(e.key==='ArrowRight') openAt(idx+1);
+    if(e.key==='ArrowLeft') openAt(idx - 1);
+    if(e.key==='ArrowRight') openAt(idx + 1);
   });
+
+  function bindSwipe(el, onLeft, onRight){
+    if(!el) return;
+    var startX = 0;
+    var tracking = false;
+    el.addEventListener('touchstart', function(e){
+      if(!e.touches.length) return;
+      startX = e.touches[0].clientX;
+      tracking = true;
+    }, { passive: true });
+    el.addEventListener('touchend', function(e){
+      if(!tracking) return;
+      tracking = false;
+      var dx = (e.changedTouches[0].clientX - startX);
+      if(Math.abs(dx) < 40) return;
+      if(dx < 0) onLeft(); else onRight();
+    }, { passive: true });
+  }
+  bindSwipe(pdpGallery, function(){ showAt(idx + 1); }, function(){ showAt(idx - 1); });
+  bindSwipe(box, function(){ openAt(idx + 1); }, function(){ openAt(idx - 1); });
+  syncUI();
 })();
 </script>`;
   return layout(
