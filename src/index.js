@@ -163,7 +163,7 @@ export default {
         return htmlResponse(shopPage(url.searchParams.get('platform') || 'all'));
 
       case '/cart':
-        return htmlResponse(cartPage());
+        return htmlResponse(cartPage(), 200, 'no-store');
 
       case '/services':
       case '/website-design':
@@ -200,7 +200,7 @@ export default {
   },
 };
 
-function htmlResponse(html, status = 200) {
+function htmlResponse(html, status = 200, cacheControl) {
   const withWidget = html.includes('</body>')
     ? html.replace('</body>', chatWidget + '</body>')
     : html + chatWidget;
@@ -208,7 +208,9 @@ function htmlResponse(html, status = 200) {
     status,
     headers: {
       'Content-Type': 'text/html;charset=UTF-8',
-      'Cache-Control': status === 404 ? 'no-store' : 'public, max-age=600',
+      'Cache-Control':
+        cacheControl ||
+        (status === 404 ? 'no-store' : 'public, max-age=600'),
     },
   });
 }
@@ -590,7 +592,104 @@ img { max-width: 100%; display: block; }
 `;
 }
 
-function layout(title, description, canonical, bodyHtml, active = '') {
+function cartScript(catalogJson) {
+  const catalogLiteral = catalogJson || 'null';
+  return `
+(function(){
+  var KEY='bloomie_cart_v1';
+  function read(){ try { return JSON.parse(localStorage.getItem(KEY)||'[]'); } catch(e){ return []; } }
+  function write(items){ localStorage.setItem(KEY, JSON.stringify(items)); updateBadge(); }
+  function updateBadge(){
+    var n = read().reduce(function(s,i){ return s+(i.qty||1); },0);
+    document.querySelectorAll('#cartCount').forEach(function(el){ el.textContent=String(n); });
+  }
+  function toast(msg){
+    var t=document.getElementById('toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+  window.BloomieCart = {
+    add: function(slug){
+      var items=read();
+      var found=items.find(function(i){ return i.slug===slug; });
+      if(found) found.qty=(found.qty||1)+1; else items.push({slug:slug, qty:1});
+      write(items); toast('Added to cart');
+    },
+    remove: function(slug){ write(read().filter(function(i){ return i.slug!==slug; })); },
+    setQty: function(slug, qty){
+      qty=Math.max(1, parseInt(qty,10)||1);
+      write(read().map(function(i){ return i.slug===slug ? Object.assign({},i,{qty:qty}) : i; }));
+    },
+    clear: function(){ write([]); },
+    items: function(){ return read(); }
+  };
+  updateBadge();
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest && e.target.closest('[data-add-cart]');
+    if(!btn) return;
+    e.preventDefault();
+    window.BloomieCart.add(btn.getAttribute('data-add-cart'));
+  });
+
+  var catalog = ${catalogLiteral};
+  function bySlug(slug){
+    if(!catalog) return null;
+    return catalog.find(function(t){ return t.slug===slug; });
+  }
+  function renderCart(){
+    var root=document.getElementById('cartRoot');
+    if(!root || !catalog) return;
+    var items=window.BloomieCart.items();
+    if(!items.length){
+      root.innerHTML='<div class="cart-empty"><h2 style="font-family:Fraunces,serif;margin-bottom:.5rem;">Your cart is empty</h2><p style="color:var(--muted);margin-bottom:1.25rem;">Browse the shop and add a template to get started.</p><a class="btn btn-pink" href="/shop">Continue shopping</a></div>';
+      return;
+    }
+    var total=0;
+    var rows=items.map(function(item){
+      var t=bySlug(item.slug); if(!t) return '';
+      var line=t.price*(item.qty||1); total+=line;
+      var thumb=t.image
+        ? '<div class="cart-thumb"><img src="'+t.image+'" alt="'+t.name+'"></div>'
+        : '<div class="cart-thumb product-thumb '+t.mockClass+'"></div>';
+      return '<div class="cart-row" data-slug="'+t.slug+'">'+
+        thumb+
+        '<div class="cart-meta"><h3><a href="/templates/'+t.slug+'" style="text-decoration:none;">'+t.name+'</a></h3><p>'+t.platform+' · '+t.niche+'</p>'+
+        '<div style="margin-top:.55rem;"><input class="qty" type="number" min="1" value="'+(item.qty||1)+'" data-qty="'+t.slug+'">'+
+        '<button class="btn btn-ghost" type="button" data-remove="'+t.slug+'" style="padding:.45rem .8rem;font-size:.8rem;">Remove</button></div></div>'+
+        '<div style="font-family:Fraunces,serif;font-weight:700;">$'+line+' AUD</div></div>';
+    }).join('');
+    root.innerHTML = rows +
+      '<div class="cart-summary"><div><div style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);">Estimated total</div>'+
+      '<div style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;">$'+total+' AUD</div></div>'+
+      '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">'+
+      '<a class="btn btn-ghost" href="/shop">Keep shopping</a>'+
+      '<a class="btn btn-pink" href="${ETSY_SHOP}" target="_blank" rel="noopener">Checkout on Etsy →</a>'+
+      '</div></div>'+
+      '<p class="cart-note">Bloomie House uses Etsy for payment &amp; delivery. Your cart here is a shopping list — open Etsy to complete purchase for each template (or browse the full shop).</p>';
+
+    root.querySelectorAll('[data-remove]').forEach(function(btn){
+      btn.addEventListener('click', function(){ window.BloomieCart.remove(btn.dataset.remove); renderCart(); });
+    });
+    root.querySelectorAll('[data-qty]').forEach(function(input){
+      input.addEventListener('change', function(){ window.BloomieCart.setQty(input.dataset.qty, input.value); renderCart(); });
+    });
+  }
+
+  function onReady(fn){
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+  onReady(function(){
+    updateBadge();
+    var toggle=document.getElementById('navToggle');
+    var links=document.getElementById('navLinks');
+    if(toggle && links) toggle.addEventListener('click', function(){ links.classList.toggle('open'); });
+    renderCart();
+  });
+})();`;
+}
+
+function layout(title, description, canonical, bodyHtml, active = '', cartCatalogJson = null) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -615,7 +714,7 @@ function layout(title, description, canonical, bodyHtml, active = '') {
   ${bodyHtml}
   ${siteFooter()}
   <div class="toast" id="toast" role="status"></div>
-  <script>${cartScript()}</script>
+  <script>${cartScript(cartCatalogJson)}</script>
 </body>
 </html>`;
 }
@@ -687,49 +786,6 @@ function siteFooter() {
     <span>Hobart, Australia · English &amp; Vietnamese</span>
   </div>
 </footer>`;
-}
-
-function cartScript() {
-  return `
-(function(){
-  var KEY='bloomie_cart_v1';
-  function read(){ try { return JSON.parse(localStorage.getItem(KEY)||'[]'); } catch(e){ return []; } }
-  function write(items){ localStorage.setItem(KEY, JSON.stringify(items)); updateBadge(); }
-  function updateBadge(){
-    var n = read().reduce(function(s,i){ return s+(i.qty||1); },0);
-    document.querySelectorAll('#cartCount').forEach(function(el){ el.textContent=String(n); });
-  }
-  function toast(msg){
-    var t=document.getElementById('toast'); if(!t) return;
-    t.textContent=msg; t.classList.add('show');
-    setTimeout(function(){ t.classList.remove('show'); }, 2200);
-  }
-  window.BloomieCart = {
-    add: function(slug){
-      var items=read();
-      var found=items.find(function(i){ return i.slug===slug; });
-      if(found) found.qty=(found.qty||1)+1; else items.push({slug:slug, qty:1});
-      write(items); toast('Added to cart');
-    },
-    remove: function(slug){ write(read().filter(function(i){ return i.slug!==slug; })); },
-    setQty: function(slug, qty){
-      qty=Math.max(1, parseInt(qty,10)||1);
-      write(read().map(function(i){ return i.slug===slug ? Object.assign({},i,{qty:qty}) : i; }));
-    },
-    clear: function(){ write([]); },
-    items: read
-  };
-  updateBadge();
-  var toggle=document.getElementById('navToggle');
-  var links=document.getElementById('navLinks');
-  if(toggle && links) toggle.addEventListener('click', function(){ links.classList.toggle('open'); });
-  document.querySelectorAll('[data-add-cart]').forEach(function(btn){
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      BloomieCart.add(btn.getAttribute('data-add-cart'));
-    });
-  });
-})();`;
 }
 
 function productCard(t) {
@@ -987,58 +1043,15 @@ function cartPage() {
   <p>Save templates here, then checkout on Etsy for secure payment and instant download.</p>
 </section>
 <div class="cart-wrap">
-  <div id="cartRoot"></div>
-</div>
-<script>
-(function(){
-  var catalog = ${catalogJson};
-  function bySlug(slug){ return catalog.find(function(t){ return t.slug===slug; }); }
-  function render(){
-    var root=document.getElementById('cartRoot');
-    var items=BloomieCart.items();
-    if(!items.length){
-      root.innerHTML='<div class="cart-empty"><h2 style="font-family:Fraunces,serif;margin-bottom:.5rem;">Your cart is empty</h2><p style="color:var(--muted);margin-bottom:1.25rem;">Browse the shop and add a template to get started.</p><a class="btn btn-pink" href="/shop">Continue shopping</a></div>';
-      return;
-    }
-    var total=0;
-    var rows=items.map(function(item){
-      var t=bySlug(item.slug); if(!t) return '';
-      var line=t.price*(item.qty||1); total+=line;
-      var thumb=t.image
-        ? '<div class="cart-thumb"><img src="'+t.image+'" alt="'+t.name+'"></div>'
-        : '<div class="cart-thumb product-thumb '+t.mockClass+'"></div>';
-      return '<div class="cart-row" data-slug="'+t.slug+'">'+
-        thumb+
-        '<div class="cart-meta"><h3><a href="/templates/'+t.slug+'" style="text-decoration:none;">'+t.name+'</a></h3><p>'+t.platform+' · '+t.niche+'</p>'+
-        '<div style="margin-top:.55rem;"><input class="qty" type="number" min="1" value="'+(item.qty||1)+'" data-qty="'+t.slug+'">'+
-        '<button class="btn btn-ghost" type="button" data-remove="'+t.slug+'" style="padding:.45rem .8rem;font-size:.8rem;">Remove</button></div></div>'+
-        '<div style="font-family:Fraunces,serif;font-weight:700;">$'+line+' AUD</div></div>';
-    }).join('');
-    root.innerHTML = rows +
-      '<div class="cart-summary"><div><div style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);">Estimated total</div>'+
-      '<div style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;">$'+total+' AUD</div></div>'+
-      '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">'+
-      '<a class="btn btn-ghost" href="/shop">Keep shopping</a>'+
-      '<a class="btn btn-pink" id="checkoutEtsy" href="${ETSY_SHOP}" target="_blank" rel="noopener">Checkout on Etsy →</a>'+
-      '</div></div>'+
-      '<p class="cart-note">Bloomie House uses Etsy for payment &amp; delivery. Your cart here is a shopping list — open Etsy to complete purchase for each template (or browse the full shop).</p>';
-
-    root.querySelectorAll('[data-remove]').forEach(function(btn){
-      btn.addEventListener('click', function(){ BloomieCart.remove(btn.dataset.remove); render(); });
-    });
-    root.querySelectorAll('[data-qty]').forEach(function(input){
-      input.addEventListener('change', function(){ BloomieCart.setQty(input.dataset.qty, input.value); render(); });
-    });
-  }
-  render();
-})();
-</script>`;
+  <div id="cartRoot"><p style="color:var(--muted);">Loading cart…</p></div>
+</div>`;
   return layout(
     'Cart — Bloomie House',
     'Review your Bloomie House templates before checking out on Etsy.',
     '/cart',
     body,
-    'shop'
+    'shop',
+    catalogJson
   );
 }
 
