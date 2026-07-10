@@ -690,23 +690,97 @@ function productValueStackHtml(t) {
 </section>`;
 }
 
-function productSocialProofPopupHtml(t) {
-  const buyers = [
-    { name: 'Mia T.', product: t.name, city: 'Melbourne', ago: '2 min', avatar: `${AVATARS}/avatar-mia.jpg` },
-    { name: 'Jess L.', product: 'LuxSpa Beauty & Nails', city: 'Sydney', ago: '6 min', avatar: `${AVATARS}/avatar-jess.jpg` },
-    { name: 'Naomi W.', product: 'Korean Lash Lift Manual', city: 'Brisbane', ago: '11 min', avatar: `${AVATARS}/avatar-naomi.jpg` },
-    { name: 'Amy N.', product: 'The Studio', city: 'Perth', ago: '18 min', avatar: `${AVATARS}/avatar-amy.jpg` },
-    { name: 'Kate B.', product: t.name, city: 'Hobart', ago: '24 min', avatar: `${AVATARS}/avatar-kate.jpg` },
+function productSocialProofBuyers(t) {
+  const others = templateData.filter((x) => x.slug !== t.slug);
+  const pick = (slug) => others.find((x) => x.slug === slug) || others[0];
+  const luxspa = pick('luxspa-beauty-nails');
+  const studio = pick('the-studio');
+  const wedding = pick('wedding-rsvp');
+  const seoul = pick('seoul-soft-korean-lash');
+  return [
+    {
+      name: 'Talia R.',
+      product: t.name,
+      city: 'Gold Coast',
+      ago: '3 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-talia.jpg` },
+    },
+    {
+      name: 'Monique B.',
+      product: luxspa?.name || 'LuxSpa Beauty & Nails',
+      city: 'Sydney',
+      ago: '7 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-monique.jpg` },
+    },
+    {
+      name: 'Lash Academy AU',
+      product: 'Korean Lash Lift Manual',
+      city: 'Brisbane',
+      ago: '12 min',
+      thumb: { kind: 'logo', src: `${MOCK}/korean-lash-lift-hero.jpg`, brand: false },
+    },
+    {
+      name: 'Hannah C.',
+      product: t.name,
+      city: 'Perth',
+      ago: '16 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-hannah.jpg` },
+    },
+    {
+      name: 'Studio Nine',
+      product: studio?.name || 'The Studio',
+      city: 'Melbourne',
+      ago: '21 min',
+      thumb: { kind: 'initial', text: 'S9', tone: 'pink' },
+    },
+    {
+      name: 'Danielle P.',
+      product: wedding?.name || 'Wedding Invitation RSVP',
+      city: 'Hobart',
+      ago: '28 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-danielle.jpg` },
+    },
+    {
+      name: 'Bloomie House',
+      product: t.name,
+      city: 'Australia',
+      ago: '5 min',
+      thumb: { kind: 'logo', src: LOGO, brand: true },
+    },
+    {
+      name: 'Luxe Wellness',
+      product: luxspa?.name || 'LuxSpa Beauty & Nails',
+      city: 'Canberra',
+      ago: '14 min',
+      thumb: { kind: 'initial', text: 'LW', tone: 'sage' },
+    },
+    {
+      name: 'Ruby F.',
+      product: t.name,
+      city: 'Darwin',
+      ago: '19 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-ruby.jpg` },
+    },
+    {
+      name: 'Seoul Lash Bar',
+      product: seoul?.name || 'Seoul Soft Korean Lash Lift',
+      city: 'Adelaide',
+      ago: '25 min',
+      thumb: { kind: 'logo', src: seoul?.images?.[0] || `${MOCK}/seoul-soft-korean.jpg`, brand: false },
+    },
   ];
+}
+
+function productSocialProofPopupHtml(t) {
+  const buyers = productSocialProofBuyers(t);
+  const first = buyers[0];
   return `
 <div class="social-proof-popup" id="socialProofPopup" role="status" aria-live="polite" hidden>
-  <div class="social-proof-avatar" id="socialProofAvatar">
-    <img id="socialProofAvatarImg" src="${AVATARS}/avatar-mia.jpg" alt="" width="44" height="44" loading="lazy" decoding="async">
-  </div>
+  <div class="social-proof-avatar social-proof-thumb-photo" id="socialProofAvatar"></div>
   <div class="social-proof-text">
-    <strong id="socialProofName">Mia T.</strong>
-    <span id="socialProofAction">purchased ${t.name}</span>
-    <small id="socialProofMeta">Melbourne · just now</small>
+    <strong id="socialProofName">${first.name}</strong>
+    <span id="socialProofAction">purchased ${first.product}</span>
+    <small id="socialProofMeta">${first.city} · just now</small>
   </div>
   <button type="button" class="social-proof-close" id="socialProofClose" aria-label="Dismiss">×</button>
 </div>
@@ -715,18 +789,44 @@ function productSocialProofPopupHtml(t) {
   var buyers = ${JSON.stringify(buyers)};
   var popup = document.getElementById('socialProofPopup');
   if(!popup || !buyers.length) return;
-  var idx = 0;
+  var lastIdx = -1;
   var dismissed = false;
-  var avatarImg = document.getElementById('socialProofAvatarImg');
+  var avatarEl = document.getElementById('socialProofAvatar');
   var nameEl = document.getElementById('socialProofName');
   var actionEl = document.getElementById('socialProofAction');
   var metaEl = document.getElementById('socialProofMeta');
   var closeBtn = document.getElementById('socialProofClose');
+  function setThumb(el, thumb){
+    if(!el || !thumb) return;
+    el.innerHTML = '';
+    el.className = 'social-proof-avatar social-proof-thumb-' + thumb.kind + (thumb.tone ? ' is-' + thumb.tone : '') + (thumb.brand ? ' is-brand' : '');
+    if(thumb.kind === 'photo' || thumb.kind === 'logo'){
+      var img = document.createElement('img');
+      img.src = thumb.src;
+      img.alt = '';
+      img.width = 44;
+      img.height = 44;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      el.appendChild(img);
+    } else if(thumb.kind === 'initial'){
+      var span = document.createElement('span');
+      span.className = 'social-proof-initial';
+      span.textContent = thumb.text || '?';
+      el.appendChild(span);
+    }
+  }
+  function pickBuyer(){
+    if(buyers.length === 1) return 0;
+    var i;
+    do { i = Math.floor(Math.random() * buyers.length); } while(i === lastIdx);
+    lastIdx = i;
+    return i;
+  }
   function show(){
     if(dismissed) return;
-    var b = buyers[idx % buyers.length];
-    idx++;
-    if(avatarImg && b.avatar) avatarImg.src = b.avatar;
+    var b = buyers[pickBuyer()];
+    setThumb(avatarEl, b.thumb);
     if(nameEl) nameEl.textContent = b.name;
     if(actionEl) actionEl.textContent = 'purchased ' + b.product;
     if(metaEl) metaEl.textContent = b.city + ' · ' + b.ago + ' ago';
@@ -2227,6 +2327,15 @@ function productPage(t) {
   }
   .social-proof-avatar img {
     width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .social-proof-thumb-logo.is-brand img { object-fit:contain; background:var(--cream); padding:5px; }
+  .social-proof-initial {
+    width:100%; height:100%; display:grid; place-items:center;
+    font-weight:700; font-size:.78rem; letter-spacing:.05em; color:#fff;
+    background:linear-gradient(135deg, var(--pink), #e8b4c4);
+  }
+  .social-proof-thumb-initial.is-sage .social-proof-initial {
+    background:linear-gradient(135deg, var(--sage), #9bb5a8);
   }
   .social-proof-text { display:grid; gap:.1rem; min-width:0; }
   .social-proof-text strong { font-size:.88rem; }
