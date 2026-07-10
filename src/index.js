@@ -247,20 +247,28 @@ function productPainPoints(t) {
   if (t.slug === 'korean-lash-lift-training-manual') {
     return [
       {
-        pain: 'You want to teach Korean lash lift — but have no curriculum ready',
-        fix: '200+ pages of professional training content, editable in Canva',
+        pain: 'You want to launch a Korean lash lift course — but have no lash training curriculum ready',
+        painHl: 'Korean lash lift course',
+        fix: '200+ page lash lift & tint training manual — professional content, fully editable in Canva',
+        fixHl: 'lash lift & tint training manual',
       },
       {
-        pain: 'Students keep asking the same theory questions',
-        fix: 'Structured manual covers technique, aftercare & troubleshooting',
+        pain: 'Students keep asking the same lash lift theory & aftercare questions',
+        painHl: 'lash lift theory & aftercare',
+        fix: 'Structured lash educator manual covers technique, tinting, troubleshooting & client care',
+        fixHl: 'lash educator manual',
       },
       {
-        pain: 'Bigger academies look more credible than your solo training',
-        fix: 'Polished, branded manual you can resell with your logo',
+        pain: 'Bigger lash academies look more credible than your solo training business',
+        painHl: 'lash academies',
+        fix: 'Polished, branded Canva curriculum you can resell with your academy logo',
+        fixHl: 'Canva curriculum',
       },
       {
-        pain: 'Building a manual from scratch takes months you don’t have',
-        fix: 'Instant download — customise and start teaching this week',
+        pain: 'Writing a lash lift training manual from scratch takes months you don’t have',
+        painHl: 'lash lift training manual',
+        fix: 'Instant digital download — customise your course material and start enrolling students this week',
+        fixHl: 'start enrolling students',
       },
     ];
   }
@@ -396,11 +404,31 @@ function productTestimonials(t) {
 }
 
 function productBeforeAfter(t) {
-  const pains = productPainPoints(t).slice(0, 3);
+  const pains = productPainPoints(t);
   return pains.map((p) => ({
     before: p.pain,
+    beforeHl: p.painHl || null,
     after: p.fix,
+    afterHl: p.fixHl || null,
   }));
+}
+
+function productBeforeAfterIntro(t) {
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    return 'Lash educators and academy owners use this <strong>Canva lash lift training manual</strong> to go from zero curriculum to a branded, resell-ready course — without months of writing.';
+  }
+  if (t.category === 'canva') {
+    return `Small ${t.niche.toLowerCase()} businesses swap DIY website stress for a <strong>${t.platform} website template</strong> built for your industry — publish faster, look professional, win more enquiries.`;
+  }
+  if (t.category === 'wix') {
+    return `Beauty & service businesses replace clunky booking flows with a <strong>${t.niche} Wix Studio template</strong> — luxury look, mobile-ready, live in days not months.`;
+  }
+  return `Tradies and local service businesses launch a <strong>${t.niche} website template</strong> that builds trust — quote forms, reviews, and portfolio sections included.`;
+}
+
+function baHighlight(text, phrase, cls) {
+  if (!phrase || !text.includes(phrase)) return text;
+  return text.replace(phrase, `<em class="${cls}">${phrase}</em>`);
 }
 
 function productPostPurchaseSteps(t) {
@@ -542,22 +570,42 @@ function productTestimonialsHtml(t) {
 
 function productBeforeAfterHtml(t) {
   const ba = productBeforeAfter(t);
-  const baRows = ba
-    .map(
-      (row, i) =>
-        `<div class="ba-row pdp-reveal" style="--reveal-delay:${i * 80}ms">
-          <div class="ba-before"><span class="ba-tag">Before</span><p>${row.before}</p></div>
-          <div class="ba-arrow" aria-hidden="true">→</div>
-          <div class="ba-after"><span class="ba-tag ba-tag-after">After</span><p>${row.after}</p></div>
-        </div>`
-    )
+  const isTraining = t.slug === 'korean-lash-lift-training-manual';
+  const seoTitle = isTraining
+    ? 'From blank page to <em>lash lift curriculum</em>'
+    : 'Before vs <em>after</em> you buy';
+  const baPairs = ba
+    .map((row, i) => {
+      const num = String(i + 1).padStart(2, '0');
+      const beforeText = baHighlight(row.before, row.beforeHl, 'ba-hl-before');
+      const afterText = baHighlight(row.after, row.afterHl, 'ba-hl-after');
+      return `<article class="ba-pair pdp-reveal" style="--reveal-delay:${i * 120}ms" aria-label="Transformation step ${i + 1}">
+        <div class="ba-step" aria-hidden="true"><span class="ba-step-num tabular-nums">${num}</span></div>
+        <div class="ba-pair-body">
+          <div class="ba-card ba-before">
+            <span class="ba-tag"><span class="ba-tag-dot ba-tag-dot-before"></span>Before</span>
+            <p>${beforeText}</p>
+          </div>
+          <div class="ba-connector" aria-hidden="true">
+            <span class="ba-connector-line"></span>
+            <span class="ba-connector-pulse"></span>
+            <span class="ba-connector-icon">↓</span>
+          </div>
+          <div class="ba-card ba-after">
+            <span class="ba-tag ba-tag-after"><span class="ba-tag-dot ba-tag-dot-after"></span>After</span>
+            <p>${afterText}</p>
+          </div>
+        </div>
+      </article>`;
+    })
     .join('');
   return `
-<section class="pdp-before-after section" style="background:var(--cream);">
+<section class="pdp-before-after section" aria-labelledby="ba-heading">
+  <div class="ba-bg-glow" aria-hidden="true"></div>
   <p class="section-label pdp-reveal">The transformation</p>
-  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Before vs <em>after</em> you buy</h2>
-  <p class="ba-sub pdp-reveal" style="--reveal-delay:100ms">The shift our customers describe — from stuck to launched.</p>
-  <div class="ba-rows">${baRows}</div>
+  <h2 class="section-title pdp-reveal" id="ba-heading" style="--reveal-delay:60ms">${seoTitle}</h2>
+  <p class="ba-sub pdp-reveal" style="--reveal-delay:100ms">${productBeforeAfterIntro(t)}</p>
+  <div class="ba-timeline">${baPairs}</div>
 </section>`;
 }
 
@@ -1955,7 +2003,7 @@ function productPage(t) {
   .audience-card h3 { font-family:Fraunces,serif; font-size:1.05rem; margin-bottom:.35rem; }
   .audience-card p { font-size:.88rem; color:var(--muted); line-height:1.6; text-wrap:pretty; }
   .audience-not { font-size:.9rem; color:var(--muted); padding:1rem 1.15rem; background:rgba(255,255,255,.65); border-radius:12px; text-wrap:pretty; }
-  .testi-sub, .ba-sub, .calc-intro { color:var(--muted); max-width:36rem; line-height:1.7; margin-bottom:1.25rem; }
+  .testi-sub, .calc-intro { color:var(--muted); max-width:36rem; line-height:1.7; margin-bottom:1.25rem; }
   .pdp-testimonials .testi-stats {
     display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.75rem; max-width:640px;
   }
@@ -1987,22 +2035,116 @@ function productPage(t) {
   .testi-card-body p { font-size:.88rem; line-height:1.55; margin-bottom:.35rem; text-wrap:pretty; }
   .testi-hl { font-style:normal; color:#9b7ec8; font-weight:500; }
   .testi-card-body span { font-size:.75rem; color:var(--muted); }
-  .ba-rows { display:grid; gap:.75rem; max-width:900px; }
-  .ba-row {
-    display:grid; grid-template-columns:1fr auto 1fr; gap:.5rem; align-items:stretch;
+  .pdp-before-after {
+    position:relative; overflow:hidden;
+    background:linear-gradient(165deg, #fff8f6 0%, var(--cream) 45%, #f4faf6 100%);
   }
-  .ba-before, .ba-after {
-    border-radius:14px; padding:1rem; font-size:.88rem; line-height:1.55; text-wrap:pretty;
+  .ba-bg-glow {
+    position:absolute; inset:-20% -10% auto; height:55%; pointer-events:none;
+    background:radial-gradient(ellipse 70% 80% at 50% 0%, rgba(214,125,154,.14), transparent 70%);
+    animation:baGlow 8s ease-in-out infinite alternate;
   }
-  .ba-before { background:#fff5f5; box-shadow:var(--shadow-border); }
-  .ba-after { background:#f0faf0; box-shadow:var(--shadow-border); }
+  @keyframes baGlow {
+    from { opacity:.6; transform:translateY(0); }
+    to { opacity:1; transform:translateY(12px); }
+  }
+  .ba-sub { color:var(--muted); max-width:40rem; line-height:1.75; margin-bottom:2rem; text-wrap:pretty; }
+  .ba-sub strong { color:var(--charcoal); font-weight:600; }
+  .ba-timeline {
+    display:grid; gap:0; max-width:640px; margin:0 auto; position:relative;
+  }
+  .ba-timeline::before {
+    content:''; position:absolute; left:19px; top:24px; bottom:24px; width:2px;
+    background:linear-gradient(180deg, rgba(196,68,68,.35), var(--pink) 30%, rgba(45,106,79,.45) 70%, rgba(45,106,79,.2));
+    transform-origin:top; transform:scaleY(0);
+    transition: transform 1.2s cubic-bezier(0.2,0,0,1) 0.2s;
+  }
+  .ba-timeline.is-drawn::before { transform:scaleY(1); }
+  .ba-pair {
+    display:grid; grid-template-columns:40px 1fr; gap:1rem; padding-bottom:1.75rem; position:relative;
+  }
+  .ba-pair:last-child { padding-bottom:0; }
+  .ba-step { display:flex; justify-content:center; padding-top:.35rem; z-index:1; }
+  .ba-step-num {
+    width:40px; height:40px; border-radius:50%; background:#fff; color:var(--pink);
+    font-family:Fraunces,serif; font-weight:700; font-size:.95rem;
+    display:grid; place-items:center; box-shadow:0 0 0 3px var(--cream), var(--shadow-border);
+    transition: transform 500ms cubic-bezier(0.2,0,0,1), box-shadow 500ms cubic-bezier(0.2,0,0,1);
+  }
+  .ba-pair.is-visible .ba-step-num {
+    transform:scale(1.08); box-shadow:0 0 0 3px var(--cream), 0 8px 24px rgba(214,125,154,.25);
+  }
+  .ba-pair-body { display:grid; gap:.65rem; }
+  .ba-card {
+    border-radius:18px; padding:1.1rem 1.2rem; font-size:.9rem; line-height:1.6; text-wrap:pretty;
+    opacity:0; transform:translateY(16px);
+    transition: opacity 550ms cubic-bezier(0.2,0,0,1), transform 550ms cubic-bezier(0.2,0,0,1), box-shadow 550ms cubic-bezier(0.2,0,0,1);
+  }
+  .ba-before {
+    background:linear-gradient(135deg, #fff5f5, #fff);
+    border:1px solid rgba(196,68,68,.12);
+    box-shadow:var(--shadow-border);
+  }
+  .ba-after {
+    background:linear-gradient(135deg, #f0faf4, #fff);
+    border:1px solid rgba(45,106,79,.15);
+    box-shadow:var(--shadow-border);
+  }
+  .ba-pair.is-visible .ba-before {
+    opacity:1; transform:translateX(0) translateY(0);
+    transition-delay:.15s;
+  }
+  .ba-pair.is-visible .ba-after {
+    opacity:1; transform:translateX(0) translateY(0);
+    transition-delay:.45s;
+    box-shadow:0 12px 32px -8px rgba(45,106,79,.18), var(--shadow-border);
+  }
+  .ba-before { transform:translateX(-18px) translateY(8px); }
+  .ba-after { transform:translateX(14px) translateY(8px); }
   .ba-tag {
-    display:inline-block; font-size:.65rem; letter-spacing:.12em; text-transform:uppercase;
-    font-weight:600; color:#c44; margin-bottom:.4rem;
+    display:inline-flex; align-items:center; gap:.4rem;
+    font-size:.65rem; letter-spacing:.14em; text-transform:uppercase;
+    font-weight:700; color:#b33; margin-bottom:.5rem;
   }
   .ba-tag-after { color:#2d6a4f; }
-  .ba-arrow { display:grid; place-items:center; color:var(--pink); font-size:1.2rem; font-weight:700; }
-  .ba-before p, .ba-after p { color:var(--charcoal); }
+  .ba-tag-dot {
+    width:7px; height:7px; border-radius:50%; flex-shrink:0;
+  }
+  .ba-tag-dot-before { background:#e88; box-shadow:0 0 0 3px rgba(232,136,136,.25); }
+  .ba-tag-dot-after { background:#3d9a6a; box-shadow:0 0 0 3px rgba(61,154,106,.2); }
+  .ba-hl-before { font-style:normal; color:#c44; font-weight:600; }
+  .ba-hl-after { font-style:normal; color:#2d6a4f; font-weight:600; }
+  .ba-card p { color:var(--charcoal); margin:0; }
+  .ba-connector {
+    display:flex; flex-direction:column; align-items:center; gap:0; height:28px; position:relative;
+    opacity:0; transform:scaleY(0.4);
+    transition: opacity 400ms ease, transform 500ms cubic-bezier(0.2,0,0,1);
+  }
+  .ba-pair.is-visible .ba-connector {
+    opacity:1; transform:scaleY(1); transition-delay:.32s;
+  }
+  .ba-connector-line {
+    width:2px; flex:1; background:linear-gradient(180deg, #e8a0a0, var(--pink), #7bc49a);
+    border-radius:2px;
+  }
+  .ba-connector-pulse {
+    position:absolute; top:50%; left:50%; width:10px; height:10px; margin:-5px 0 0 -5px;
+    border-radius:50%; background:var(--pink); opacity:0;
+    animation:baPulse 2.2s ease-in-out infinite;
+  }
+  .ba-pair.is-visible .ba-connector-pulse { opacity:.85; animation-delay:.5s; }
+  @keyframes baPulse {
+    0%, 100% { transform:scale(.6); opacity:.4; }
+    50% { transform:scale(1.4); opacity:.9; box-shadow:0 0 12px rgba(214,125,154,.5); }
+  }
+  .ba-connector-icon {
+    font-size:.85rem; color:var(--pink); font-weight:700; line-height:1;
+    animation:baBounce 2s ease-in-out infinite;
+  }
+  @keyframes baBounce {
+    0%, 100% { transform:translateY(0); }
+    50% { transform:translateY(3px); }
+  }
   .calc-card {
     max-width:560px; background:#fff; border-radius:20px; padding:1.75rem;
     box-shadow:var(--shadow-border); border:1px solid rgba(214,125,154,.15);
@@ -2113,8 +2255,8 @@ function productPage(t) {
   .process-body p { font-size:.9rem; color:var(--muted); line-height:1.7; text-wrap:pretty; }
   .process-cta { display:flex; gap:.65rem; flex-wrap:wrap; justify-content:center; }
   @media (max-width:640px) {
-    .ba-row { grid-template-columns:1fr; }
-    .ba-arrow { transform:rotate(90deg); justify-self:center; }
+    .ba-timeline::before { left:19px; }
+    .ba-pair { grid-template-columns:40px 1fr; gap:.75rem; }
     .pdp-testimonials .testi-stats { grid-template-columns:repeat(2,1fr); }
     .social-proof-popup { left:12px; bottom:88px; }
   }
@@ -2122,6 +2264,11 @@ function productPage(t) {
     .pdp-reveal { opacity:1; transform:none; filter:none; transition:none; }
     .faq-item p { animation:none; }
     .testi-marquee-track { animation:none; }
+    .ba-bg-glow { animation:none; }
+    .ba-timeline::before { transform:scaleY(1); }
+    .ba-card, .ba-connector { opacity:1; transform:none; transition:none; }
+    .ba-connector-pulse, .ba-connector-icon { animation:none; }
+    .ba-pair.is-visible .ba-step-num { transform:none; }
   }
   .pdp-actions { display:flex; flex-wrap:wrap; gap:.7rem; margin:1.5rem 0 1rem; }
   .pdp-features { margin-top:1.75rem; }
@@ -2324,8 +2471,24 @@ ${productSocialProofPopupHtml(t)}
     } else {
       reveals.forEach(function(el){ el.classList.add('is-visible'); });
     }
+    var baTimeline = document.querySelector('.ba-timeline');
+    if(baTimeline && 'IntersectionObserver' in window){
+      var baIo = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            baTimeline.classList.add('is-drawn');
+            baIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      baIo.observe(baTimeline);
+    } else if(baTimeline) {
+      baTimeline.classList.add('is-drawn');
+    }
   } else {
     document.querySelectorAll('.pdp-reveal').forEach(function(el){ el.classList.add('is-visible'); });
+    var baTimelineReduced = document.querySelector('.ba-timeline');
+    if(baTimelineReduced) baTimelineReduced.classList.add('is-drawn');
   }
 
   var calc = document.getElementById('profitCalc');
