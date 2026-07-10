@@ -377,15 +377,21 @@ function productAudience(t) {
 function productTestimonials(t) {
   if (t.slug === 'korean-lash-lift-training-manual') {
     return [
-      { text: 'Finally have a manual I can brand and hand to students. Saved me weeks of writing.', who: 'Lash educator, Melbourne' },
-      { text: 'My 1:1 training feels so much more professional now — students love the layout.', who: 'Korean lash lift trainer' },
-      { text: 'Worth every dollar. Edited in Canva in one afternoon and started teaching next week.', who: 'Academy owner, Sydney' },
+      { name: 'Mia T.', city: 'Melbourne', text: 'Finally have a manual I can brand and hand to students. Saved me weeks of writing.', highlight: 'Saved me weeks' },
+      { name: 'Jess L.', city: 'Sydney', text: 'My 1:1 training feels so much more professional now — students love the layout.', highlight: 'so much more professional' },
+      { name: 'Hana K.', city: 'Brisbane', text: 'Worth every dollar. Edited in Canva in one afternoon and started teaching next week.', highlight: 'started teaching next week' },
+      { name: 'Priya S.', city: 'Perth', text: 'Exactly what my academy needed. The curriculum structure is spot-on for Korean lash lift.', highlight: 'spot-on for Korean lash lift' },
+      { name: 'Ella R.', city: 'Hobart', text: 'Best purchase for my training business. Students ask where I got the manual!', highlight: 'Best purchase' },
+      { name: 'Sophie W.', city: 'Adelaide', text: 'Clean, aesthetic, easy to customise. I added my logo and launched my course the same week.', highlight: 'launched my course' },
     ];
   }
   return [
-    { text: `Exactly what my ${t.niche.toLowerCase()} business needed — live in a weekend, not months.`, who: 'Small business owner, Hobart' },
-    { text: 'Clean, aesthetic, and easy to customise. Clients keep complimenting the site.', who: `${t.platform} user, Australia` },
-    { text: 'Best template purchase I have made. The layout just converts — more enquiries straight away.', who: 'Bloomie House customer' },
+    { name: 'Chloe M.', city: 'Melbourne', text: `Exactly what my ${t.niche.toLowerCase()} business needed — live in a weekend, not months.`, highlight: 'live in a weekend' },
+    { name: 'Amy N.', city: 'Sydney', text: 'Clean, aesthetic, and easy to customise. Clients keep complimenting the site.', highlight: 'easy to customise' },
+    { name: 'Kate B.', city: 'Brisbane', text: 'Best template purchase I have made. The layout just converts — more enquiries straight away.', highlight: 'more enquiries' },
+    { name: 'Linh P.', city: 'Hobart', text: 'Your templates are beyond my expectations — bought so many before but nothing comes close.', highlight: 'beyond my expectations' },
+    { name: 'Sarah D.', city: 'Perth', text: 'Just joined and wow… everything is so aesthetic and easy to work with. You thought of everything!', highlight: 'so aesthetic' },
+    { name: 'Ruby F.', city: 'Canberra', text: 'Feeling ready to start my business properly. Professional look without the agency price tag.', highlight: 'ready to start my business' },
   ];
 }
 
@@ -489,30 +495,52 @@ function productAudienceHtml(t) {
 </section>`;
 }
 
-function productShowcaseCarouselHtml(t) {
-  const rollImgs = (() => {
-    let imgs = t.images?.length ? [...t.images] : [`${MOCK}/studio-hero.jpg`, `${MOCK}/luxspa-devices.jpg`];
-    while (imgs.length < 8) imgs = imgs.concat(t.images || imgs);
-    return imgs.slice(0, 10);
-  })();
-  const colA = rollImgs.filter((_, i) => i % 2 === 0);
-  const colB = rollImgs.filter((_, i) => i % 2 === 1);
-  const rollCell = (src, h) =>
-    `<div class="roll-cell" style="height:${h}px"><img src="${src}" alt="" loading="lazy"></div>`;
-  const colHtml = (imgs, cls) => {
-    const cells = imgs.map((src, i) => rollCell(src, 120 + (i % 3) * 36)).join('');
-    return `<div class="roll-col ${cls}"><div class="roll-track">${cells}${cells}</div></div>`;
+function productValueBonuses(t) {
+  const industry = t.niche.toLowerCase();
+  return [
+    { icon: '⚡', label: `${t.platform} template — saves weeks of design`, value: t.originalPrice ? `$${t.originalPrice}` : '$127' },
+    { icon: '🎯', label: `Built accurately for ${industry} businesses`, value: 'Included' },
+    { icon: '📱', label: 'Free Instagram story template bonus', value: '$29' },
+    { icon: '📧', label: 'Updated versions — email notifications', value: 'Included' },
+    { icon: '🆕', label: 'Early access to new course & template drops', value: 'Included' },
+    { icon: '📖', label: 'Step-by-step setup guide + 30-day support', value: '$49' },
+  ];
+}
+
+function productTestimonialsHtml(t) {
+  const items = productTestimonials(t);
+  const bubble = (x) => {
+    const text = x.highlight
+      ? x.text.replace(x.highlight, `<em class="testi-hl">${x.highlight}</em>`)
+      : x.text;
+    const initial = x.name.charAt(0);
+    return `<div class="testi-card">
+      <div class="testi-avatar" aria-hidden="true">${initial}</div>
+      <div class="testi-card-body">
+        <p>"${text}"</p>
+        <span>${x.name} · ${x.city}</span>
+      </div>
+    </div>`;
   };
-  const testis = productTestimonials(t);
-  const bubbles = testis
-    .map(
-      (x, i) =>
-        `<div class="testi-bubble pdp-reveal" style="--reveal-delay:${i * 100}ms">
-          <p>"${x.text}"</p>
-          <span>— ${x.who}</span>
-        </div>`
-    )
-    .join('');
+  const track = items.map(bubble).join('') + items.map(bubble).join('');
+  return `
+<section class="pdp-testimonials section">
+  <p class="section-label pdp-reveal">Social proof</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">What <em>customers</em> say</h2>
+  <p class="testi-sub pdp-reveal" style="--reveal-delay:100ms">Real creators sharing their experience.</p>
+  <div class="testi-stats pdp-reveal" style="--reveal-delay:140ms">
+    <div><strong class="tabular-nums">500+</strong><span>creators worldwide</span></div>
+    <div><strong class="tabular-nums">80+</strong><span>countries</span></div>
+    <div><strong>★ 5.0</strong><span>average rating</span></div>
+    <div><strong class="tabular-nums">30</strong><span>day support</span></div>
+  </div>
+  <div class="testi-marquee-mask pdp-reveal" style="--reveal-delay:180ms">
+    <div class="testi-marquee-track">${track}</div>
+  </div>
+</section>`;
+}
+
+function productBeforeAfterHtml(t) {
   const ba = productBeforeAfter(t);
   const baRows = ba
     .map(
@@ -524,51 +552,148 @@ function productShowcaseCarouselHtml(t) {
         </div>`
     )
     .join('');
-
   return `
-<section class="pdp-showcase section">
-  <p class="section-label pdp-reveal">See it in action</p>
-  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Preview · proof · <em>results</em></h2>
-  <div class="showcase-carousel pdp-reveal" style="--reveal-delay:120ms" id="showcaseCarousel">
-    <div class="showcase-tabs" role="tablist">
-      <button type="button" class="showcase-tab active" data-slide="0" role="tab" aria-selected="true">Template preview</button>
-      <button type="button" class="showcase-tab" data-slide="1" role="tab" aria-selected="false">Testimonials</button>
-      <button type="button" class="showcase-tab" data-slide="2" role="tab" aria-selected="false">Before &amp; after</button>
+<section class="pdp-before-after section" style="background:var(--cream);">
+  <p class="section-label pdp-reveal">The transformation</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Before vs <em>after</em> you buy</h2>
+  <p class="ba-sub pdp-reveal" style="--reveal-delay:100ms">The shift our customers describe — from stuck to launched.</p>
+  <div class="ba-rows">${baRows}</div>
+</section>`;
+}
+
+function productCalculatorHtml(t) {
+  const isTraining =
+    t.slug === 'korean-lash-lift-training-manual' || /training|academy|educat/i.test(t.niche);
+  const minStudents = 1;
+  const maxStudents = isTraining ? 40 : 24;
+  const minPrice = isTraining ? 297 : 79;
+  const maxPrice = isTraining ? 1997 : 497;
+  const defaultStudents = isTraining ? 8 : 5;
+  const defaultPrice = isTraining ? 697 : 189;
+  const investLabel = isTraining ? 'Template investment (one-time)' : 'Template cost (one-time)';
+  const countLabel = isTraining ? 'Students you enrol' : 'New clients per month';
+  const priceLabel = isTraining ? 'Course price per student' : 'Average booking / sale value';
+  return `
+<section class="pdp-calculator section">
+  <p class="section-label pdp-reveal">ROI calculator</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">See your <em>profit</em> potential</h2>
+  <p class="calc-intro pdp-reveal" style="--reveal-delay:100ms">Drag the sliders — watch your profit per ${isTraining ? 'student' : 'client'} and total return grow.</p>
+  <div class="calc-card pdp-reveal" style="--reveal-delay:140ms" id="profitCalc" data-invest="${t.price}" data-training="${isTraining ? '1' : '0'}">
+    <div class="calc-row">
+      <label for="calcStudents">${countLabel}: <strong id="calcStudentsVal" class="tabular-nums">${defaultStudents}</strong></label>
+      <input type="range" id="calcStudents" min="${minStudents}" max="${maxStudents}" value="${defaultStudents}" class="calc-slider">
     </div>
-    <div class="showcase-viewport">
-      <div class="showcase-track" id="showcaseTrack">
-        <div class="showcase-slide showcase-slide-roll" role="tabpanel">
-          <p class="showcase-slide-label">Roll through the template</p>
-          <div class="roll-board">${colHtml(colA, 'roll-col-up')}${colHtml(colB, 'roll-col-down')}</div>
-        </div>
-        <div class="showcase-slide showcase-slide-testi" role="tabpanel">
-          <div class="testi-head">
-            <h3>What <em>creators</em> say</h3>
-            <p>Real feedback from beauty &amp; small business owners.</p>
-            <div class="testi-stats">
-              <div><strong class="tabular-nums">500+</strong><span>downloads</span></div>
-              <div><strong>★ 5.0</strong><span>avg. rating</span></div>
-              <div><strong class="tabular-nums">30</strong><span>day support</span></div>
-            </div>
-          </div>
-          <div class="testi-bubbles">${bubbles}</div>
-        </div>
-        <div class="showcase-slide showcase-slide-ba" role="tabpanel">
-          <h3 class="ba-title">Before vs <em>after</em> you buy</h3>
-          <p class="ba-sub">The shift our customers describe — from stuck to launched.</p>
-          <div class="ba-rows">${baRows}</div>
-        </div>
+    <div class="calc-row">
+      <label for="calcPrice">${priceLabel}: <strong id="calcPriceVal" class="tabular-nums">$${defaultPrice}</strong></label>
+      <input type="range" id="calcPrice" min="${minPrice}" max="${maxPrice}" step="${isTraining ? 50 : 10}" value="${defaultPrice}" class="calc-slider">
+    </div>
+    <div class="calc-results">
+      <div class="calc-result">
+        <span class="calc-result-label">${investLabel}</span>
+        <span class="calc-result-val tabular-nums" id="calcInvest">$${t.price}</span>
       </div>
-      <button type="button" class="showcase-nav showcase-prev" id="showcasePrev" aria-label="Previous slide">‹</button>
-      <button type="button" class="showcase-nav showcase-next" id="showcaseNext" aria-label="Next slide">›</button>
+      <div class="calc-result calc-result-highlight">
+        <span class="calc-result-label">Profit per ${isTraining ? 'student' : 'client'}</span>
+        <span class="calc-result-val tabular-nums" id="calcPerUnit">$${defaultPrice}</span>
+      </div>
+      <div class="calc-result calc-result-total">
+        <span class="calc-result-label">Total ${isTraining ? 'profit' : 'monthly revenue'}</span>
+        <span class="calc-result-val tabular-nums" id="calcTotal">$${(defaultStudents * defaultPrice - t.price).toFixed(0)}</span>
+      </div>
     </div>
-    <div class="showcase-dots" id="showcaseDots">
-      <button type="button" class="showcase-dot active" data-slide="0" aria-label="Slide 1"></button>
-      <button type="button" class="showcase-dot" data-slide="1" aria-label="Slide 2"></button>
-      <button type="button" class="showcase-dot" data-slide="2" aria-label="Slide 3"></button>
-    </div>
+    <p class="calc-note">*Estimates only. Your results depend on pricing, demand &amp; how you market.</p>
   </div>
 </section>`;
+}
+
+function productValueStackHtml(t) {
+  const bonuses = productValueBonuses(t);
+  const rows = bonuses
+    .map(
+      (b) =>
+        `<li><span class="value-icon" aria-hidden="true">${b.icon}</span><span class="value-label">${b.label}</span><span class="value-amt">${b.value}</span></li>`
+    )
+    .join('');
+  const totalValue = t.originalPrice
+    ? t.originalPrice + 127
+    : Math.round(t.price * 8);
+  const buyLabel = t.slug === 'korean-lash-lift-training-manual' ? 'Get Instant Access →' : 'Get Instant Access →';
+  return `
+<section class="pdp-value section" style="background:var(--cream);">
+  <div class="value-card pdp-reveal">
+    <span class="value-badge">Everything you get</span>
+    <h2 class="value-title">${t.name}</h2>
+    <div class="star-seller-badge">
+      <span class="star-seller-icon">★</span>
+      <span><strong>Star Seller</strong> · 5.0 average rating · trusted by 500+ creators</span>
+    </div>
+    <ul class="value-list">${rows}</ul>
+    <div class="value-total-row">
+      <span>Total value</span>
+      <span class="value-strike tabular-nums">$${totalValue} AUD</span>
+    </div>
+    <div class="value-price tabular-nums">$${t.price} AUD</div>
+    <p class="value-terms">ONE-TIME PAYMENT · INSTANT DIGITAL ACCESS</p>
+    <p class="value-script">Pay once — launch this week, keep it forever ✨</p>
+    <a class="btn btn-dark value-cta" href="${t.etsy}" target="_blank" rel="noopener">${buyLabel}</a>
+  </div>
+</section>`;
+}
+
+function productSocialProofPopupHtml(t) {
+  const buyers = [
+    { name: 'Mia T.', product: t.name, city: 'Melbourne', ago: '2 min' },
+    { name: 'Jess L.', product: 'LuxSpa Beauty & Nails', city: 'Sydney', ago: '6 min' },
+    { name: 'Chloe M.', product: 'Korean Lash Lift Manual', city: 'Brisbane', ago: '11 min' },
+    { name: 'Amy N.', product: 'The Studio', city: 'Perth', ago: '18 min' },
+    { name: 'Kate B.', product: t.name, city: 'Hobart', ago: '24 min' },
+  ];
+  return `
+<div class="social-proof-popup" id="socialProofPopup" role="status" aria-live="polite" hidden>
+  <div class="social-proof-avatar" id="socialProofAvatar" aria-hidden="true">M</div>
+  <div class="social-proof-text">
+    <strong id="socialProofName">Mia T.</strong>
+    <span id="socialProofAction">purchased ${t.name}</span>
+    <small id="socialProofMeta">Melbourne · just now</small>
+  </div>
+  <button type="button" class="social-proof-close" id="socialProofClose" aria-label="Dismiss">×</button>
+</div>
+<script>
+(function(){
+  var buyers = ${JSON.stringify(buyers)};
+  var popup = document.getElementById('socialProofPopup');
+  if(!popup || !buyers.length) return;
+  var idx = 0;
+  var dismissed = false;
+  var avatar = document.getElementById('socialProofAvatar');
+  var nameEl = document.getElementById('socialProofName');
+  var actionEl = document.getElementById('socialProofAction');
+  var metaEl = document.getElementById('socialProofMeta');
+  var closeBtn = document.getElementById('socialProofClose');
+  function show(){
+    if(dismissed) return;
+    var b = buyers[idx % buyers.length];
+    idx++;
+    if(avatar) avatar.textContent = b.name.charAt(0);
+    if(nameEl) nameEl.textContent = b.name;
+    if(actionEl) actionEl.textContent = 'purchased ' + b.product;
+    if(metaEl) metaEl.textContent = b.city + ' · ' + b.ago + ' ago';
+    popup.hidden = false;
+    popup.classList.remove('is-leaving');
+    popup.classList.add('is-visible');
+    setTimeout(function(){
+      popup.classList.add('is-leaving');
+      setTimeout(function(){
+        popup.classList.remove('is-visible');
+        popup.hidden = true;
+      }, 400);
+    }, 5000);
+  }
+  if(closeBtn) closeBtn.addEventListener('click', function(){ dismissed = true; popup.hidden = true; });
+  setTimeout(show, 8000);
+  setInterval(function(){ if(!dismissed) show(); }, 22000);
+})();
+</script>`;
 }
 
 function productProcessHtml(t) {
@@ -1830,66 +1955,39 @@ function productPage(t) {
   .audience-card h3 { font-family:Fraunces,serif; font-size:1.05rem; margin-bottom:.35rem; }
   .audience-card p { font-size:.88rem; color:var(--muted); line-height:1.6; text-wrap:pretty; }
   .audience-not { font-size:.9rem; color:var(--muted); padding:1rem 1.15rem; background:rgba(255,255,255,.65); border-radius:12px; text-wrap:pretty; }
-  .showcase-carousel { max-width:900px; margin:0 auto; }
-  .showcase-tabs { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:1rem; }
-  .showcase-tab {
-    border:none; background:#fff; border-radius:999px; padding:.55rem 1rem; font-family:inherit;
-    font-size:.8rem; cursor:pointer; box-shadow:var(--shadow-border); color:var(--muted);
-    transition-property: background-color, color, box-shadow, transform;
-    transition-duration:150ms;
+  .testi-sub, .ba-sub, .calc-intro { color:var(--muted); max-width:36rem; line-height:1.7; margin-bottom:1.25rem; }
+  .pdp-testimonials .testi-stats {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.75rem; max-width:640px;
   }
-  .showcase-tab.active { background:var(--black); color:#fff; box-shadow:none; }
-  .showcase-tab:active { transform:scale(0.96); }
-  .showcase-viewport {
-    position:relative; overflow:hidden; border-radius:20px; background:#fff;
-    box-shadow:var(--shadow-border); min-height:380px;
+  .pdp-testimonials .testi-stats div { text-align:center; background:#fff; border-radius:14px; padding:1rem .75rem; box-shadow:var(--shadow-border); }
+  .pdp-testimonials .testi-stats strong { display:block; font-family:Fraunces,serif; font-size:1.5rem; margin-bottom:.2rem; }
+  .pdp-testimonials .testi-stats span { font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .testi-marquee-mask {
+    overflow:hidden; position:relative;
+    mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   }
-  .showcase-track {
-    display:flex; width:300%; transition: transform 450ms cubic-bezier(0.2,0,0,1);
+  .testi-marquee-track {
+    display:flex; gap:1rem; width:max-content;
+    animation:testiMarquee 55s ease-in-out infinite alternate;
   }
-  .showcase-slide {
-    width:33.333%; flex-shrink:0; padding:1.5rem 1.75rem 1.75rem; box-sizing:border-box;
+  @keyframes testiMarquee {
+    from { transform:translateX(0); }
+    to { transform:translateX(-50%); }
   }
-  .showcase-slide-label { font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.75rem; }
-  .roll-board {
-    display:grid; grid-template-columns:1fr 1fr; gap:.65rem; height:300px; overflow:hidden;
-    border-radius:14px; background:var(--cream); padding:.5rem;
+  .testi-card {
+    flex-shrink:0; width:min(300px,78vw); display:flex; gap:.75rem; align-items:flex-start;
+    background:#fff; border-radius:18px; padding:1rem 1.1rem; box-shadow:var(--shadow-border);
   }
-  .roll-col { overflow:hidden; border-radius:10px; }
-  .roll-track { display:flex; flex-direction:column; gap:.5rem; }
-  .roll-col-up .roll-track { animation: rollUp 22s linear infinite; }
-  .roll-col-down .roll-track { animation: rollDown 26s linear infinite; }
-  @keyframes rollUp {
-    from { transform: translateY(0); }
-    to { transform: translateY(-50%); }
+  .testi-avatar {
+    width:40px; height:40px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg, var(--pink), #e8b4c4); color:#fff;
+    display:grid; place-items:center; font-weight:600; font-size:.9rem;
   }
-  @keyframes rollDown {
-    from { transform: translateY(-50%); }
-    to { transform: translateY(0); }
-  }
-  .roll-cell { border-radius:10px; overflow:hidden; flex-shrink:0; box-shadow:var(--shadow-border); }
-  .roll-cell img { width:100%; height:100%; object-fit:cover; }
-  .testi-head h3 { font-family:Fraunces,serif; font-size:1.5rem; margin-bottom:.25rem; }
-  .testi-head h3 em { font-style:italic; color:var(--pink); font-weight:300; }
-  .testi-head p { color:var(--muted); font-size:.9rem; margin-bottom:1rem; }
-  .testi-stats {
-    display:flex; gap:1.25rem; flex-wrap:wrap; margin-bottom:1.25rem;
-  }
-  .testi-stats div { text-align:center; }
-  .testi-stats strong { display:block; font-family:Fraunces,serif; font-size:1.35rem; }
-  .testi-stats span { font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
-  .testi-bubbles { display:grid; gap:.65rem; }
-  .testi-bubble {
-    background:var(--cream); border-radius:16px 16px 16px 4px; padding:.9rem 1.1rem;
-    box-shadow:var(--shadow-border); max-width:95%;
-  }
-  .testi-bubble:nth-child(even) { border-radius:16px 16px 4px 16px; margin-left:auto; }
-  .testi-bubble p { font-size:.9rem; line-height:1.55; margin-bottom:.35rem; text-wrap:pretty; }
-  .testi-bubble span { font-size:.78rem; color:var(--muted); }
-  .ba-title { font-family:Fraunces,serif; font-size:1.4rem; margin-bottom:.25rem; }
-  .ba-title em { font-style:italic; color:var(--pink); font-weight:300; }
-  .ba-sub { color:var(--muted); font-size:.9rem; margin-bottom:1.25rem; }
-  .ba-rows { display:grid; gap:.75rem; }
+  .testi-card-body p { font-size:.88rem; line-height:1.55; margin-bottom:.35rem; text-wrap:pretty; }
+  .testi-hl { font-style:normal; color:#9b7ec8; font-weight:500; }
+  .testi-card-body span { font-size:.75rem; color:var(--muted); }
+  .ba-rows { display:grid; gap:.75rem; max-width:900px; }
   .ba-row {
     display:grid; grid-template-columns:1fr auto 1fr; gap:.5rem; align-items:stretch;
   }
@@ -1905,21 +2003,90 @@ function productPage(t) {
   .ba-tag-after { color:#2d6a4f; }
   .ba-arrow { display:grid; place-items:center; color:var(--pink); font-size:1.2rem; font-weight:700; }
   .ba-before p, .ba-after p { color:var(--charcoal); }
-  .showcase-nav {
-    position:absolute; top:50%; transform:translateY(-50%); width:36px; height:36px; border-radius:50%;
-    border:none; background:rgba(255,255,255,.95); font-size:1.1rem; cursor:pointer; z-index:2;
-    box-shadow:var(--shadow-border-hover);
-    transition-property: transform; transition-duration:150ms;
+  .calc-card {
+    max-width:560px; background:#fff; border-radius:20px; padding:1.75rem;
+    box-shadow:var(--shadow-border); border:1px solid rgba(214,125,154,.15);
   }
-  .showcase-nav:active { transform:translateY(-50%) scale(0.96); }
-  .showcase-prev { left:8px; }
-  .showcase-next { right:8px; padding-left:2px; }
-  .showcase-dots { display:flex; justify-content:center; gap:.45rem; margin-top:1rem; }
-  .showcase-dot {
-    width:8px; height:8px; border-radius:50%; border:none; padding:0; background:rgba(0,0,0,.15); cursor:pointer;
-    transition-property: transform, background-color; transition-duration:150ms;
+  .calc-row { margin-bottom:1.5rem; }
+  .calc-row label { display:block; font-size:.9rem; margin-bottom:.65rem; color:var(--charcoal); }
+  .calc-row label strong { color:var(--pink); font-family:Fraunces,serif; font-size:1.1rem; }
+  .calc-slider {
+    width:100%; height:6px; border-radius:999px; appearance:none; -webkit-appearance:none;
+    background:linear-gradient(90deg, var(--pink), var(--sage)); cursor:pointer;
   }
-  .showcase-dot.active { background:var(--pink); transform:scale(1.2); }
+  .calc-slider::-webkit-slider-thumb {
+    appearance:none; -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+    background:#fff; border:2px solid var(--pink); box-shadow:var(--shadow-border-hover); cursor:grab;
+  }
+  .calc-slider::-moz-range-thumb {
+    width:22px; height:22px; border-radius:50%; background:#fff; border:2px solid var(--pink); cursor:grab;
+  }
+  .calc-results { display:grid; gap:.65rem; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--border); }
+  .calc-result {
+    display:flex; justify-content:space-between; align-items:center; font-size:.9rem;
+  }
+  .calc-result-label { color:var(--muted); }
+  .calc-result-val { font-family:Fraunces,serif; font-weight:700; font-size:1.1rem; }
+  .calc-result-highlight .calc-result-val { color:var(--pink); font-size:1.35rem; }
+  .calc-result-total {
+    background:var(--cream); border-radius:12px; padding:.85rem 1rem; margin-top:.25rem;
+  }
+  .calc-result-total .calc-result-val { font-size:1.6rem; color:var(--black); }
+  .calc-note { font-size:.78rem; color:var(--muted); margin-top:1rem; }
+  .value-card {
+    max-width:520px; margin:0 auto; background:#fff; border-radius:22px; padding:2rem 1.75rem;
+    box-shadow:var(--shadow-lift); border:2px solid rgba(214,125,154,.25); text-align:center;
+  }
+  .value-badge {
+    display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--pink); background:rgba(214,125,154,.12); padding:.35rem .85rem; border-radius:999px; margin-bottom:1rem;
+  }
+  .value-title { font-family:Fraunces,serif; font-size:1.75rem; font-weight:900; margin-bottom:.75rem; text-wrap:balance; }
+  .star-seller-badge {
+    display:inline-flex; align-items:center; gap:.45rem; font-size:.82rem; color:var(--charcoal);
+    background:linear-gradient(135deg, #fff8e6, #fff); border-radius:999px; padding:.45rem .9rem;
+    margin-bottom:1.25rem; box-shadow:var(--shadow-border);
+  }
+  .star-seller-icon { color:#f5a623; font-size:1rem; }
+  .value-list { list-style:none; text-align:left; margin-bottom:1rem; }
+  .value-list li {
+    display:grid; grid-template-columns:auto 1fr auto; gap:.65rem; align-items:center;
+    padding:.75rem 0; border-bottom:1px solid var(--border); font-size:.88rem;
+  }
+  .value-icon { font-size:1.1rem; }
+  .value-label { text-wrap:pretty; color:var(--charcoal); }
+  .value-amt { font-size:.8rem; color:var(--muted); white-space:nowrap; }
+  .value-total-row {
+    display:flex; justify-content:space-between; padding:.75rem 0; font-size:.9rem; color:var(--muted);
+  }
+  .value-strike { text-decoration:line-through; }
+  .value-price { font-family:Fraunces,serif; font-size:2.8rem; font-weight:900; margin:.25rem 0; }
+  .value-terms { font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
+  .value-script { font-family:Fraunces,serif; font-style:italic; color:var(--pink); font-weight:300; margin-bottom:1.25rem; }
+  .value-cta { width:100%; border-radius:999px; padding:1rem; font-size:.95rem; }
+  .social-proof-popup {
+    position:fixed; left:16px; bottom:100px; z-index:2500; max-width:min(320px,calc(100vw - 32px));
+    display:flex; align-items:center; gap:.75rem; background:#fff; border-radius:14px;
+    padding:.75rem 2.25rem .75rem .75rem; box-shadow:0 12px 40px rgba(0,0,0,.15);
+    transform:translateX(-120%); opacity:0;
+    transition: transform 450ms cubic-bezier(0.2,0,0,1), opacity 450ms cubic-bezier(0.2,0,0,1);
+  }
+  .social-proof-popup.is-visible { transform:translateX(0); opacity:1; }
+  .social-proof-popup.is-leaving { transform:translateX(-120%); opacity:0; }
+  .social-proof-avatar {
+    width:44px; height:44px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg, var(--sage), var(--pink)); color:#fff;
+    display:grid; place-items:center; font-weight:600; font-size:1rem;
+  }
+  .social-proof-text { display:grid; gap:.1rem; min-width:0; }
+  .social-proof-text strong { font-size:.88rem; }
+  .social-proof-text span { font-size:.8rem; color:var(--charcoal); line-height:1.35; }
+  .social-proof-text small { font-size:.72rem; color:var(--muted); }
+  .social-proof-close {
+    position:absolute; top:6px; right:8px; border:none; background:none; font-size:1.1rem;
+    color:var(--muted); cursor:pointer; width:28px; height:28px; border-radius:50%;
+  }
+  .social-proof-close:hover { background:var(--cream); }
   .process-intro { color:var(--muted); max-width:38rem; line-height:1.75; margin-bottom:1.75rem; }
   .process-timeline {
     list-style:none; display:grid; gap:0; max-width:720px; margin:0 auto 2rem;
@@ -1948,14 +2115,13 @@ function productPage(t) {
   @media (max-width:640px) {
     .ba-row { grid-template-columns:1fr; }
     .ba-arrow { transform:rotate(90deg); justify-self:center; }
-    .showcase-slide { padding:1.15rem; }
-    .roll-board { height:260px; }
+    .pdp-testimonials .testi-stats { grid-template-columns:repeat(2,1fr); }
+    .social-proof-popup { left:12px; bottom:88px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .pdp-reveal { opacity:1; transform:none; filter:none; transition:none; }
     .faq-item p { animation:none; }
-    .roll-col-up .roll-track, .roll-col-down .roll-track { animation:none; }
-    .showcase-track { transition:none; }
+    .testi-marquee-track { animation:none; }
   }
   .pdp-actions { display:flex; flex-wrap:wrap; gap:.7rem; margin:1.5rem 0 1rem; }
   .pdp-features { margin-top:1.75rem; }
@@ -2030,10 +2196,14 @@ function productPage(t) {
   </div>
 </div>
 ${productAudienceHtml(t)}
-${productShowcaseCarouselHtml(t)}
+${productTestimonialsHtml(t)}
+${productBeforeAfterHtml(t)}
+${productCalculatorHtml(t)}
+${productValueStackHtml(t)}
 ${productFunnelHtml(t)}
 ${productProcessHtml(t)}
 ${productFaqHtml(t)}
+${productSocialProofPopupHtml(t)}
 <section class="section" style="padding-top:0;">
   <h2 class="section-title pdp-reveal">You may also <em>like</em></h2>
   <div class="product-grid">${related}</div>
@@ -2158,52 +2328,27 @@ ${productFaqHtml(t)}
     document.querySelectorAll('.pdp-reveal').forEach(function(el){ el.classList.add('is-visible'); });
   }
 
-  var showcase = document.getElementById('showcaseCarousel');
-  if(showcase){
-    var track = document.getElementById('showcaseTrack');
-    var slide = 0;
-    var total = 3;
-    var timer;
-    function goTo(n){
-      slide = (n + total) % total;
-      if(track) track.style.transform = 'translateX(-' + (slide * (100 / total)) + '%)';
-      showcase.querySelectorAll('.showcase-dot').forEach(function(d, i){
-        d.classList.toggle('active', i === slide);
-      });
-      showcase.querySelectorAll('.showcase-tab').forEach(function(tab, i){
-        tab.classList.toggle('active', i === slide);
-        tab.setAttribute('aria-selected', i === slide ? 'true' : 'false');
-      });
+  var calc = document.getElementById('profitCalc');
+  if(calc){
+    var invest = parseFloat(calc.dataset.invest) || 0;
+    var students = document.getElementById('calcStudents');
+    var price = document.getElementById('calcPrice');
+    var studentsVal = document.getElementById('calcStudentsVal');
+    var priceVal = document.getElementById('calcPriceVal');
+    var perUnit = document.getElementById('calcPerUnit');
+    var total = document.getElementById('calcTotal');
+    function fmt(n){ return '$' + Math.round(n).toLocaleString(); }
+    function update(){
+      var n = parseInt(students.value, 10) || 1;
+      var p = parseInt(price.value, 10) || 0;
+      if(studentsVal) studentsVal.textContent = String(n);
+      if(priceVal) priceVal.textContent = fmt(p);
+      if(perUnit) perUnit.textContent = fmt(p);
+      if(total) total.textContent = fmt(Math.max(0, n * p - invest));
     }
-    function next(){ goTo(slide + 1); }
-    function startAuto(){
-      clearInterval(timer);
-      if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-        timer = setInterval(next, 5500);
-      }
-    }
-    showcase.querySelectorAll('[data-slide]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        goTo(parseInt(btn.getAttribute('data-slide'), 10) || 0);
-        startAuto();
-      });
-    });
-    var sp = document.getElementById('showcasePrev');
-    var sn = document.getElementById('showcaseNext');
-    if(sp) sp.addEventListener('click', function(){ goTo(slide - 1); startAuto(); });
-    if(sn) sn.addEventListener('click', function(){ goTo(slide + 1); startAuto(); });
-    showcase.addEventListener('mouseenter', function(){ clearInterval(timer); });
-    showcase.addEventListener('mouseleave', startAuto);
-    var sx = 0;
-    showcase.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, { passive:true });
-    showcase.addEventListener('touchend', function(e){
-      var dx = e.changedTouches[0].clientX - sx;
-      if(Math.abs(dx) < 40) return;
-      goTo(dx < 0 ? slide + 1 : slide - 1);
-      startAuto();
-    }, { passive:true });
-    goTo(0);
-    startAuto();
+    if(students) students.addEventListener('input', update);
+    if(price) price.addEventListener('input', update);
+    update();
   }
 })();
 </script>`;
