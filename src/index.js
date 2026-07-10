@@ -473,15 +473,15 @@ function productPostPurchaseSteps(t) {
   return [
     {
       time: 'Instant',
-      title: 'Checkout on Etsy',
+      title: 'Secure checkout',
       detail:
-        'Click Buy on Etsy, complete secure payment, and wait for your Etsy confirmation email — usually within minutes.',
+        'Complete payment at checkout. As soon as your order is confirmed, you will receive an instant email with everything you need to access your purchase.',
     },
     {
       time: '1–5 min',
-      title: 'Download your files',
+      title: 'Open your access email',
       detail:
-        'Open the Etsy email → Downloads → save the template link, setup guide PDF, and any bonus files to your device.',
+        'Check your inbox (and spam folder) for your order confirmation. Follow the link inside to download your template files, setup guide, and any bonus materials.',
     },
     editStep,
     extra,
@@ -684,8 +684,8 @@ function productValueStackHtml(t) {
     </div>
     <div class="value-price tabular-nums">$${t.price} AUD</div>
     <p class="value-terms">ONE-TIME PAYMENT · INSTANT DIGITAL ACCESS</p>
-    <p class="value-script">Pay once — launch this week, keep it forever ✨</p>
-    <a class="btn btn-dark value-cta" href="${t.etsy}" target="_blank" rel="noopener">${buyLabel}</a>
+    <p class="value-script">Pay once — have it for life. Keep it forever ✨</p>
+    <button type="button" class="btn btn-dark value-cta" data-add-cart="${t.slug}">${buyLabel}</button>
   </div>
 </section>`;
 }
@@ -863,15 +863,18 @@ function productProcessHtml(t) {
         </li>`
     )
     .join('');
-  const buyLabel = t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →';
   return `
 <section class="pdp-process section" style="background:var(--cream);">
   <p class="section-label pdp-reveal">After you buy</p>
   <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Your path from <em>purchase</em> to launch</h2>
-  <p class="process-intro pdp-reveal" style="--reveal-delay:100ms">No guesswork — here is exactly what happens after you checkout on Etsy, step by step.</p>
+  <p class="process-intro pdp-reveal" style="--reveal-delay:100ms">No guesswork — here is exactly what happens once payment is confirmed, step by step.</p>
   <ol class="process-timeline">${rows}</ol>
-  <div class="process-cta pdp-reveal" style="--reveal-delay:200ms">
-    <a class="btn btn-pink" href="${t.etsy}" target="_blank" rel="noopener">${buyLabel}</a>
+  <div class="process-notice pdp-reveal" style="--reveal-delay:180ms">
+    <p class="process-warning"><strong>Please note:</strong> Digital template purchases are <strong>non-refundable</strong> because access is delivered instantly. Read every section on this page, check what is included, and make sure this template is right for you before you buy.</p>
+    <p class="process-support">Still unsure? Email <a href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a> — our dedicated support team is happy to answer questions before you purchase.</p>
+  </div>
+  <div class="process-cta pdp-reveal" style="--reveal-delay:240ms">
+    <button type="button" class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
     <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Prefer we set it up? Book now</a>
   </div>
 </section>`;
@@ -2311,7 +2314,7 @@ function productPage(t) {
   .value-price { font-family:Fraunces,serif; font-size:2.8rem; font-weight:900; margin:.25rem 0; }
   .value-terms { font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
   .value-script { font-family:Fraunces,serif; font-style:italic; color:var(--pink); font-weight:300; margin-bottom:1.25rem; }
-  .value-cta { width:100%; border-radius:999px; padding:1rem; font-size:.95rem; }
+  .value-cta { width:100%; border-radius:999px; padding:1rem; font-size:.95rem; font-family:inherit; }
   .social-proof-popup {
     position:fixed; left:16px; bottom:100px; z-index:2500; max-width:min(320px,calc(100vw - 32px));
     display:flex; align-items:center; gap:.75rem; background:#fff; border-radius:14px;
@@ -2370,6 +2373,18 @@ function productPage(t) {
   }
   .process-body strong { display:block; font-family:Fraunces,serif; font-size:1.1rem; margin-bottom:.35rem; }
   .process-body p { font-size:.9rem; color:var(--muted); line-height:1.7; text-wrap:pretty; }
+  .process-notice {
+    max-width:720px; margin:0 auto 1.75rem; padding:1.15rem 1.25rem;
+    background:rgba(255,255,255,.75); border-radius:14px; border:1px solid rgba(214,125,154,.2);
+    box-shadow:var(--shadow-border);
+  }
+  .process-warning {
+    font-size:.88rem; color:var(--charcoal); line-height:1.7; text-wrap:pretty; margin-bottom:.75rem;
+  }
+  .process-support {
+    font-size:.88rem; color:var(--muted); line-height:1.7; text-wrap:pretty; margin:0;
+  }
+  .process-support a { color:var(--pink); font-weight:500; }
   .process-cta { display:flex; gap:.65rem; flex-wrap:wrap; justify-content:center; }
   @media (max-width:640px) {
     .ba-timeline::before { left:19px; }
