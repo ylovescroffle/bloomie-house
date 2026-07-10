@@ -13,7 +13,135 @@ const JOTFORM_DISCOVERY = 'https://form.jotform.com/haiyen0304/website-design-di
 const JOTFORM_CUSTOM = 'https://form.jotform.com/jsform/253192865445869';
 const SITE = 'https://bloomiehouse.com.au';
 
+const MOCK = '/mockups';
+
 const templateData = [
+  {
+    slug: 'wedding-rsvp',
+    name: 'Wedding Invitation RSVP',
+    niche: 'Wedding & Events',
+    platform: 'Canva',
+    category: 'canva',
+    badge: 'New',
+    price: 47,
+    originalPrice: 67,
+    mockClass: 'mock-boutique',
+    images: [
+      `${MOCK}/wedding-rsvp-promo.jpg`,
+      `${MOCK}/wedding-rsvp-burgundy.jpg`,
+      `${MOCK}/wedding-gift-tracker.jpg`,
+    ],
+    description:
+      'An aesthetic Canva website template for wedding invitation RSVPs — elegant device mockups, mobile-friendly RSVP pages, and a bonus customisable gift registry tracker. Fully editable in Canva.',
+    features: [
+      '4–6 page Canva website',
+      'Mobile RSVP flow',
+      'Bonus gift registry tracker',
+      'Elegant serif typography',
+      'Fully customisable colours & text',
+      'Instant Canva access',
+    ],
+    etsy: ETSY_SHOP,
+  },
+  {
+    slug: 'luxspa-beauty-nails',
+    name: 'LuxSpa Beauty & Nails',
+    niche: 'Spa & Nail Salon',
+    platform: 'Wix Studio',
+    category: 'wix',
+    badge: 'Bestseller',
+    price: 97,
+    originalPrice: 127,
+    mockClass: 'mock-beauty',
+    images: [
+      `${MOCK}/luxspa-devices.jpg`,
+      `${MOCK}/luxspa-services.jpg`,
+      `${MOCK}/luxspa-booking.jpg`,
+      `${MOCK}/luxspa-faq.jpg`,
+    ],
+    description:
+      'A soft-luxury spa & nails website with multi-device mockups — service showcase, online booking flow, FAQ, and testimonials. Built for beauty salons that want an elegant booking experience.',
+    features: [
+      'Online appointment booking',
+      'Service showcase & pricing',
+      'FAQ accordion section',
+      'Testimonials & gallery',
+      'Responsive multi-device layout',
+      'Book Now CTAs throughout',
+    ],
+    etsy: ETSY_SHOP,
+  },
+  {
+    slug: 'lumina-lash-training',
+    name: 'Lumina Lash Training',
+    niche: 'Lash Lift Training',
+    platform: 'Wix Studio',
+    category: 'wix',
+    badge: 'New',
+    price: 89,
+    originalPrice: 119,
+    mockClass: 'mock-beauty',
+    images: [`${MOCK}/lumina-lash-training.jpg`, `${MOCK}/lumina-courses.jpg`],
+    description:
+      'A soft-luxury academy template for lash lift training schools. Course curriculum, enrolment CTAs, and trainer-ready layouts — branded as Lumina Lash (not Bloom).',
+    features: [
+      'Course curriculum pages',
+      'Enrolment / training CTAs',
+      'Service & pricing blocks',
+      'Mobile-optimised layouts',
+      'Aesthetic device mockups included',
+    ],
+    etsy: ETSY_SHOP,
+  },
+  {
+    slug: 'seoul-soft-korean-lash',
+    name: 'Seoul Soft Korean Lash Lift',
+    niche: 'Korean Lash Lift',
+    platform: 'Canva',
+    category: 'canva',
+    badge: 'New',
+    price: 49,
+    originalPrice: 69,
+    mockClass: 'mock-coaching',
+    images: [`${MOCK}/seoul-soft-korean.jpg`],
+    description:
+      'A minimal K-beauty Canva website template for Korean lash lift clinics and freelancers. Soft beige UI, before/after friendly layout, and booking-ready sections under the Seoul Soft brand.',
+    features: [
+      'Canva website template',
+      'K-beauty soft aesthetic',
+      'Service menu layout',
+      'Booking CTA sections',
+      'Fully editable in Canva',
+    ],
+    etsy: ETSY_SHOP,
+  },
+  {
+    slug: 'lash-brows-academy',
+    name: 'Lash & Brows Academy',
+    niche: 'Lash & Brows Training',
+    platform: 'Wix Studio',
+    category: 'wix',
+    badge: 'New',
+    price: 89,
+    originalPrice: 119,
+    mockClass: 'mock-beauty',
+    images: [
+      `${MOCK}/lash-academy-hero.jpg`,
+      `${MOCK}/lash-academy-services.jpg`,
+      `${MOCK}/lash-academy-courses.jpg`,
+      `${MOCK}/lash-academy-about.jpg`,
+    ],
+    description:
+      'A soft-luxury website template for lash & brows academies and beauty educators. Hero, services, course enrolment, and trainer story — ready to personalise and launch this week.',
+    features: [
+      'Hero with academy branding',
+      'Services & treatment menu',
+      'Course / training enrolment',
+      'Trainer story & credentials',
+      'Mobile-optimised layouts',
+    ],
+    etsy: ETSY_SHOP,
+  },
   {
     slug: 'coaching-service',
     name: 'Coaching Service',
@@ -42,27 +170,6 @@ const templateData = [
     etsy: ETSY_SHOP,
   },
   {
-    slug: 'the-brew',
-    name: 'The Brew',
-    niche: 'Cafe & Coffee Shop',
-    platform: 'Wix Studio',
-    category: 'wix',
-    badge: '20% OFF',
-    price: 79,
-    originalPrice: 97,
-    mockClass: 'mock-cafe',
-    description:
-      'A warm, editorial template built for cafes, coffee roasters, and food-forward brands. Showcases your menu, story, and atmosphere with rich typography and a full-bleed hero.',
-    features: [
-      'Full menu section',
-      'Online booking integration',
-      'Instagram feed',
-      'Google Maps embed',
-      'Mobile-optimised',
-    ],
-    etsy: ETSY_SHOP,
-  },
-  {
     slug: 'the-studio',
     name: 'The Studio',
     niche: 'Beauty & Lash Studio',
@@ -72,6 +179,7 @@ const templateData = [
     price: 79,
     originalPrice: 97,
     mockClass: 'mock-beauty',
+    images: [`${MOCK}/studio-hero.jpg`, `${MOCK}/studio-services.jpg`],
     description:
       'Our most-loved template — designed for beauty studios, lash techs, brow bars, and skin clinics. Elegant, feminine, and conversion-focused with a built-in booking flow.',
     features: [
@@ -93,6 +201,7 @@ const templateData = [
     price: 97,
     originalPrice: null,
     mockClass: 'mock-tradie',
+    images: [`${MOCK}/tradie-hero.jpg`],
     description:
       'A bold, trust-building template for tradies, builders, electricians, and service businesses. Lead-gen focused with a prominent quote request form and project gallery.',
     features: [
@@ -509,9 +618,11 @@ img { max-width: 100%; display: block; }
 }
 .product-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.08); }
 .product-thumb {
-  aspect-ratio: 4/3; position: relative; overflow: hidden;
+  aspect-ratio: 1/1; position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
+  background: var(--cream);
 }
+.product-thumb img { width: 100%; height: 100%; object-fit: contain; }
 .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .product-thumb-label {
   font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300;
@@ -794,7 +905,7 @@ function productCard(t) {
     : `<div class="product-thumb-label">${t.name}</div>`;
   return `
 <a class="product-card" href="/templates/${t.slug}" data-platform="${t.category}">
-  <div class="product-thumb ${t.mockClass}" style="${t.images ? 'background:none;' : ''}">
+  <div class="product-thumb ${t.mockClass}" style="${t.images ? 'background:var(--cream);' : ''}">
     ${thumb}
     <span class="badge badge-platform">${t.platform}</span>
     <span class="badge badge-sale">${t.badge}</span>
@@ -919,13 +1030,16 @@ function shopPage(platform) {
 
 function productPage(t) {
   const galleryMain = t.images?.[0]
-    ? `<img id="mainImg" src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;">`
+    ? `<button type="button" class="pdp-zoom" data-lightbox="${t.images[0]}" aria-label="Enlarge image">
+         <img id="mainImg" src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:contain;">
+         <span class="zoom-hint">Click to enlarge</span>
+       </button>`
     : `<span class="product-thumb-label" style="font-size:2.4rem;">${t.name}</span>`;
   const thumbs = t.images
     ? t.images
         .map(
           (src, i) =>
-            `<button type="button" class="thumb-btn" data-src="${src}" style="border:none;padding:0;border-radius:12px;overflow:hidden;cursor:pointer;opacity:${i === 0 ? 1 : 0.65};"><img src="${src}" alt="${t.name} ${i + 1}" style="width:100%;aspect-ratio:4/3;object-fit:cover;"></button>`
+            `<button type="button" class="thumb-btn" data-src="${src}" style="border:none;padding:0;border-radius:12px;overflow:hidden;cursor:pointer;opacity:${i === 0 ? 1 : 0.65};background:var(--cream);"><img src="${src}" alt="${t.name} ${i + 1}" style="width:100%;aspect-ratio:1/1;object-fit:contain;"></button>`
         )
         .join('')
     : '';
@@ -938,8 +1052,14 @@ function productPage(t) {
   const body = `
 <style>
   .pdp { display:grid; grid-template-columns:1.05fr .95fr; gap:3rem; padding:3rem 4vw 4rem; max-width:1200px; margin:0 auto; align-items:start; }
-  .pdp-main { aspect-ratio:4/3; border-radius:20px; overflow:hidden; border:1px solid var(--border); }
-  .pdp-thumbs { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin-top:.75rem; }
+  .pdp-main { aspect-ratio:1/1; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--cream); position:relative; }
+  .pdp-zoom { display:block; width:100%; height:100%; border:none; padding:0; background:transparent; cursor:zoom-in; position:relative; }
+  .zoom-hint {
+    position:absolute; bottom:12px; right:12px; background:rgba(17,17,17,.72); color:#fff;
+    font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; padding:.4rem .7rem; border-radius:999px;
+    pointer-events:none; opacity:.9;
+  }
+  .pdp-thumbs { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:.6rem; margin-top:.75rem; }
   .breadcrumb { font-size:.85rem; color:var(--muted); margin-bottom:1rem; }
   .breadcrumb a { color:var(--muted); text-decoration:none; }
   .breadcrumb a:hover { color:var(--pink); }
@@ -949,12 +1069,32 @@ function productPage(t) {
   .pdp-features ul { list-style:none; display:grid; gap:.55rem; }
   .pdp-features li { display:flex; gap:.55rem; align-items:flex-start; color:var(--charcoal); }
   .pdp-features li::before { content:'✦'; color:var(--pink); font-size:.7rem; margin-top:.35rem; }
+  .lightbox {
+    position:fixed; inset:0; z-index:3000; background:rgba(17,17,17,.88);
+    display:none; align-items:center; justify-content:center; padding:1.5rem; cursor:zoom-out;
+  }
+  .lightbox.open { display:flex; }
+  .lightbox img {
+    max-width:min(960px,96vw); max-height:90vh; border-radius:12px; box-shadow:0 24px 80px rgba(0,0,0,.45);
+    background:#fff; object-fit:contain; cursor:default;
+  }
+  .lightbox-close {
+    position:fixed; top:1rem; right:1rem; width:44px; height:44px; border-radius:50%;
+    border:none; background:#fff; font-size:1.4rem; cursor:pointer; z-index:3001;
+  }
+  .lightbox-nav {
+    position:fixed; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
+    border:none; background:rgba(255,255,255,.92); font-size:1.3rem; cursor:pointer; z-index:3001;
+  }
+  .lightbox-prev { left:1rem; }
+  .lightbox-next { right:1rem; }
   @media (max-width:900px){ .pdp { grid-template-columns:1fr; gap:1.75rem; padding-top:1.5rem; } }
 </style>
 <div class="pdp">
   <div>
-    <div class="pdp-main product-thumb ${t.mockClass}" style="${t.images ? 'background:none;display:block;' : ''}">${galleryMain}</div>
+    <div class="pdp-main product-thumb ${t.mockClass}" style="${t.images ? 'background:var(--cream);display:block;' : ''}">${galleryMain}</div>
     ${thumbs ? `<div class="pdp-thumbs">${thumbs}</div>` : ''}
+    <p style="font-size:.8rem;color:var(--muted);margin-top:.6rem;">Tip: click the image to view full size</p>
   </div>
   <div>
     <div class="breadcrumb"><a href="/shop">Shop</a> / ${t.name}</div>
@@ -983,15 +1123,59 @@ function productPage(t) {
   <h2 class="section-title">You may also <em>like</em></h2>
   <div class="product-grid">${related}</div>
 </section>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">‹</button>
+  <img id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">›</button>
+</div>
 <script>
-document.querySelectorAll('.thumb-btn').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    var img=document.getElementById('mainImg');
-    if(img) img.src=btn.dataset.src;
-    document.querySelectorAll('.thumb-btn').forEach(function(b){ b.style.opacity='0.65'; });
-    btn.style.opacity='1';
+(function(){
+  var gallery = ${JSON.stringify(t.images || [])};
+  var idx = 0;
+  var box = document.getElementById('lightbox');
+  var boxImg = document.getElementById('lightboxImg');
+  function openAt(i){
+    if(!gallery.length) return;
+    idx = (i + gallery.length) % gallery.length;
+    boxImg.src = gallery[idx];
+    box.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    box.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.thumb-btn').forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      var img=document.getElementById('mainImg');
+      if(img) img.src=btn.dataset.src;
+      var zoom=document.querySelector('.pdp-zoom');
+      if(zoom) zoom.setAttribute('data-lightbox', btn.dataset.src);
+      document.querySelectorAll('.thumb-btn').forEach(function(b){ b.style.opacity='0.65'; });
+      btn.style.opacity='1';
+      idx = i;
+    });
   });
-});
+  document.querySelectorAll('[data-lightbox]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      var src = el.getAttribute('data-lightbox');
+      var i = gallery.indexOf(src);
+      openAt(i >= 0 ? i : 0);
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+  document.getElementById('lightboxPrev').addEventListener('click', function(e){ e.stopPropagation(); openAt(idx-1); });
+  document.getElementById('lightboxNext').addEventListener('click', function(e){ e.stopPropagation(); openAt(idx+1); });
+  box.addEventListener('click', function(e){ if(e.target===box) close(); });
+  document.addEventListener('keydown', function(e){
+    if(!box.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowLeft') openAt(idx-1);
+    if(e.key==='ArrowRight') openAt(idx+1);
+  });
+})();
 </script>`;
   return layout(
     `${t.name} — Bloomie House`,

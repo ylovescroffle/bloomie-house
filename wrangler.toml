@@ -2,6 +2,11 @@ name = "bloomie-house"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
+# Generated template mockups live in /public/mockups and are served as static assets.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
 # Custom domain routing — serve all paths on bloomiehouse.com.au via this Worker.
 # Without bloomiehouse.com.au/*, only / reaches the Worker; other paths fall through
 # to the zone origin and 301 to http://global_errors.all.com/.
