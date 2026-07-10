@@ -103,7 +103,7 @@ If `GROQ_API_KEY` is missing, the widget still appears but replies with a friend
 Edit the Etsy shop link in `src/index.js`:
 
 ```javascript
-<a href="https://www.etsy.com/shop/bloomiehouse" ...>
+<a href="https://bloomlashbar.etsy.com" ...>
 ```
 
 Replace `bloomiehouse` with your actual Etsy shop name.
