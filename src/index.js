@@ -241,49 +241,146 @@ const templateData = [
     ],
     etsy: ETSY_SHOP,
   },
-  {
-    slug: 'the-flow',
-    name: 'The Flow',
-    niche: 'Wellness & Yoga',
-    platform: 'Wix Studio',
-    category: 'wix',
-    badge: '20% OFF',
-    price: 79,
-    originalPrice: 97,
-    mockClass: 'mock-yoga',
-    description:
-      'A soft, serene template for yoga studios, wellness coaches, pilates, and holistic practitioners. Calming palette, class schedule section, and a gentle booking experience.',
-    features: [
-      'Class schedule & timetable',
-      'Teacher profiles',
-      'Membership / pricing plans',
-      'Blog / journal section',
-      'Newsletter opt-in',
-    ],
-    etsy: ETSY_SHOP,
-  },
-  {
-    slug: 'the-boutique',
-    name: 'The Boutique',
-    niche: 'Boutique & Retail',
-    platform: 'Shopify',
-    category: 'shopify',
-    badge: '20% OFF',
-    price: 97,
-    originalPrice: 127,
-    mockClass: 'mock-boutique',
-    description:
-      'A luxe, scroll-stopping Shopify theme for fashion boutiques, homewares, and lifestyle brands. Full ecommerce ready with editorial lookbook sections and a minimal cart experience.',
-    features: [
-      'Full Shopify ecommerce',
-      'Lookbook / editorial section',
-      'Announcement bar',
-      'Product quick-view',
-      'Size guide popup',
-    ],
-    etsy: ETSY_SHOP,
-  },
 ];
+
+function productPainPoints(t) {
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    return [
+      {
+        pain: 'You want to teach Korean lash lift — but have no curriculum ready',
+        fix: '200+ pages of professional training content, editable in Canva',
+      },
+      {
+        pain: 'Students keep asking the same theory questions',
+        fix: 'Structured manual covers technique, aftercare & troubleshooting',
+      },
+      {
+        pain: 'Bigger academies look more credible than your solo training',
+        fix: 'Polished, branded manual you can resell with your logo',
+      },
+      {
+        pain: 'Building a manual from scratch takes months you don’t have',
+        fix: 'Instant download — customise and start teaching this week',
+      },
+    ];
+  }
+  if (t.category === 'canva') {
+    return [
+      { pain: 'Your site still isn’t live — and DIY design is eating your weekends', fix: 'Editable Canva template you can publish in under an hour' },
+      { pain: 'You’re losing enquiries to competitors who look more polished online', fix: 'Conversion-focused layout built for real small businesses' },
+      { pain: 'Agency quotes of $2k–$5k aren’t in the budget right now', fix: `Professional design from $${t.price} AUD — own it forever` },
+      { pain: 'You’re not a designer — and it shows on your current page', fix: 'Drag-and-drop editing, no code or design degree needed' },
+    ];
+  }
+  if (t.category === 'wix') {
+    return [
+      { pain: 'Your booking flow is clunky — clients drop off before they enquire', fix: 'Built-in booking & CTA sections ready to connect' },
+      { pain: 'Your brand deserves luxury, but custom Wix builds cost thousands', fix: 'Soft-luxury Wix Studio layout at a fraction of the price' },
+      { pain: 'You’ve been “working on the website” for months', fix: 'Install, personalise, and go live this week' },
+      { pain: 'Mobile visitors bounce because the site feels dated', fix: 'Fully responsive, multi-device-ready design' },
+    ];
+  }
+  return [
+    { pain: 'You need to look trustworthy online before you can win the job', fix: 'Lead-gen layout with quote forms, reviews & portfolio sections' },
+    { pain: 'Shopify themes are overwhelming — and the wrong pick wastes money', fix: 'Curated theme matched to your niche, ready to sell' },
+    { pain: 'Every week without a proper site is lost revenue', fix: 'Instant download — start customising today' },
+    { pain: 'You want it done right, but not a $10k custom build', fix: `From $${t.price} AUD with setup guide & email support` },
+  ];
+}
+
+function productFaqs(t) {
+  const platformNote =
+    t.category === 'canva'
+      ? 'Everything is fully editable in Canva — colours, fonts, images, and copy.'
+      : t.category === 'wix'
+        ? 'Built for Wix Studio. Duplicate to your account, swap branding, connect your domain.'
+        : 'Built for Shopify. Upload the theme, add products, and connect payments.';
+  const base = [
+    {
+      q: 'How do I get the template after purchase?',
+      a: 'Checkout on Etsy for secure payment. You’ll receive an instant digital download link by email — usually within minutes.',
+    },
+    {
+      q: 'Can I customise it for my brand?',
+      a: platformNote,
+    },
+    {
+      q: 'Do I need technical skills?',
+      a: 'No coding required. Each template includes a setup guide. If you get stuck, email us — 30-day support is included.',
+    },
+    {
+      q: 'What if I want you to set it up for me?',
+      a: 'Book our One Day Website service ($397 AUD) and we’ll install, personalise, and launch it for you — usually within 24 hours.',
+    },
+    {
+      q: 'Is this a one-time purchase?',
+      a: `Yes. Pay once ($${t.price} AUD on Etsy), keep the template forever. No monthly template fee from Bloomie House.`,
+    },
+  ];
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    base.unshift({
+      q: 'Can I resell this manual to my own students?',
+      a: 'Yes — this is designed for lash educators and academies. Edit in Canva, add your logo, and use it as your training curriculum or sell it as part of your course.',
+    });
+  }
+  return base;
+}
+
+function productFunnelHtml(t) {
+  const pains = productPainPoints(t);
+  const painCards = pains
+    .map(
+      (p, i) =>
+        `<article class="pain-card pdp-reveal" style="--reveal-delay:${i * 80}ms">
+          <p class="pain-label">The problem</p>
+          <p class="pain-text">${p.pain}</p>
+          <p class="pain-fix">→ ${p.fix}</p>
+        </article>`
+    )
+    .join('');
+  const buyLabel = t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →';
+  return `
+<section class="pdp-funnel section">
+  <p class="section-label pdp-reveal">Why this template</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:80ms">Stop losing time.<br>Start <em>launching</em>.</h2>
+  <p class="pdp-funnel-intro pdp-reveal" style="--reveal-delay:140ms">Most small businesses stall because the website never ships. This template removes the guesswork — so you can focus on clients, not Canva tabs at midnight.</p>
+  <div class="pain-grid">${painCards}</div>
+  <div class="funnel-steps pdp-reveal" style="--reveal-delay:200ms">
+    <div class="funnel-step"><span class="funnel-num">1</span><div><strong>Buy on Etsy</strong><p>Secure checkout · instant digital delivery</p></div></div>
+    <div class="funnel-step"><span class="funnel-num">2</span><div><strong>Personalise</strong><p>Swap your logo, colours &amp; photos in ${t.platform}</p></div></div>
+    <div class="funnel-step"><span class="funnel-num">3</span><div><strong>Launch &amp; convert</strong><p>Go live and start booking, selling, or teaching</p></div></div>
+  </div>
+  <div class="pdp-funnel-cta pdp-reveal" style="--reveal-delay:260ms">
+    <div>
+      <p class="funnel-cta-price"><span class="price-current tabular-nums">$${t.price} AUD</span>${t.originalPrice ? `<span class="price-original tabular-nums">$${t.originalPrice}</span>` : ''}</p>
+      <p style="color:var(--muted);font-size:.9rem;">One-time purchase · instant download</p>
+    </div>
+    <div style="display:flex;gap:.65rem;flex-wrap:wrap;">
+      <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
+      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${buyLabel}</a>
+    </div>
+  </div>
+</section>`;
+}
+
+function productFaqHtml(t) {
+  const items = productFaqs(t)
+    .map(
+      (f, i) =>
+        `<details class="faq-item pdp-reveal" style="--reveal-delay:${i * 60}ms">
+          <summary>${f.q}</summary>
+          <p>${f.a}</p>
+        </details>`
+    )
+    .join('');
+  return `
+<section class="pdp-faq section" style="background:var(--cream);">
+  <p class="section-label pdp-reveal">FAQ</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Questions before <em>you buy</em></h2>
+  <div class="faq-list">${items}</div>
+  <p class="pdp-faq-footer pdp-reveal" style="--reveal-delay:120ms">Still unsure? <a href="/contact" style="color:var(--pink);">Message us</a> or <a href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener" style="color:var(--pink);">book a free discovery call</a>.</p>
+</section>`;
+}
 
 export default {
   async fetch(request, env) {
@@ -1322,7 +1419,7 @@ function productPage(t) {
 
   const body = `
 <style>
-  .pdp { display:grid; grid-template-columns:1.05fr .95fr; gap:3rem; padding:3rem 4vw 4rem; max-width:1200px; margin:0 auto; align-items:start; }
+  .pdp { display:grid; grid-template-columns:1.05fr .95fr; gap:3rem; padding:0 0 3rem; max-width:none; margin:0; align-items:start; }
   .pdp-main {
     aspect-ratio:1/1; border-radius:20px; overflow:visible; background:var(--cream); position:relative;
     box-shadow: var(--shadow-border);
@@ -1376,9 +1473,85 @@ function productPage(t) {
   }
   .thumb-btn img { width:100%; aspect-ratio:1/1; object-fit:contain; border-radius:12px; }
   .thumb-btn .glassy-3d img { aspect-ratio: 1/1; }
-  .breadcrumb { font-size:.85rem; color:var(--muted); margin-bottom:1rem; }
+  .breadcrumb { font-size:.85rem; color:var(--muted); }
   .breadcrumb a { color:var(--muted); text-decoration:none; }
   .breadcrumb a:hover { color:var(--pink); }
+  .pdp-page { max-width:1200px; margin:0 auto; padding:1.25rem 4vw 0; }
+  .pdp-breadcrumb {
+    margin-bottom:1.25rem; padding-bottom:.85rem;
+    border-bottom:1px solid var(--border);
+  }
+  .pdp-breadcrumb span { color:var(--charcoal); }
+  .pdp-reveal {
+    opacity:0; transform:translateY(14px); filter:blur(3px);
+    transition: opacity 500ms cubic-bezier(0.2,0,0,1), transform 500ms cubic-bezier(0.2,0,0,1), filter 500ms cubic-bezier(0.2,0,0,1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .pdp-reveal.is-visible { opacity:1; transform:translateY(0); filter:blur(0); }
+  .pain-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin:2rem 0;
+  }
+  .pain-card {
+    background:#fff; border-radius:16px; padding:1.25rem 1.35rem;
+    box-shadow:var(--shadow-border);
+    transition-property: transform, box-shadow;
+    transition-duration:200ms;
+  }
+  .pain-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
+  .pain-label { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pink); margin-bottom:.45rem; }
+  .pain-text { font-family:Fraunces,serif; font-size:1.05rem; font-weight:700; line-height:1.35; margin-bottom:.55rem; text-wrap:pretty; }
+  .pain-fix { font-size:.88rem; color:var(--muted); line-height:1.6; text-wrap:pretty; }
+  .pdp-funnel-intro { color:var(--muted); max-width:38rem; line-height:1.75; margin-bottom:.5rem; }
+  .funnel-steps {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:1.5rem 0 2rem;
+  }
+  .funnel-step {
+    display:flex; gap:.85rem; align-items:flex-start; background:var(--cream);
+    border-radius:14px; padding:1.1rem 1.2rem; box-shadow:var(--shadow-border);
+  }
+  .funnel-num {
+    flex-shrink:0; width:32px; height:32px; border-radius:50%; background:var(--black); color:#fff;
+    display:grid; place-items:center; font-size:.82rem; font-weight:600; font-variant-numeric:tabular-nums;
+  }
+  .funnel-step strong { display:block; font-family:Fraunces,serif; margin-bottom:.2rem; }
+  .funnel-step p { font-size:.85rem; color:var(--muted); text-wrap:pretty; }
+  .pdp-funnel-cta {
+    display:flex; justify-content:space-between; align-items:center; gap:1.25rem; flex-wrap:wrap;
+    background:linear-gradient(135deg, rgba(214,125,154,.12), rgba(200,213,176,.18));
+    border-radius:18px; padding:1.5rem 1.75rem; box-shadow:var(--shadow-border);
+  }
+  .funnel-cta-price { display:flex; align-items:baseline; gap:.55rem; margin-bottom:.25rem; }
+  .funnel-cta-price .price-current { font-family:Fraunces,serif; font-size:1.75rem; font-weight:900; }
+  .faq-list { display:grid; gap:.65rem; max-width:760px; margin-top:1.5rem; }
+  .faq-item {
+    background:#fff; border-radius:14px; padding:0 1.15rem;
+    box-shadow:var(--shadow-border); overflow:hidden;
+  }
+  .faq-item summary {
+    cursor:pointer; padding:1rem 0; font-family:Fraunces,serif; font-weight:700;
+    list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;
+    transition: color 150ms ease-out;
+  }
+  .faq-item summary::-webkit-details-marker { display:none; }
+  .faq-item summary::after {
+    content:'+'; font-size:1.2rem; color:var(--pink); flex-shrink:0;
+    transition: transform 200ms cubic-bezier(0.2,0,0,1);
+  }
+  .faq-item[open] summary::after { transform:rotate(45deg); }
+  .faq-item[open] summary { color:var(--pink); }
+  .faq-item p {
+    padding:0 0 1rem; color:var(--muted); font-size:.92rem; line-height:1.75; text-wrap:pretty;
+    animation: faqOpen 280ms cubic-bezier(0.2,0,0,1);
+  }
+  @keyframes faqOpen {
+    from { opacity:0; transform:translateY(-6px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .pdp-faq-footer { margin-top:1.75rem; color:var(--muted); font-size:.92rem; }
+  @media (prefers-reduced-motion: reduce) {
+    .pdp-reveal { opacity:1; transform:none; filter:none; transition:none; }
+    .faq-item p { animation:none; }
+  }
   .pdp-actions { display:flex; flex-wrap:wrap; gap:.7rem; margin:1.5rem 0 1rem; }
   .pdp-features { margin-top:1.75rem; }
   .pdp-features h3 { font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; margin-bottom:.8rem; }
@@ -1420,38 +1593,41 @@ function productPage(t) {
     padding:.45rem .85rem; border-radius:999px; z-index:3001; pointer-events:none;
     font-variant-numeric: tabular-nums; box-shadow: var(--shadow-border);
   }
-  @media (max-width:900px){ .pdp { grid-template-columns:1fr; gap:1.75rem; padding-top:1.5rem; } }
+  @media (max-width:900px){ .pdp { grid-template-columns:1fr; gap:1.75rem; padding-top:0; } }
 </style>
-<div class="pdp">
-  <div>
-    ${galleryMain}
-    ${hasGallery ? '<p style="font-size:.8rem;color:var(--muted);margin-top:.25rem;">Tip: swipe or use arrows · click to view full size</p>' : ''}
-  </div>
-  <div>
-    <div class="breadcrumb"><a href="/shop">Shop</a> / ${t.name}</div>
-    <p class="product-niche">${t.niche}</p>
-    <h1 style="font-family:Fraunces,serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:.4rem 0 1rem;">${t.name}</h1>
-    <span class="badge badge-platform" style="position:static;display:inline-block;margin-bottom:1rem;">${t.platform}</span>
-    <div class="product-price">
-      <span class="price-current" style="font-size:1.8rem;">$${t.price} AUD</span>
-      ${t.originalPrice ? `<span class="price-original">$${t.originalPrice}</span>` : ''}
-      <span class="badge badge-sale" style="position:static;">${t.badge}</span>
-    </div>
-    <p style="color:var(--muted);line-height:1.8;margin-top:.5rem;">${t.description}</p>
-    <div class="pdp-actions">
-      <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
-      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →'}</a>
-      <a class="btn btn-ghost" href="/cart">View cart</a>
-    </div>
-    <p style="font-size:.85rem;color:var(--muted);">Instant delivery via Etsy · setup guide included · 30-day email support</p>
-    <div class="pdp-features">
-      <h3>What's included</h3>
-      <ul>${t.features.map((f) => `<li>${f}</li>`).join('')}</ul>
+<div class="pdp-page">
+  <nav class="breadcrumb pdp-breadcrumb" aria-label="Breadcrumb">
+    <a href="/shop">Shop</a> <span aria-hidden="true">/</span> <span>${t.name}</span>
+  </nav>
+  <div class="pdp">
+    <div class="pdp-reveal is-visible">${galleryMain}</div>
+    <div class="pdp-info pdp-reveal" style="--reveal-delay:100ms">
+      <p class="product-niche">${t.niche}</p>
+      <h1 style="font-family:Fraunces,serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:.4rem 0 1rem;">${t.name}</h1>
+      <span class="badge badge-platform" style="position:static;display:inline-block;margin-bottom:1rem;">${t.platform}</span>
+      <div class="product-price">
+        <span class="price-current" style="font-size:1.8rem;">$${t.price} AUD</span>
+        ${t.originalPrice ? `<span class="price-original">$${t.originalPrice}</span>` : ''}
+        <span class="badge badge-sale" style="position:static;">${t.badge}</span>
+      </div>
+      <p style="color:var(--muted);line-height:1.8;margin-top:.5rem;">${t.description}</p>
+      <div class="pdp-actions">
+        <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
+        <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →'}</a>
+        <a class="btn btn-ghost" href="/cart">View cart</a>
+      </div>
+      <p style="font-size:.85rem;color:var(--muted);">Instant delivery via Etsy · setup guide included · 30-day email support</p>
+      <div class="pdp-features">
+        <h3>What's included</h3>
+        <ul>${t.features.map((f) => `<li>${f}</li>`).join('')}</ul>
+      </div>
     </div>
   </div>
 </div>
+${productFunnelHtml(t)}
+${productFaqHtml(t)}
 <section class="section" style="padding-top:0;">
-  <h2 class="section-title">You may also <em>like</em></h2>
+  <h2 class="section-title pdp-reveal">You may also <em>like</em></h2>
   <div class="product-grid">${related}</div>
 </section>
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
@@ -1554,6 +1730,25 @@ function productPage(t) {
   bindSwipe(pdpGallery, function(){ showAt(idx + 1); }, function(){ showAt(idx - 1); });
   bindSwipe(box, function(){ openAt(idx + 1); }, function(){ openAt(idx - 1); });
   syncUI();
+
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var reveals = document.querySelectorAll('.pdp-reveal:not(.is-visible)');
+    if(reveals.length && 'IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      reveals.forEach(function(el){ io.observe(el); });
+    } else {
+      reveals.forEach(function(el){ el.classList.add('is-visible'); });
+    }
+  } else {
+    document.querySelectorAll('.pdp-reveal').forEach(function(el){ el.classList.add('is-visible'); });
+  }
 })();
 </script>`;
   return layout(
