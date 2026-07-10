@@ -13,7 +13,37 @@ const JOTFORM_DISCOVERY = 'https://form.jotform.com/haiyen0304/website-design-di
 const JOTFORM_CUSTOM = 'https://form.jotform.com/jsform/253192865445869';
 const SITE = 'https://bloomiehouse.com.au';
 
+const MOCK = '/mockups';
+
 const templateData = [
+  {
+    slug: 'lash-brows-academy',
+    name: 'Lash & Brows Academy',
+    niche: 'Lash & Brows Training',
+    platform: 'Wix Studio',
+    category: 'wix',
+    badge: 'New',
+    price: 89,
+    originalPrice: 119,
+    mockClass: 'mock-beauty',
+    images: [
+      `${MOCK}/lash-academy-hero.jpg`,
+      `${MOCK}/lash-academy-services.jpg`,
+      `${MOCK}/lash-academy-courses.jpg`,
+      `${MOCK}/lash-academy-about.jpg`,
+    ],
+    description:
+      'A soft-luxury website template for lash & brows academies and beauty educators. Hero, services, course enrolment, and trainer story — ready to personalise and launch this week.',
+    features: [
+      'Hero with academy branding',
+      'Services & treatment menu',
+      'Course / training enrolment section',
+      'Trainer story & credentials',
+      'Mobile-optimised layouts',
+      'Booking & enquiry CTAs',
+    ],
+    etsy: ETSY_SHOP,
+  },
   {
     slug: 'coaching-service',
     name: 'Coaching Service',
@@ -51,6 +81,7 @@ const templateData = [
     price: 79,
     originalPrice: 97,
     mockClass: 'mock-cafe',
+    images: [`${MOCK}/brew-hero.jpg`],
     description:
       'A warm, editorial template built for cafes, coffee roasters, and food-forward brands. Showcases your menu, story, and atmosphere with rich typography and a full-bleed hero.',
     features: [
@@ -72,6 +103,7 @@ const templateData = [
     price: 79,
     originalPrice: 97,
     mockClass: 'mock-beauty',
+    images: [`${MOCK}/studio-hero.jpg`, `${MOCK}/studio-services.jpg`],
     description:
       'Our most-loved template — designed for beauty studios, lash techs, brow bars, and skin clinics. Elegant, feminine, and conversion-focused with a built-in booking flow.',
     features: [
@@ -93,6 +125,7 @@ const templateData = [
     price: 97,
     originalPrice: null,
     mockClass: 'mock-tradie',
+    images: [`${MOCK}/tradie-hero.jpg`],
     description:
       'A bold, trust-building template for tradies, builders, electricians, and service businesses. Lead-gen focused with a prominent quote request form and project gallery.',
     features: [
