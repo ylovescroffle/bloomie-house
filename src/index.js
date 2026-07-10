@@ -1,6 +1,10 @@
 /**
- * Bloomie House — Cloudflare Worker
+ * Bloomie House - Cloudflare Worker
  * Ecommerce-style multi-page site (templates shop + services)
+ *
+ * Design read: redesign of a premium template shop for small businesses
+ * worldwide, soft-luxury pink-logo language, asymmetric sans layout,
+ * restrained motion. Dials: VARIANCE 6 / MOTION 5 / DENSITY 3.
  */
 
 const LOGO =
@@ -12,6 +16,7 @@ const ETSY_ALT = 'https://bloomlashbar.etsy.com';
 const JOTFORM_DISCOVERY = 'https://form.jotform.com/haiyen0304/website-design-discovery';
 const JOTFORM_CUSTOM = 'https://form.jotform.com/jsform/253192865445869';
 const SITE = 'https://bloomiehouse.com.au';
+const CONTACT_EMAIL = 'hello@bloomiehouse.com.au';
 
 const MOCK = '/mockups';
 
@@ -32,12 +37,12 @@ const templateData = [
       `${MOCK}/wedding-gift-tracker.jpg`,
     ],
     description:
-      'An aesthetic Canva website template for wedding invitation RSVPs — elegant device mockups, mobile-friendly RSVP pages, and a bonus customisable gift registry tracker. Fully editable in Canva.',
+      'An aesthetic Canva website template for wedding invitation RSVPs. Elegant device mockups, mobile-friendly RSVP pages, and a bonus customisable gift registry tracker. Fully editable in Canva.',
     features: [
-      '4–6 page Canva website',
+      '4-6 page Canva website',
       'Mobile RSVP flow',
       'Bonus gift registry tracker',
-      'Elegant serif typography',
+      'Elegant typography',
       'Fully customisable colours & text',
       'Instant Canva access',
     ],
@@ -60,7 +65,7 @@ const templateData = [
       `${MOCK}/luxspa-faq.jpg`,
     ],
     description:
-      'A soft-luxury spa & nails website with multi-device mockups — service showcase, online booking flow, FAQ, and testimonials. Built for beauty salons that want an elegant booking experience.',
+      'A soft-luxury spa and nails website with multi-device mockups, service showcase, online booking flow, FAQ, and testimonials. Built for beauty salons that want an elegant booking experience.',
     features: [
       'Online appointment booking',
       'Service showcase & pricing',
@@ -83,7 +88,7 @@ const templateData = [
     mockClass: 'mock-beauty',
     images: [`${MOCK}/lumina-lash-training.jpg`, `${MOCK}/lumina-courses.jpg`],
     description:
-      'A soft-luxury academy template for lash lift training schools. Course curriculum, enrolment CTAs, and trainer-ready layouts — branded as Lumina Lash (not Bloom).',
+      'A soft-luxury academy template for lash lift training schools. Course curriculum, enrolment CTAs, and trainer-ready layouts, branded as Lumina Lash (not Bloom).',
     features: [
       'Course curriculum pages',
       'Enrolment / training CTAs',
@@ -132,7 +137,7 @@ const templateData = [
       `${MOCK}/lash-academy-about.jpg`,
     ],
     description:
-      'A soft-luxury website template for lash & brows academies and beauty educators. Hero, services, course enrolment, and trainer story — ready to personalise and launch this week.',
+      'A soft-luxury website template for lash and brows academies and beauty educators. Hero, services, course enrolment, and trainer story, ready to personalise and launch this week.',
     features: [
       'Hero with academy branding',
       'Services & treatment menu',
@@ -158,7 +163,7 @@ const templateData = [
       'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Templates/landing-page-coaching-service-canva/template-service-landing-3.png',
     ],
     description:
-      'A clean, high-converting landing page template for coaches, consultants, and service providers. Built in Canva — fully editable, no design skills needed. Ready to publish in under an hour.',
+      'A clean, high-converting landing page template for coaches, consultants, and service providers. Built in Canva, fully editable, no design skills needed. Ready to publish in under an hour.',
     features: [
       'Fully editable in Canva',
       'High-converting layout',
@@ -181,7 +186,7 @@ const templateData = [
     mockClass: 'mock-beauty',
     images: [`${MOCK}/studio-hero.jpg`, `${MOCK}/studio-services.jpg`],
     description:
-      'Our most-loved template — designed for beauty studios, lash techs, brow bars, and skin clinics. Elegant, feminine, and conversion-focused with a built-in booking flow.',
+      'Our most-loved template, designed for beauty studios, lash techs, brow bars, and skin clinics. Elegant, feminine, and conversion-focused with a built-in booking flow.',
     features: [
       'Service & pricing cards',
       'Online booking section',
@@ -223,6 +228,7 @@ const templateData = [
     price: 79,
     originalPrice: 97,
     mockClass: 'mock-yoga',
+    images: [`${MOCK}/flow-hero.jpg`],
     description:
       'A soft, serene template for yoga studios, wellness coaches, pilates, and holistic practitioners. Calming palette, class schedule section, and a gentle booking experience.',
     features: [
@@ -244,6 +250,7 @@ const templateData = [
     price: 97,
     originalPrice: 127,
     mockClass: 'mock-boutique',
+    images: [`${MOCK}/boutique-hero.jpg`],
     description:
       'A luxe, scroll-stopping Shopify theme for fashion boutiques, homewares, and lifestyle brands. Full ecommerce ready with editorial lookbook sections and a minimal cart experience.',
     features: [
@@ -352,7 +359,7 @@ ${urls.map(([path, p]) => `  <url><loc>${SITE}${path}</loc><priority>${p}</prior
 }
 
 // ── CHATBOT ──
-const CHAT_SYSTEM_PROMPT = `You are "Bloomie", the friendly AI assistant for Bloomie House — a Hobart, Australia studio that sells premium Wix Studio, Shopify & Canva website templates and offers done-for-you web design for small businesses (cafes, beauty studios, tradies, boutiques and more).
+const CHAT_SYSTEM_PROMPT = `You are "Bloomie", the friendly AI assistant for Bloomie House, an Australia-based studio serving clients worldwide. Bloomie House sells premium Wix Studio, Shopify and Canva website templates and offers done-for-you web design for small businesses (cafes, beauty studios, tradies, boutiques and more).
 
 Your job:
 - Help visitors understand products and services.
@@ -360,7 +367,7 @@ Your job:
 - Answer pricing, timelines, and process questions warmly and briefly.
 - Point people to /shop, /cart (wishlist before Etsy checkout), /contact, or the discovery form on /services.
 
-Style: warm, modern, encouraging, never pushy. Keep replies short (2–4 sentences) unless asked for detail. Never invent prices. Only discuss Bloomie House and web design.`;
+Style: warm, modern, encouraging, never pushy. Keep replies short (2-4 sentences) unless asked for detail. Never invent prices. Only discuss Bloomie House and web design. Frame the business as Australia-based and worldwide, never as a single-city studio.`;
 
 async function handleChat(request, env) {
   if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed.' }, 405);
@@ -397,7 +404,7 @@ async function handleChat(request, env) {
       return jsonResponse({ error: 'The assistant is unavailable right now. Please try again shortly.' }, 502);
     }
     const data = await groqRes.json();
-    const reply = data.choices?.[0]?.message?.content?.trim() || 'Sorry — I could not generate a reply.';
+    const reply = data.choices?.[0]?.message?.content?.trim() || 'Sorry, I could not generate a reply.';
     return jsonResponse({ reply });
   } catch {
     return jsonResponse({ error: 'The assistant is unavailable right now. Please try again shortly.' }, 502);
@@ -408,43 +415,44 @@ const chatWidget = `
 <style>
   #bloomie-chat-btn {
     position: fixed; bottom: 24px; right: 24px; z-index: 9999;
-    width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer;
-    background: #D67D9A; color: #fff; font-size: 26px; line-height: 60px;
-    box-shadow: 0 8px 24px rgba(214,125,154,.35); transition: transform .2s;
+    width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer;
+    background: var(--pink, #D67D9A); color: #fff; font-size: 1.15rem; font-weight: 700;
+    font-family: 'Syne', system-ui, sans-serif; letter-spacing: -.02em;
+    box-shadow: 0 10px 28px rgba(214,125,154,.32); transition: transform .25s ease;
   }
-  #bloomie-chat-btn:hover { transform: scale(1.06); }
+  #bloomie-chat-btn:hover { transform: translateY(-2px) scale(1.04); }
   #bloomie-chat-panel {
     position: fixed; bottom: 96px; right: 24px; z-index: 9999;
     width: min(380px, calc(100vw - 32px)); height: 480px;
-    background: #fff; border-radius: 18px; display: none; flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0,0,0,.18); overflow: hidden; border: 1px solid rgba(0,0,0,.06);
+    background: #fff; border-radius: 20px; display: none; flex-direction: column;
+    box-shadow: 0 24px 64px rgba(44,35,38,.16); overflow: hidden;
   }
   #bloomie-chat-panel.open { display: flex; }
   .bloomie-chat-header {
-    padding: 16px 18px; background: #FAFAF8; border-bottom: 1px solid rgba(0,0,0,.06);
+    padding: 16px 18px; background: #F9F4F6; border-bottom: 1px solid rgba(44,35,38,.06);
     display: flex; justify-content: space-between; align-items: center;
-    font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 17px;
+    font-family: 'Syne', system-ui, sans-serif; font-weight: 700; font-size: 17px;
   }
-  .bloomie-chat-header small { display: block; font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 12px; opacity: .7; margin-top: 2px; }
-  .bloomie-chat-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #111; line-height: 1; }
+  .bloomie-chat-header small { display: block; font-family: 'Outfit', system-ui, sans-serif; font-weight: 400; font-size: 12px; opacity: .7; margin-top: 2px; }
+  .bloomie-chat-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #2C2326; line-height: 1; }
   .bloomie-chat-log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .bloomie-msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; font-family: 'DM Sans', sans-serif; }
+  .bloomie-msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; font-family: 'Outfit', system-ui, sans-serif; }
   .bloomie-msg.user { align-self: flex-end; background: #D67D9A; color: #fff; border-bottom-right-radius: 4px; }
-  .bloomie-msg.bot { align-self: flex-start; background: #F0EBE3; color: #111; border-bottom-left-radius: 4px; }
+  .bloomie-msg.bot { align-self: flex-start; background: #F3E8EC; color: #2C2326; border-bottom-left-radius: 4px; }
   .bloomie-msg.typing { font-style: italic; opacity: .7; }
-  .bloomie-chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid rgba(0,0,0,.08); background: #FAFAF8; }
+  .bloomie-chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid rgba(44,35,38,.08); background: #F9F4F6; }
   .bloomie-chat-input input {
-    flex: 1; border: 1px solid rgba(0,0,0,.12); border-radius: 999px; padding: 10px 14px;
-    font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+    flex: 1; border: 1px solid rgba(44,35,38,.12); border-radius: 999px; padding: 10px 14px;
+    font-family: 'Outfit', system-ui, sans-serif; font-size: 14px; outline: none; background: #fff;
   }
   .bloomie-chat-input input:focus { border-color: #D67D9A; }
   .bloomie-chat-input button {
-    border: none; background: #111; color: #fff; border-radius: 999px; padding: 0 16px;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer;
+    border: none; background: #2C2326; color: #fff; border-radius: 999px; padding: 0 16px;
+    font-family: 'Outfit', system-ui, sans-serif; font-size: 13px; cursor: pointer;
   }
   .bloomie-chat-input button:disabled { opacity: .5; cursor: default; }
 </style>
-<button id="bloomie-chat-btn" aria-label="Open chat">💬</button>
+<button id="bloomie-chat-btn" aria-label="Open chat">B</button>
 <div id="bloomie-chat-panel" role="dialog" aria-label="Chat with Bloomie">
   <div class="bloomie-chat-header">
     <div>Chat with Bloomie<small>AI assistant · usually replies instantly</small></div>
@@ -520,113 +528,148 @@ const chatWidget = `
 function baseStyles() {
   return `
 :root {
-  --black: #111111;
-  --white: #FAFAF8;
-  --cream: #F5F0E8;
-  --sage: #C8D5B0;
+  --ink: #2C2326;
+  --white: #FFFBFC;
+  --blush: #F9F4F6;
+  --blush-deep: #F3E8EC;
   --pink: #D67D9A;
-  --sand: #E8DDD0;
-  --charcoal: #2C2C2C;
-  --muted: #7A7570;
-  --border: rgba(0,0,0,0.08);
+  --pink-deep: #C45F82;
+  --sage: #B8C9A8;
+  --muted: #7A6B70;
+  --border: rgba(44,35,38,0.08);
+  --radius: 4px;
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   background: var(--white);
-  color: var(--black);
-  line-height: 1.6;
+  color: var(--ink);
+  line-height: 1.65;
   overflow-x: hidden;
+  font-weight: 400;
 }
 a { color: inherit; }
 img { max-width: 100%; display: block; }
+
 .site-nav {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; padding: 1rem 4vw;
-  background: rgba(250,250,248,.92); backdrop-filter: blur(12px);
+  background: rgba(255,251,252,.9); backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
 }
 .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
 .nav-logo img { height: 44px; width: auto; }
 .nav-logo span {
-  font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; letter-spacing: -.03em;
 }
-.nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+.nav-links { display: flex; gap: 1.6rem; list-style: none; align-items: center; }
 .nav-links a {
-  text-decoration: none; font-size: .92rem; color: var(--charcoal);
+  text-decoration: none; font-size: .92rem; color: var(--ink); font-weight: 450;
   transition: color .2s;
 }
 .nav-links a:hover, .nav-links a.active { color: var(--pink); }
 .nav-actions { display: flex; align-items: center; gap: .75rem; }
+
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
-  padding: .85rem 1.4rem; border-radius: 999px; text-decoration: none;
+  padding: .85rem 1.45rem; border-radius: 999px; text-decoration: none;
   font-size: .88rem; font-weight: 500; border: 1.5px solid transparent;
-  transition: transform .2s, background .2s, color .2s, border-color .2s; cursor: pointer;
+  font-family: var(--font-body);
+  transition: transform .25s ease, background .2s, color .2s, border-color .2s; cursor: pointer;
+  white-space: nowrap;
 }
-.btn:hover { transform: translateY(-1px); }
-.btn-dark { background: var(--black); color: var(--white); }
-.btn-dark:hover { background: #2a2a2a; }
+.btn:hover { transform: translateY(-2px); }
+.btn-dark { background: var(--ink); color: var(--white); }
+.btn-dark:hover { background: #3d3336; }
 .btn-pink { background: var(--pink); color: #fff; }
-.btn-pink:hover { background: #c96b88; }
-.btn-ghost { background: transparent; border-color: var(--border); color: var(--black); }
-.btn-ghost:hover { border-color: var(--black); }
-.btn-outline-light { background: transparent; border-color: rgba(255,255,255,.5); color: #fff; }
+.btn-pink:hover { background: var(--pink-deep); }
+.btn-ghost { background: transparent; border-color: var(--border); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--ink); }
+
 .cart-link {
   position: relative; width: 44px; height: 44px; border-radius: 50%;
   display: grid; place-items: center; text-decoration: none;
-  border: 1px solid var(--border); background: var(--white); font-size: 1.1rem;
+  border: 1px solid var(--border); background: var(--white); font-size: .85rem;
+  font-family: var(--font-display); font-weight: 700;
 }
 .cart-count {
   position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px;
   padding: 0 5px; border-radius: 999px; background: var(--pink); color: #fff;
   font-size: 11px; font-weight: 600; display: grid; place-items: center;
+  font-family: var(--font-body);
 }
+
 .page-hero {
-  padding: 4.5rem 4vw 2.5rem;
+  position: relative;
+  padding: clamp(3.5rem, 8vw, 6.5rem) 4vw clamp(2.5rem, 5vw, 4rem);
   background:
-    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(214,125,154,.18), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 90% 20%, rgba(200,213,176,.25), transparent 50%),
-    linear-gradient(180deg, var(--cream), var(--white));
+    radial-gradient(ellipse 70% 55% at 0% 0%, rgba(214,125,154,.22), transparent 58%),
+    radial-gradient(ellipse 50% 45% at 100% 10%, rgba(184,201,168,.2), transparent 52%),
+    linear-gradient(165deg, var(--blush) 0%, var(--white) 72%);
+  overflow: hidden;
 }
+.page-hero::after {
+  content: '';
+  position: absolute; right: -8%; top: 12%; width: min(42vw, 420px); height: min(42vw, 420px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(214,125,154,.12), transparent 68%);
+  pointer-events: none;
+}
+.page-hero > * { position: relative; z-index: 1; max-width: 38rem; }
+.page-hero.hero-home > * { max-width: 42rem; }
 .page-hero h1 {
-  font-family: 'Fraunces', serif; font-weight: 900; letter-spacing: -.03em;
-  font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.05; margin-bottom: .75rem;
+  font-family: var(--font-display); font-weight: 700; letter-spacing: -.04em;
+  font-size: clamp(2.6rem, 6.2vw, 4.6rem); line-height: 1.08; margin-bottom: .9rem;
+  padding-bottom: .15rem;
 }
-.page-hero h1 em { font-style: italic; font-weight: 300; color: var(--pink); }
-.page-hero p { color: var(--muted); max-width: 36rem; font-size: 1.05rem; }
-.section { padding: 4rem 4vw; }
+.page-hero h1 em {
+  font-style: italic; font-weight: 600; color: var(--pink);
+  display: inline-block; padding-bottom: .12em;
+}
+.page-hero .brand-mark {
+  font-family: var(--font-display); font-weight: 800; letter-spacing: -.045em;
+  font-size: clamp(2.8rem, 7vw, 5.2rem); line-height: 1.05; display: block;
+  margin-bottom: .35rem;
+}
+.page-hero p { color: var(--muted); font-size: 1.08rem; max-width: 34rem; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.85rem; }
+
+.section { padding: clamp(3.5rem, 7vw, 5.5rem) 4vw; }
 .section-label {
-  font-size: .75rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: .6rem;
+  font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: .55rem; font-weight: 500;
 }
 .section-title {
-  font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-  font-weight: 700; letter-spacing: -.02em; margin-bottom: 1.5rem;
+  font-family: var(--font-display); font-size: clamp(1.85rem, 3.8vw, 2.75rem);
+  font-weight: 700; letter-spacing: -.03em; margin-bottom: 1.6rem; line-height: 1.12;
 }
-.section-title em { font-style: italic; font-weight: 300; color: var(--pink); }
+.section-title em { font-style: italic; font-weight: 600; color: var(--pink); }
+
 .product-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.5rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem 1.5rem;
 }
 .product-card {
-  background: #fff; border: 1px solid var(--border); border-radius: 18px;
-  overflow: hidden; text-decoration: none; color: inherit;
-  transition: transform .25s, box-shadow .25s; display: flex; flex-direction: column;
+  background: transparent; border: none; border-radius: 0;
+  overflow: visible; text-decoration: none; color: inherit;
+  transition: transform .3s ease; display: flex; flex-direction: column;
 }
-.product-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.08); }
+.product-card:hover { transform: translateY(-6px); }
 .product-thumb {
   aspect-ratio: 1/1; position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  background: var(--cream);
+  background: var(--blush); border-radius: 2px;
 }
-.product-thumb img { width: 100%; height: 100%; object-fit: contain; }
-.product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.product-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+.product-card:hover .product-thumb img { transform: scale(1.04); }
 .product-thumb-label {
-  font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300;
-  color: rgba(255,255,255,.92); letter-spacing: .04em; text-shadow: 0 2px 12px rgba(0,0,0,.25);
+  font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
+  color: rgba(255,255,255,.92); letter-spacing: -.02em; text-shadow: 0 2px 12px rgba(0,0,0,.25);
+  padding: 1rem; text-align: center;
 }
 .mock-cafe { background: linear-gradient(135deg, #6B4226, #C8A07A); }
 .mock-beauty { background: linear-gradient(135deg, #C8A09A, #F5EAE8); }
@@ -638,26 +681,54 @@ img { max-width: 100%; display: block; }
   position: absolute; top: .85rem; font-size: .68rem; font-weight: 600;
   letter-spacing: .08em; text-transform: uppercase; padding: .3rem .65rem; border-radius: 999px;
 }
-.badge-platform { left: .85rem; background: rgba(255,255,255,.92); color: var(--black); }
-.badge-sale { right: .85rem; background: var(--black); color: #fff; }
-.product-info { padding: 1.1rem 1.15rem 1.35rem; display: flex; flex-direction: column; gap: .35rem; flex: 1; }
-.product-niche { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.product-name { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 700; }
-.product-price { display: flex; align-items: baseline; gap: .5rem; margin: .35rem 0 .7rem; }
-.price-current { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 700; }
+.badge-platform { left: .85rem; background: rgba(255,251,252,.94); color: var(--ink); }
+.badge-sale { right: .85rem; background: var(--ink); color: #fff; }
+.product-info { padding: 1rem 0 0; display: flex; flex-direction: column; gap: .3rem; flex: 1; }
+.product-niche { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.product-name { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; letter-spacing: -.02em; }
+.product-price { display: flex; align-items: baseline; gap: .5rem; margin: .3rem 0 .55rem; }
+.price-current { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; }
 .price-original { font-size: .9rem; color: var(--muted); text-decoration: line-through; }
-.filters {
-  display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 2rem;
+.product-link {
+  font-size: .85rem; font-weight: 500; color: var(--pink); text-decoration: none;
+  margin-top: auto;
 }
+.product-card:hover .product-link { color: var(--pink-deep); }
+
+.filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.25rem 0 2rem; }
 .filter-btn {
-  border: 1px solid var(--border); background: #fff; border-radius: 999px;
+  border: 1px solid var(--border); background: transparent; border-radius: 999px;
   padding: .55rem 1rem; font-family: inherit; font-size: .82rem; cursor: pointer;
   color: var(--muted); transition: .2s;
 }
-.filter-btn:hover, .filter-btn.active { background: var(--black); color: #fff; border-color: var(--black); }
+.filter-btn:hover, .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.ladder {
+  display: grid; grid-template-columns: 1.15fr .95fr .9fr; gap: 1.25rem; align-items: stretch;
+}
+.ladder-item {
+  padding: 1.75rem 1.5rem; background: var(--blush); border-radius: 2px;
+  display: flex; flex-direction: column;
+}
+.ladder-item.featured {
+  background: var(--ink); color: #fff;
+  transform: translateY(-8px);
+}
+.ladder-item h3 {
+  font-family: var(--font-display); font-size: 1.45rem; font-weight: 700;
+  letter-spacing: -.02em; margin-bottom: .4rem;
+}
+.ladder-item p { color: var(--muted); margin-bottom: 1.15rem; flex: 1; }
+.ladder-item.featured p { color: rgba(255,255,255,.72); }
+.ladder-price {
+  font-family: var(--font-display); font-size: 1.05rem; font-weight: 600;
+  margin-bottom: .85rem; color: var(--ink);
+}
+.ladder-item.featured .ladder-price { color: #fff; }
+
 .site-footer {
-  margin-top: 3rem; padding: 3.5rem 4vw 2rem;
-  background: var(--black); color: rgba(255,255,255,.78);
+  margin-top: 2rem; padding: 3.5rem 4vw 2rem;
+  background: var(--ink); color: rgba(255,255,255,.78);
 }
 .footer-grid {
   display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 2rem;
@@ -665,11 +736,12 @@ img { max-width: 100%; display: block; }
 }
 .footer-brand img { height: 52px; margin-bottom: .8rem; }
 .footer-brand strong {
-  display: block; font-family: 'Fraunces', serif; font-size: 1.4rem; color: #fff; margin-bottom: .4rem;
+  display: block; font-family: var(--font-display); font-size: 1.35rem; color: #fff;
+  margin-bottom: .4rem; letter-spacing: -.02em;
 }
 .footer-col h4 {
-  color: #fff; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
-  margin-bottom: 1rem;
+  color: #fff; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+  margin-bottom: 1rem; font-weight: 600;
 }
 .footer-col ul { list-style: none; display: grid; gap: .55rem; }
 .footer-col a { color: rgba(255,255,255,.7); text-decoration: none; font-size: .92rem; }
@@ -680,13 +752,25 @@ img { max-width: 100%; display: block; }
   display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
   font-size: .85rem; color: rgba(255,255,255,.5);
 }
+
 .toast {
   position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--black); color: #fff; padding: .85rem 1.25rem; border-radius: 999px;
+  background: var(--ink); color: #fff; padding: .85rem 1.25rem; border-radius: 999px;
   font-size: .88rem; opacity: 0; pointer-events: none; transition: .3s; z-index: 2000;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .nav-toggle { display: none; background: none; border: 1px solid var(--border); border-radius: 10px; width: 42px; height: 42px; font-size: 1.2rem; }
+
+.reveal {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.in { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  .ladder { grid-template-columns: 1fr; }
+  .ladder-item.featured { transform: none; }
+}
 @media (max-width: 860px) {
   .nav-toggle { display: grid; place-items: center; }
   .nav-links {
@@ -700,7 +784,36 @@ img { max-width: 100%; display: block; }
 @media (max-width: 560px) {
   .footer-grid { grid-template-columns: 1fr; }
 }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .product-card, .product-thumb img, #bloomie-chat-btn, .reveal {
+    transition: none !important; animation: none !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .btn:hover, .product-card:hover { transform: none; }
+}
 `;
+}
+
+function motionScript() {
+  return `
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function(el){ io.observe(el); });
+})();`;
 }
 
 function cartScript(catalogJson) {
@@ -752,7 +865,7 @@ function cartScript(catalogJson) {
     if(!root || !catalog) return;
     var items=window.BloomieCart.items();
     if(!items.length){
-      root.innerHTML='<div class="cart-empty"><h2 style="font-family:Fraunces,serif;margin-bottom:.5rem;">Your cart is empty</h2><p style="color:var(--muted);margin-bottom:1.25rem;">Browse the shop and add a template to get started.</p><a class="btn btn-pink" href="/shop">Continue shopping</a></div>';
+      root.innerHTML='<div class="cart-empty"><h2 style="font-family:var(--font-display);margin-bottom:.5rem;letter-spacing:-.02em;">Your cart is empty</h2><p style="color:var(--muted);margin-bottom:1.25rem;">Browse the shop and add a template to get started.</p><a class="btn btn-pink" href="/shop">Continue shopping</a></div>';
       return;
     }
     var total=0;
@@ -767,16 +880,16 @@ function cartScript(catalogJson) {
         '<div class="cart-meta"><h3><a href="/templates/'+t.slug+'" style="text-decoration:none;">'+t.name+'</a></h3><p>'+t.platform+' · '+t.niche+'</p>'+
         '<div style="margin-top:.55rem;"><input class="qty" type="number" min="1" value="'+(item.qty||1)+'" data-qty="'+t.slug+'">'+
         '<button class="btn btn-ghost" type="button" data-remove="'+t.slug+'" style="padding:.45rem .8rem;font-size:.8rem;">Remove</button></div></div>'+
-        '<div style="font-family:Fraunces,serif;font-weight:700;">$'+line+' AUD</div></div>';
+        '<div style="font-family:var(--font-display);font-weight:700;">$'+line+' AUD</div></div>';
     }).join('');
     root.innerHTML = rows +
       '<div class="cart-summary"><div><div style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);">Estimated total</div>'+
-      '<div style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;">$'+total+' AUD</div></div>'+
+      '<div style="font-family:var(--font-display);font-size:2rem;font-weight:700;letter-spacing:-.03em;">$'+total+' AUD</div></div>'+
       '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">'+
       '<a class="btn btn-ghost" href="/shop">Keep shopping</a>'+
-      '<a class="btn btn-pink" href="${ETSY_SHOP}" target="_blank" rel="noopener">Checkout on Etsy →</a>'+
+      '<a class="btn btn-pink" href="${ETSY_SHOP}" target="_blank" rel="noopener">Checkout on Etsy</a>'+
       '</div></div>'+
-      '<p class="cart-note">Bloomie House uses Etsy for payment &amp; delivery. Your cart here is a shopping list — open Etsy to complete purchase for each template (or browse the full shop).</p>';
+      '<p class="cart-note">Bloomie House uses Etsy for payment and delivery. Your cart here is a shopping list. Open Etsy to complete purchase for each template, or browse the full shop.</p>';
 
     root.querySelectorAll('[data-remove]').forEach(function(btn){
       btn.addEventListener('click', function(){ window.BloomieCart.remove(btn.dataset.remove); renderCart(); });
@@ -817,7 +930,8 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <link rel="icon" type="image/png" href="${LOGO}">
   <link rel="apple-touch-icon" href="${LOGO}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <style>${baseStyles()}</style>
 </head>
 <body>
@@ -826,6 +940,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   ${siteFooter()}
   <div class="toast" id="toast" role="status"></div>
   <script>${cartScript(cartCatalogJson)}</script>
+  <script>${motionScript()}</script>
 </body>
 </html>`;
 }
@@ -849,7 +964,7 @@ function siteNav(active) {
   <div class="nav-actions">
     <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book Now</a>
     <a class="cart-link" href="/cart" aria-label="Cart">
-      🛒<span class="cart-count" id="cartCount">0</span>
+      Bag<span class="cart-count" id="cartCount">0</span>
     </a>
   </div>
 </nav>`;
@@ -862,8 +977,8 @@ function siteFooter() {
     <div class="footer-brand">
       <img src="${LOGO}" alt="Bloomie House">
       <strong>Bloomie House</strong>
-      <p>Premium website templates &amp; done-for-you design for Australian small businesses. Based in Hobart.</p>
-      <p style="margin-top:1rem"><a href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a></p>
+      <p>Premium website templates and done-for-you design for small businesses across Australia and worldwide.</p>
+      <p style="margin-top:1rem"><a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></p>
     </div>
     <div class="footer-col">
       <h4>Shop</h4>
@@ -894,7 +1009,7 @@ function siteFooter() {
   </div>
   <div class="footer-bottom">
     <span>© ${new Date().getFullYear()} Bloomie House</span>
-    <span>Hobart, Australia · English &amp; Vietnamese</span>
+    <span>Australia · Worldwide · English &amp; Vietnamese</span>
   </div>
 </footer>`;
 }
@@ -904,8 +1019,8 @@ function productCard(t) {
     ? `<img src="${t.images[0]}" alt="${t.name}">`
     : `<div class="product-thumb-label">${t.name}</div>`;
   return `
-<a class="product-card" href="/templates/${t.slug}" data-platform="${t.category}">
-  <div class="product-thumb ${t.mockClass}" style="${t.images ? 'background:var(--cream);' : ''}">
+<a class="product-card reveal" href="/templates/${t.slug}" data-platform="${t.category}">
+  <div class="product-thumb ${t.mockClass}" style="${t.images ? 'background:var(--blush);' : ''}">
     ${thumb}
     <span class="badge badge-platform">${t.platform}</span>
     <span class="badge badge-sale">${t.badge}</span>
@@ -917,7 +1032,7 @@ function productCard(t) {
       <span class="price-current">$${t.price} AUD</span>
       ${t.originalPrice ? `<span class="price-original">$${t.originalPrice}</span>` : ''}
     </div>
-    <span class="btn btn-dark" style="margin-top:auto;width:100%;border-radius:12px;">View details</span>
+    <span class="product-link">View details</span>
   </div>
 </a>`;
 }
@@ -926,58 +1041,61 @@ function productCard(t) {
 function homePage() {
   const featured = templateData.slice(0, 6).map(productCard).join('');
   const body = `
-<section class="page-hero" style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;">
+<section class="page-hero hero-home" style="min-height:min(88dvh, 820px);display:flex;flex-direction:column;justify-content:center;">
   <p class="section-label">Template shop · Est. 2025</p>
-  <h1>Bloomie House<br><em>for online</em> success.</h1>
-  <p>Premium Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies, boutiques &amp; beyond. Buy, personalise, launch — this week.</p>
-  <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.75rem;">
-    <a class="btn btn-pink" href="/shop">Browse Templates →</a>
+  <h1><span class="brand-mark">Bloomie House</span>Templates that look like you meant it.</h1>
+  <p>Premium Wix Studio, Shopify and Canva templates for cafes, beauty studios, tradies, boutiques and beyond. Buy, personalise, launch this week. Serving Australia and clients worldwide.</p>
+  <div class="hero-cta">
+    <a class="btn btn-pink" href="/shop">Browse Templates</a>
     <a class="btn btn-ghost" href="/services">Need us to set it up?</a>
   </div>
 </section>
 
 <section class="section">
-  <p class="section-label">Shop the collection</p>
-  <h2 class="section-title">Find your <em>perfect</em> template</h2>
+  <p class="section-label reveal">Shop the collection</p>
+  <h2 class="section-title reveal">Find your <em>perfect</em> template</h2>
   <div class="product-grid">${featured}</div>
-  <div style="text-align:center;margin-top:2rem;">
-    <a class="btn btn-dark" href="/shop">View all templates →</a>
+  <div style="margin-top:2.25rem;">
+    <a class="btn btn-dark" href="/shop">View all templates</a>
   </div>
 </section>
 
-<section class="section" style="background:var(--cream);">
-  <p class="section-label">Done-for-you</p>
-  <h2 class="section-title">Services that <em>ship</em> fast</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;">
-    <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">DIY Template</h3>
-      <p style="color:var(--muted);margin-bottom:1rem;">From $37 AUD · Instant download</p>
+<section class="section" style="background:var(--blush);">
+  <p class="section-label reveal">Done-for-you</p>
+  <h2 class="section-title reveal">Pick your <em>pace</em></h2>
+  <div class="ladder reveal">
+    <article class="ladder-item">
+      <h3>DIY Template</h3>
+      <div class="ladder-price">From $37 AUD</div>
+      <p>Instant download. Personalise yourself and launch on your timeline.</p>
       <a class="btn btn-ghost" href="/shop">Shop templates</a>
     </article>
-    <article style="background:var(--black);color:#fff;border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">One Day Website</h3>
-      <p style="opacity:.75;margin-bottom:1rem;">$397 AUD · Live in 24 hours</p>
-      <a class="btn btn-pink" href="/services">Book now →</a>
+    <article class="ladder-item featured">
+      <h3>One Day Website</h3>
+      <div class="ladder-price">$397 AUD</div>
+      <p>We install and personalise a template for your brand. Live in about 24 hours.</p>
+      <a class="btn btn-pink" href="/services">Book now</a>
     </article>
-    <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">Full Custom</h3>
-      <p style="color:var(--muted);margin-bottom:1rem;">From $897 AUD · Built from scratch</p>
-      <a class="btn btn-ghost" href="/full-custom">Let's chat</a>
+    <article class="ladder-item">
+      <h3>Full Custom</h3>
+      <div class="ladder-price">From $897 AUD</div>
+      <p>Built from scratch when you need strategy, uniqueness, and room to grow.</p>
+      <a class="btn btn-ghost" href="/full-custom">View details</a>
     </article>
   </div>
 </section>
 
-<section class="section" style="text-align:center;">
-  <h2 class="section-title">Ready when <em>you</em> are</h2>
-  <p style="color:var(--muted);max-width:32rem;margin:0 auto 1.5rem;">Add templates to your cart, then checkout securely on Etsy — or book a discovery call for done-for-you setup.</p>
-  <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap;">
+<section class="section">
+  <h2 class="section-title reveal">Ready when <em>you</em> are</h2>
+  <p class="reveal" style="color:var(--muted);max-width:32rem;margin:0 0 1.5rem;">Add templates to your cart, then checkout securely on Etsy. Or book a discovery call for done-for-you setup.</p>
+  <div class="reveal" style="display:flex;gap:.75rem;flex-wrap:wrap;">
     <a class="btn btn-pink" href="/shop">Shop templates</a>
-    <a class="btn btn-ghost" href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a>
+    <a class="btn btn-ghost" href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>
   </div>
 </section>`;
   return layout(
-    'Bloomie House — Website Templates for Brands That Mean Business',
-    'Premium Wix Studio & Shopify website templates for cafes, beauty studios, tradies, boutiques & more. Buy, personalise, launch — this week. Based in Hobart, Australia.',
+    'Bloomie House - Website Templates for Brands That Mean Business',
+    'Premium Wix Studio and Shopify website templates for cafes, beauty studios, tradies, boutiques and more. Buy, personalise, launch this week. Australia and worldwide.',
     '/',
     body,
     'home'
@@ -991,7 +1109,7 @@ function shopPage(platform) {
 <section class="page-hero">
   <p class="section-label">Template shop</p>
   <h1>Shop <em>templates</em></h1>
-  <p>Premium website templates for Australian small businesses. Filter by platform, open a product page, add to cart, then checkout on Etsy.</p>
+  <p>Premium website templates for small businesses. Filter by platform, open a product page, add to cart, then checkout on Etsy.</p>
 </section>
 <section class="section" style="padding-top:1rem;">
   <div class="filters" id="shopFilters">
@@ -1020,8 +1138,8 @@ function shopPage(platform) {
 })();
 </script>`;
   return layout(
-    'Shop Templates — Bloomie House',
-    'Browse premium Wix Studio, Shopify & Canva website templates from $37 AUD. Instant download via Etsy.',
+    'Shop Templates - Bloomie House',
+    'Browse premium Wix Studio, Shopify and Canva website templates from $37 AUD. Instant download via Etsy.',
     '/shop',
     body,
     'shop'
@@ -1039,7 +1157,7 @@ function productPage(t) {
     ? t.images
         .map(
           (src, i) =>
-            `<button type="button" class="thumb-btn" data-src="${src}" style="border:none;padding:0;border-radius:12px;overflow:hidden;cursor:pointer;opacity:${i === 0 ? 1 : 0.65};background:var(--cream);"><img src="${src}" alt="${t.name} ${i + 1}" style="width:100%;aspect-ratio:1/1;object-fit:contain;"></button>`
+            `<button type="button" class="thumb-btn" data-src="${src}" style="border:none;padding:0;border-radius:2px;overflow:hidden;cursor:pointer;opacity:${i === 0 ? 1 : 0.65};background:var(--blush);"><img src="${src}" alt="${t.name} ${i + 1}" style="width:100%;aspect-ratio:1/1;object-fit:contain;"></button>`
         )
         .join('')
     : '';
@@ -1052,10 +1170,10 @@ function productPage(t) {
   const body = `
 <style>
   .pdp { display:grid; grid-template-columns:1.05fr .95fr; gap:3rem; padding:3rem 4vw 4rem; max-width:1200px; margin:0 auto; align-items:start; }
-  .pdp-main { aspect-ratio:1/1; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--cream); position:relative; }
+  .pdp-main { aspect-ratio:1/1; border-radius:2px; overflow:hidden; background:var(--blush); position:relative; }
   .pdp-zoom { display:block; width:100%; height:100%; border:none; padding:0; background:transparent; cursor:zoom-in; position:relative; }
   .zoom-hint {
-    position:absolute; bottom:12px; right:12px; background:rgba(17,17,17,.72); color:#fff;
+    position:absolute; bottom:12px; right:12px; background:rgba(44,35,38,.72); color:#fff;
     font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; padding:.4rem .7rem; border-radius:999px;
     pointer-events:none; opacity:.9;
   }
@@ -1065,17 +1183,17 @@ function productPage(t) {
   .breadcrumb a:hover { color:var(--pink); }
   .pdp-actions { display:flex; flex-wrap:wrap; gap:.7rem; margin:1.5rem 0 1rem; }
   .pdp-features { margin-top:1.75rem; }
-  .pdp-features h3 { font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; margin-bottom:.8rem; }
+  .pdp-features h3 { font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.8rem; color:var(--muted); }
   .pdp-features ul { list-style:none; display:grid; gap:.55rem; }
-  .pdp-features li { display:flex; gap:.55rem; align-items:flex-start; color:var(--charcoal); }
-  .pdp-features li::before { content:'✦'; color:var(--pink); font-size:.7rem; margin-top:.35rem; }
+  .pdp-features li { display:flex; gap:.55rem; align-items:flex-start; color:var(--ink); }
+  .pdp-features li::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--pink); margin-top:.55rem; flex-shrink:0; }
   .lightbox {
-    position:fixed; inset:0; z-index:3000; background:rgba(17,17,17,.88);
+    position:fixed; inset:0; z-index:3000; background:rgba(44,35,38,.88);
     display:none; align-items:center; justify-content:center; padding:1.5rem; cursor:zoom-out;
   }
   .lightbox.open { display:flex; }
   .lightbox img {
-    max-width:min(960px,96vw); max-height:90vh; border-radius:12px; box-shadow:0 24px 80px rgba(0,0,0,.45);
+    max-width:min(960px,96vw); max-height:90vh; border-radius:4px; box-shadow:0 24px 80px rgba(0,0,0,.45);
     background:#fff; object-fit:contain; cursor:default;
   }
   .lightbox-close {
@@ -1092,14 +1210,14 @@ function productPage(t) {
 </style>
 <div class="pdp">
   <div>
-    <div class="pdp-main product-thumb ${t.mockClass}" style="${t.images ? 'background:var(--cream);display:block;' : ''}">${galleryMain}</div>
+    <div class="pdp-main product-thumb ${t.mockClass}" style="${t.images ? 'background:var(--blush);display:block;' : ''}">${galleryMain}</div>
     ${thumbs ? `<div class="pdp-thumbs">${thumbs}</div>` : ''}
     <p style="font-size:.8rem;color:var(--muted);margin-top:.6rem;">Tip: click the image to view full size</p>
   </div>
   <div>
     <div class="breadcrumb"><a href="/shop">Shop</a> / ${t.name}</div>
     <p class="product-niche">${t.niche}</p>
-    <h1 style="font-family:Fraunces,serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:.4rem 0 1rem;">${t.name}</h1>
+    <h1 style="font-family:var(--font-display);font-size:clamp(2.2rem,4vw,3.4rem);font-weight:700;letter-spacing:-.035em;line-height:1.08;margin:.4rem 0 1rem;padding-bottom:.1rem;">${t.name}</h1>
     <span class="badge badge-platform" style="position:static;display:inline-block;margin-bottom:1rem;">${t.platform}</span>
     <div class="product-price">
       <span class="price-current" style="font-size:1.8rem;">$${t.price} AUD</span>
@@ -1109,7 +1227,7 @@ function productPage(t) {
     <p style="color:var(--muted);line-height:1.8;margin-top:.5rem;">${t.description}</p>
     <div class="pdp-actions">
       <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
-      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">Buy now on Etsy →</a>
+      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">Buy on Etsy</a>
       <a class="btn btn-ghost" href="/cart">View cart</a>
     </div>
     <p style="font-size:.85rem;color:var(--muted);">Instant delivery via Etsy · setup guide included · 30-day email support</p>
@@ -1178,7 +1296,7 @@ function productPage(t) {
 })();
 </script>`;
   return layout(
-    `${t.name} — Bloomie House`,
+    `${t.name} - Bloomie House`,
     t.description,
     `/templates/${t.slug}`,
     body,
@@ -1202,21 +1320,21 @@ function cartPage() {
   const body = `
 <style>
   .cart-wrap { max-width: 980px; margin: 0 auto; padding: 2rem 4vw 4rem; }
-  .cart-empty { text-align:center; padding: 3rem 1rem; background: var(--cream); border-radius: 20px; }
+  .cart-empty { text-align:left; padding: 3rem 1.5rem; background: var(--blush); border-radius: 2px; }
   .cart-row {
     display:grid; grid-template-columns: 96px 1fr auto; gap: 1rem; align-items:center;
-    padding: 1rem 0; border-bottom: 1px solid var(--border);
+    padding: 1.15rem 0; border-bottom: 1px solid var(--border);
   }
-  .cart-thumb { width:96px; height:72px; border-radius:12px; overflow:hidden; }
+  .cart-thumb { width:96px; height:72px; border-radius:2px; overflow:hidden; }
   .cart-thumb img { width:100%; height:100%; object-fit:cover; }
-  .cart-meta h3 { font-family:Fraunces,serif; font-size:1.15rem; }
+  .cart-meta h3 { font-family:var(--font-display); font-size:1.1rem; letter-spacing:-.02em; }
   .cart-meta p { color:var(--muted); font-size:.85rem; }
   .qty {
-    width: 64px; padding: .45rem .5rem; border:1px solid var(--border); border-radius:10px;
-    font-family:inherit; margin-right:.5rem;
+    width: 64px; padding: .45rem .5rem; border:1px solid var(--border); border-radius:8px;
+    font-family:inherit; margin-right:.5rem; background:var(--blush);
   }
   .cart-summary {
-    margin-top: 1.75rem; padding: 1.5rem; border-radius: 18px; background: var(--cream);
+    margin-top: 1.75rem; padding: 1.5rem; border-radius: 2px; background: var(--blush);
     display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; align-items:center;
   }
   .cart-note { font-size:.9rem; color:var(--muted); max-width: 34rem; margin-top:1rem; }
@@ -1230,7 +1348,7 @@ function cartPage() {
   <div id="cartRoot"><p style="color:var(--muted);">Loading cart…</p></div>
 </div>`;
   return layout(
-    'Cart — Bloomie House',
+    'Cart - Bloomie House',
     'Review your Bloomie House templates before checking out on Etsy.',
     '/cart',
     body,
@@ -1247,29 +1365,29 @@ function servicesPage() {
   <p>Prefer we handle the setup? Book a discovery call for One Day Website ($397) or chat about a full custom build.</p>
 </section>
 <section class="section" style="padding-top:1rem;">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-bottom:3rem;">
-    <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">One Day Website</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">$397 <span style="font-size:1rem;color:var(--muted);text-decoration:line-through;font-weight:400;">$497</span></p>
-      <p style="color:var(--muted);margin-bottom:1rem;">We install &amp; personalise a template for your brand — live in ~24 hours.</p>
-      <a class="btn btn-pink" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book now →</a>
-    </article>
-    <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:var(--black);color:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">Full Custom</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">From $897</p>
-      <p style="opacity:.75;margin-bottom:1rem;">Built from scratch — up to 6 pages, strategy session, SEO foundation, 30 days support.</p>
-      <a class="btn btn-pink" href="/full-custom">View details →</a>
-    </article>
-    <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">DIY Templates</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">From $37</p>
-      <p style="color:var(--muted);margin-bottom:1rem;">Buy a template, personalise it yourself, launch this week.</p>
+  <div class="ladder reveal" style="margin-bottom:3.5rem;">
+    <article class="ladder-item">
+      <h3>DIY Templates</h3>
+      <div class="ladder-price">From $37</div>
+      <p>Buy a template, personalise it yourself, launch this week.</p>
       <a class="btn btn-ghost" href="/shop">Browse shop</a>
     </article>
+    <article class="ladder-item featured">
+      <h3>One Day Website</h3>
+      <div class="ladder-price">$397 <span style="font-size:.9rem;opacity:.55;text-decoration:line-through;font-weight:400;">$497</span></div>
+      <p>We install and personalise a template for your brand. Live in about 24 hours.</p>
+      <a class="btn btn-pink" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book now</a>
+    </article>
+    <article class="ladder-item">
+      <h3>Full Custom</h3>
+      <div class="ladder-price">From $897</div>
+      <p>Built from scratch. Up to 6 pages, strategy session, SEO foundation, 30 days support.</p>
+      <a class="btn btn-ghost" href="/full-custom">View details</a>
+    </article>
   </div>
-  <h2 class="section-title" style="text-align:center;">Discovery <em>form</em></h2>
-  <p style="text-align:center;color:var(--muted);max-width:36rem;margin:0 auto 1.5rem;">Tell us about your business and we’ll recommend the right path.</p>
-  <div style="max-width:900px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:18px;padding:1rem;overflow:hidden;">
+  <h2 class="section-title reveal">Discovery <em>form</em></h2>
+  <p class="reveal" style="color:var(--muted);max-width:36rem;margin:0 0 1.5rem;">Tell us about your business and we will recommend the right path.</p>
+  <div class="reveal" style="max-width:900px;background:var(--blush);border-radius:2px;padding:1rem;overflow:hidden;">
     <iframe
       id="JotFormIFrame-243655997068176"
       title="Website Design Discovery Form"
@@ -1280,8 +1398,8 @@ function servicesPage() {
   </div>
 </section>`;
   return layout(
-    'Website Design Services — Bloomie House',
-    'One Day Website from $397 and full custom builds from $897. Wix Studio & Shopify specialists in Hobart, Australia.',
+    'Website Design Services - Bloomie House',
+    'One Day Website from $397 and full custom builds from $897. Wix Studio and Shopify specialists serving Australia and worldwide.',
     '/services',
     body,
     'services'
@@ -1293,29 +1411,29 @@ function fullCustomPage() {
 <section class="page-hero">
   <p class="section-label">Bespoke</p>
   <h1>Full <em>custom</em> build</h1>
-  <p>Built from scratch for your brand — your vision, your voice, no template limits. From $897 AUD.</p>
+  <p>Built from scratch for your brand. Your vision, your voice, no template limits. From $897 AUD.</p>
 </section>
 <section class="section" style="padding-top:1rem;">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2.5rem;">
     ${[
       ['Custom design', 'Unique layouts tailored to your brand'],
-      ['Up to 6 pages', 'Home, About, Services, Portfolio & more'],
+      ['Up to 6 pages', 'Home, About, Services, Portfolio and more'],
       ['SEO foundation', 'Structure that helps you get found'],
       ['30 days support', 'Post-launch help when you need it'],
     ]
       .map(
         ([h, p]) =>
-          `<div style="background:var(--cream);border-radius:16px;padding:1.25rem;"><h3 style="font-family:Fraunces,serif;margin-bottom:.35rem;">${h}</h3><p style="color:var(--muted);font-size:.95rem;">${p}</p></div>`
+          `<div class="reveal" style="background:var(--blush);border-radius:2px;padding:1.35rem;"><h3 style="font-family:var(--font-display);margin-bottom:.35rem;letter-spacing:-.02em;">${h}</h3><p style="color:var(--muted);font-size:.95rem;">${p}</p></div>`
       )
       .join('')}
   </div>
-  <div style="max-width:900px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:18px;padding:1rem;">
+  <div style="max-width:900px;background:var(--blush);border-radius:2px;padding:1rem;">
     <script type="text/javascript" src="${JOTFORM_CUSTOM}"><\/script>
   </div>
 </section>`;
   return layout(
-    'Full Custom Website Build — Bloomie House',
-    'Get a fully custom website built from scratch. Up to 6 pages, brand strategy, SEO foundation & 30 days support. From $897 AUD.',
+    'Full Custom Website Build - Bloomie House',
+    'Get a fully custom website built from scratch. Up to 6 pages, brand strategy, SEO foundation and 30 days support. From $897 AUD.',
     '/full-custom',
     body,
     'services'
@@ -1327,20 +1445,23 @@ function contactPage() {
 <section class="page-hero">
   <p class="section-label">Say hello</p>
   <h1>Get in <em>touch</em></h1>
-  <p>Questions about a template, One Day Website, or a custom project? We’d love to hear from you.</p>
+  <p>Questions about a template, One Day Website, or a custom project? We would love to hear from you.</p>
 </section>
 <section class="section" style="padding-top:1rem;max-width:720px;margin:0 auto;">
-  <div style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.75rem;">
-    <div id="formMessage" style="display:none;padding:.9rem 1rem;border-radius:12px;margin-bottom:1rem;"></div>
+  <div style="background:var(--blush);border-radius:2px;padding:1.75rem;">
+    <p style="color:var(--muted);margin-bottom:1.25rem;font-size:.95rem;">
+      This form opens your email app with a draft to <strong style="color:var(--ink);">${CONTACT_EMAIL}</strong>. Nothing is stored on this site.
+    </p>
+    <div id="formMessage" style="display:none;padding:.9rem 1rem;border-radius:8px;margin-bottom:1rem;"></div>
     <form id="contactForm">
       <label style="display:block;margin-bottom:1rem;font-size:.9rem;">Name *
-        <input required name="name" style="display:block;width:100%;margin-top:.4rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:12px;font:inherit;background:var(--cream);">
+        <input required name="name" style="display:block;width:100%;margin-top:.4rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:8px;font:inherit;background:#fff;">
       </label>
       <label style="display:block;margin-bottom:1rem;font-size:.9rem;">Email *
-        <input required type="email" name="email" style="display:block;width:100%;margin-top:.4rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:12px;font:inherit;background:var(--cream);">
+        <input required type="email" name="email" style="display:block;width:100%;margin-top:.4rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:8px;font:inherit;background:#fff;">
       </label>
       <label style="display:block;margin-bottom:1rem;font-size:.9rem;">Service interest
-        <select name="service" style="display:block;width:100%;margin-top:.4rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:12px;font:inherit;background:var(--cream);">
+        <select name="service" style="display:block;width:100%;margin-top:.4rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:8px;font:inherit;background:#fff;">
           <option value="">Select…</option>
           <option value="template">Template purchase</option>
           <option value="one-day">One Day Website</option>
@@ -1349,29 +1470,38 @@ function contactPage() {
         </select>
       </label>
       <label style="display:block;margin-bottom:1.25rem;font-size:.9rem;">Message *
-        <textarea required name="message" rows="5" style="display:block;width:100%;margin-top:.4rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:12px;font:inherit;background:var(--cream);resize:vertical;"></textarea>
+        <textarea required name="message" rows="5" style="display:block;width:100%;margin-top:.4rem;padding:.9rem 1rem;border:1px solid var(--border);border-radius:8px;font:inherit;background:#fff;resize:vertical;"></textarea>
       </label>
-      <button class="btn btn-pink" type="submit" style="width:100%;">Send message</button>
+      <button class="btn btn-pink" type="submit" style="width:100%;">Open email draft</button>
     </form>
   </div>
-  <p style="text-align:center;margin-top:1.5rem;color:var(--muted);">
-    Or email <a href="mailto:hello@bloomiehouse.com.au" style="color:var(--pink);">hello@bloomiehouse.com.au</a> · English &amp; Vietnamese
+  <p style="margin-top:1.5rem;color:var(--muted);">
+    Or email <a href="mailto:${CONTACT_EMAIL}" style="color:var(--pink);">${CONTACT_EMAIL}</a> · English &amp; Vietnamese
   </p>
 </section>
 <script>
 document.getElementById('contactForm').addEventListener('submit', function(e){
   e.preventDefault();
-  var msg=document.getElementById('formMessage');
-  msg.style.display='block';
-  msg.style.background='#e8f5e9';
-  msg.style.color='#1b5e20';
-  msg.textContent='Thanks! We will get back to you soon. For faster replies, email hello@bloomiehouse.com.au.';
-  e.target.reset();
+  var fd = new FormData(e.target);
+  var name = (fd.get('name') || '').toString().trim();
+  var email = (fd.get('email') || '').toString().trim();
+  var service = (fd.get('service') || '').toString().trim() || 'general';
+  var message = (fd.get('message') || '').toString().trim();
+  var subject = encodeURIComponent('Bloomie House enquiry - ' + service);
+  var body = encodeURIComponent(
+    'Name: ' + name + '\\nEmail: ' + email + '\\nService: ' + service + '\\n\\n' + message
+  );
+  var msg = document.getElementById('formMessage');
+  msg.style.display = 'block';
+  msg.style.background = '#fff';
+  msg.style.color = 'var(--ink)';
+  msg.textContent = 'Opening your email app. If nothing opens, email ${CONTACT_EMAIL} directly.';
+  window.location.href = 'mailto:${CONTACT_EMAIL}?subject=' + subject + '&body=' + body;
 });
 </script>`;
   return layout(
-    'Contact — Bloomie House',
-    'Contact Bloomie House about templates, One Day Website, or custom web design. Based in Hobart, Australia.',
+    'Contact - Bloomie House',
+    'Contact Bloomie House about templates, One Day Website, or custom web design. Australia and worldwide.',
     '/contact',
     body,
     'contact'
@@ -1383,23 +1513,23 @@ function aboutPage() {
 <section class="page-hero">
   <p class="section-label">Our story</p>
   <h1>About <em>Bloomie</em> House</h1>
-  <p>We’re a Hobart-based studio helping small businesses look polished online — without the agency price tag or endless timelines.</p>
+  <p>We help small businesses look polished online, without the agency price tag or endless timelines. Based in Australia, working with clients worldwide.</p>
 </section>
 <section class="section" style="max-width:760px;margin:0 auto;">
-  <p style="font-size:1.1rem;color:var(--charcoal);line-height:1.85;margin-bottom:1.25rem;">
-    Bloomie House started from a simple idea: beautiful websites shouldn’t take months or cost a fortune. We design premium templates for real Australian businesses — cafes, beauty studios, tradies, boutiques — and offer done-for-you setup when you want us to handle the details.
+  <p class="reveal" style="font-size:1.1rem;color:var(--ink);line-height:1.85;margin-bottom:1.25rem;">
+    Bloomie House started from a simple idea: beautiful websites should not take months or cost a fortune. We design premium templates for real businesses (cafes, beauty studios, tradies, boutiques) and offer done-for-you setup when you want us to handle the details.
   </p>
-  <p style="color:var(--muted);line-height:1.85;margin-bottom:2rem;">
-    Shop templates for instant download, book a One Day Website, or start a full custom build. Either way, you’ll launch looking like you meant it.
+  <p class="reveal" style="color:var(--muted);line-height:1.85;margin-bottom:2rem;">
+    Shop templates for instant download, book a One Day Website, or start a full custom build. Either way, you will launch looking like you meant it.
   </p>
-  <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+  <div class="reveal" style="display:flex;gap:.75rem;flex-wrap:wrap;">
     <a class="btn btn-pink" href="/shop">Shop templates</a>
     <a class="btn btn-ghost" href="/services">View services</a>
   </div>
 </section>`;
   return layout(
-    'About — Bloomie House',
-    'Bloomie House is a Hobart studio selling premium website templates and done-for-you web design for Australian small businesses.',
+    'About - Bloomie House',
+    'Bloomie House sells premium website templates and done-for-you web design for small businesses across Australia and worldwide.',
     '/about',
     body,
     'about'
@@ -1408,13 +1538,13 @@ function aboutPage() {
 
 function notFoundPage() {
   const body = `
-<section class="page-hero" style="text-align:center;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<section class="page-hero" style="min-height:60vh;display:flex;flex-direction:column;justify-content:center;">
   <h1>Page not <em>found</em></h1>
-  <p style="margin-bottom:1.5rem;">That link doesn’t exist — try the shop or head home.</p>
-  <div style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;">
+  <p style="margin-bottom:1.5rem;">That link does not exist. Try the shop or head home.</p>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
     <a class="btn btn-pink" href="/shop">Go to shop</a>
     <a class="btn btn-ghost" href="/">Home</a>
   </div>
 </section>`;
-  return layout('Not Found — Bloomie House', 'Page not found.', '/404', body, '');
+  return layout('Not Found - Bloomie House', 'Page not found.', '/404', body, '');
 }

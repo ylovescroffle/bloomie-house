@@ -2,6 +2,10 @@ name = "bloomie-house"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
+# Enable versioned preview URLs for PR / non-production uploads
+# (e.g. <version>-bloomie-house.<subdomain>.workers.dev)
+preview_urls = true
+
 # Generated template mockups live in /public/mockups and are served as static assets.
 [assets]
 directory = "./public"
