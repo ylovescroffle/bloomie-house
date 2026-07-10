@@ -15,6 +15,7 @@ const JOTFORM_CUSTOM = 'https://form.jotform.com/jsform/253192865445869';
 const SITE = 'https://bloomiehouse.com.au';
 
 const MOCK = '/mockups';
+const AVATARS = `${MOCK}/avatars`;
 
 const templateData = [
   {
@@ -241,49 +242,694 @@ const templateData = [
     ],
     etsy: ETSY_SHOP,
   },
-  {
-    slug: 'the-flow',
-    name: 'The Flow',
-    niche: 'Wellness & Yoga',
-    platform: 'Wix Studio',
-    category: 'wix',
-    badge: '20% OFF',
-    price: 79,
-    originalPrice: 97,
-    mockClass: 'mock-yoga',
-    description:
-      'A soft, serene template for yoga studios, wellness coaches, pilates, and holistic practitioners. Calming palette, class schedule section, and a gentle booking experience.',
-    features: [
-      'Class schedule & timetable',
-      'Teacher profiles',
-      'Membership / pricing plans',
-      'Blog / journal section',
-      'Newsletter opt-in',
-    ],
-    etsy: ETSY_SHOP,
-  },
-  {
-    slug: 'the-boutique',
-    name: 'The Boutique',
-    niche: 'Boutique & Retail',
-    platform: 'Shopify',
-    category: 'shopify',
-    badge: '20% OFF',
-    price: 97,
-    originalPrice: 127,
-    mockClass: 'mock-boutique',
-    description:
-      'A luxe, scroll-stopping Shopify theme for fashion boutiques, homewares, and lifestyle brands. Full ecommerce ready with editorial lookbook sections and a minimal cart experience.',
-    features: [
-      'Full Shopify ecommerce',
-      'Lookbook / editorial section',
-      'Announcement bar',
-      'Product quick-view',
-      'Size guide popup',
-    ],
-    etsy: ETSY_SHOP,
-  },
 ];
+
+function productPainPoints(t) {
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    return [
+      {
+        pain: 'You want to launch a Korean lash lift course — but have no lash training curriculum ready',
+        painHl: 'Korean lash lift course',
+        fix: '200+ page lash lift & tint training manual — professional content, fully editable in Canva',
+        fixHl: 'lash lift & tint training manual',
+      },
+      {
+        pain: 'Students keep asking the same lash lift theory & aftercare questions',
+        painHl: 'lash lift theory & aftercare',
+        fix: 'Structured lash educator manual covers technique, tinting, troubleshooting & client care',
+        fixHl: 'lash educator manual',
+      },
+      {
+        pain: 'Bigger lash academies look more credible than your solo training business',
+        painHl: 'lash academies',
+        fix: 'Polished, branded Canva curriculum you can resell with your academy logo',
+        fixHl: 'Canva curriculum',
+      },
+      {
+        pain: 'Writing a lash lift training manual from scratch takes months you don’t have',
+        painHl: 'lash lift training manual',
+        fix: 'Instant digital download — customise your course material and start enrolling students this week',
+        fixHl: 'start enrolling students',
+      },
+    ];
+  }
+  if (t.category === 'canva') {
+    return [
+      { pain: 'Your site still isn’t live — and DIY design is eating your weekends', fix: 'Editable Canva template you can publish in under an hour' },
+      { pain: 'You’re losing enquiries to competitors who look more polished online', fix: 'Conversion-focused layout built for real small businesses' },
+      { pain: 'Agency quotes of $2k–$5k aren’t in the budget right now', fix: `Professional design from $${t.price} AUD — own it forever` },
+      { pain: 'You’re not a designer — and it shows on your current page', fix: 'Drag-and-drop editing, no code or design degree needed' },
+    ];
+  }
+  if (t.category === 'wix') {
+    return [
+      { pain: 'Your booking flow is clunky — clients drop off before they enquire', fix: 'Built-in booking & CTA sections ready to connect' },
+      { pain: 'Your brand deserves luxury, but custom Wix builds cost thousands', fix: 'Soft-luxury Wix Studio layout at a fraction of the price' },
+      { pain: 'You’ve been “working on the website” for months', fix: 'Install, personalise, and go live this week' },
+      { pain: 'Mobile visitors bounce because the site feels dated', fix: 'Fully responsive, multi-device-ready design' },
+    ];
+  }
+  return [
+    { pain: 'You need to look trustworthy online before you can win the job', fix: 'Lead-gen layout with quote forms, reviews & portfolio sections' },
+    { pain: 'Shopify themes are overwhelming — and the wrong pick wastes money', fix: 'Curated theme matched to your niche, ready to sell' },
+    { pain: 'Every week without a proper site is lost revenue', fix: 'Instant download — start customising today' },
+    { pain: 'You want it done right, but not a $10k custom build', fix: `From $${t.price} AUD with setup guide & email support` },
+  ];
+}
+
+function productFaqs(t) {
+  const platformNote =
+    t.category === 'canva'
+      ? 'Everything is fully editable in Canva — colours, fonts, images, and copy.'
+      : t.category === 'wix'
+        ? 'Built for Wix Studio. Duplicate to your account, swap branding, connect your domain.'
+        : 'Built for Shopify. Upload the theme, add products, and connect payments.';
+  const base = [
+    {
+      q: 'How do I get the template after purchase?',
+      a: 'Checkout on Etsy for secure payment. You’ll receive an instant digital download link by email — usually within minutes.',
+    },
+    {
+      q: 'Can I customise it for my brand?',
+      a: platformNote,
+    },
+    {
+      q: 'Do I need technical skills?',
+      a: 'No coding required. Each template includes a setup guide. If you get stuck, email us — 30-day support is included.',
+    },
+    {
+      q: 'What if I want you to set it up for me?',
+      a: 'Book our One Day Website service ($397 AUD) and we’ll install, personalise, and launch it for you — usually within 24 hours.',
+    },
+    {
+      q: 'Is this a one-time purchase?',
+      a: `Yes. Pay once ($${t.price} AUD on Etsy), keep the template forever. No monthly template fee from Bloomie House.`,
+    },
+  ];
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    base.unshift({
+      q: 'Can I resell this manual to my own students?',
+      a: 'Yes — this is designed for lash educators and academies. Edit in Canva, add your logo, and use it as your training curriculum or sell it as part of your course.',
+    });
+  }
+  return base;
+}
+
+function productAudience(t) {
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    return {
+      intro: 'Built for lash educators who want a credible, ready-to-teach curriculum — without spending months writing it.',
+      fits: [
+        { icon: '🎓', title: 'Lash trainers & academies', desc: 'Running or launching 1:1 or group Korean lash lift courses' },
+        { icon: '✨', title: 'Solo lash artists going pro', desc: 'Adding training income alongside your treatment menu' },
+        { icon: '📖', title: 'Educators who resell manuals', desc: 'Canva-editable with your logo — teach under your brand' },
+        { icon: '🇰🇷', title: 'Korean lash lift specialists', desc: 'Technique-focused curriculum your students actually need' },
+      ],
+      notFor: 'Not ideal if you need a live website template — this is a training manual, not a site design.',
+    };
+  }
+  const byCategory = {
+    canva: {
+      intro: `A ${t.niche.toLowerCase()} template for founders who want a polished online presence fast — without hiring an agency.`,
+      fits: [
+        { icon: '🚀', title: 'New business owners', desc: 'Launching your first site and need it live this week' },
+        { icon: '💅', title: `${t.niche} professionals`, desc: 'Your work is premium — your website should look the part' },
+        { icon: '🎨', title: 'Non-designers', desc: 'Comfortable editing in Canva, not code or Figma' },
+        { icon: '💰', title: 'Budget-conscious brands', desc: `Professional look from $${t.price} AUD, not $3k+ custom` },
+      ],
+      notFor: 'Not ideal if you need a fully coded custom build or complex ecommerce logic.',
+    },
+    wix: {
+      intro: `Designed for ${t.niche.toLowerCase()} businesses that book clients online and need a soft-luxury, conversion-ready site.`,
+      fits: [
+        { icon: '📅', title: 'Service businesses', desc: 'Salons, studios & clinics that rely on online booking' },
+        { icon: '✨', title: 'Beauty & wellness brands', desc: 'Elegant layout that matches a premium in-person experience' },
+        { icon: '📱', title: 'Mobile-first businesses', desc: 'Most clients find you on Instagram — this converts on phone' },
+        { icon: '⏱️', title: 'Busy owners', desc: 'Install in Wix Studio, swap branding, publish in days' },
+      ],
+      notFor: 'Not ideal if you are not on Wix Studio or need deep custom development.',
+    },
+    shopify: {
+      intro: `For ${t.niche.toLowerCase()} brands ready to sell online with a trust-building, lead-gen focused layout.`,
+      fits: [
+        { icon: '🔧', title: 'Tradies & service pros', desc: 'Quote requests, reviews & portfolio — built to win jobs' },
+        { icon: '🛒', title: 'Small product sellers', desc: 'Shopify-ready structure when you are ready to add products' },
+        { icon: '📈', title: 'Growing local businesses', desc: 'Look established before you have a big marketing budget' },
+        { icon: '⚡', title: 'Fast movers', desc: 'Skip months of theme research — start with a proven layout' },
+      ],
+      notFor: 'Not ideal if you need a non-Shopify platform or enterprise-scale catalog.',
+    },
+  };
+  return byCategory[t.category] || byCategory.canva;
+}
+
+function productTestimonials(t) {
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    return [
+      { name: 'Mia T.', city: 'Melbourne', avatar: `${AVATARS}/avatar-mia.jpg`, text: 'Finally have a manual I can brand and hand to students. Saved me weeks of writing.', highlight: 'Saved me weeks' },
+      { name: 'Jess L.', city: 'Sydney', avatar: `${AVATARS}/avatar-jess.jpg`, text: 'My 1:1 training feels so much more professional now — students love the layout.', highlight: 'so much more professional' },
+      { name: 'Naomi W.', city: 'Brisbane', avatar: `${AVATARS}/avatar-naomi.jpg`, text: 'Worth every dollar. Edited in Canva in one afternoon and started teaching next week.', highlight: 'started teaching next week' },
+      { name: 'Ella R.', city: 'Perth', avatar: `${AVATARS}/avatar-ella.jpg`, text: 'Exactly what my academy needed. The curriculum structure is spot-on for Korean lash lift.', highlight: 'spot-on for Korean lash lift' },
+      { name: 'Amara J.', city: 'Hobart', avatar: `${AVATARS}/avatar-amara.jpg`, text: 'Best purchase for my training business. Students ask where I got the manual!', highlight: 'Best purchase' },
+      { name: 'Sophie W.', city: 'Adelaide', avatar: `${AVATARS}/avatar-sophie.jpg`, text: 'Clean, aesthetic, easy to customise. I added my logo and launched my course the same week.', highlight: 'launched my course' },
+    ];
+  }
+  return [
+    { name: 'Chloe M.', city: 'Melbourne', avatar: `${AVATARS}/avatar-chloe.jpg`, text: `Exactly what my ${t.niche.toLowerCase()} business needed — live in a weekend, not months.`, highlight: 'live in a weekend' },
+    { name: 'Amy N.', city: 'Sydney', avatar: `${AVATARS}/avatar-amy.jpg`, text: 'Clean, aesthetic, and easy to customise. Clients keep complimenting the site.', highlight: 'easy to customise' },
+    { name: 'Kate B.', city: 'Brisbane', avatar: `${AVATARS}/avatar-kate.jpg`, text: 'Best template purchase I have made. The layout just converts — more enquiries straight away.', highlight: 'more enquiries' },
+    { name: 'Zara H.', city: 'Hobart', avatar: `${AVATARS}/avatar-zara.jpg`, text: 'Your templates are beyond my expectations — bought so many before but nothing comes close.', highlight: 'beyond my expectations' },
+    { name: 'Sarah D.', city: 'Perth', avatar: `${AVATARS}/avatar-sarah.jpg`, text: 'Just joined and wow… everything is so aesthetic and easy to work with. You thought of everything!', highlight: 'so aesthetic' },
+    { name: 'Jade K.', city: 'Canberra', avatar: `${AVATARS}/avatar-jade.jpg`, text: 'Feeling ready to start my business properly. Professional look without the agency price tag.', highlight: 'ready to start my business' },
+  ];
+}
+
+function productBeforeAfter(t) {
+  const pains = productPainPoints(t);
+  return pains.map((p) => ({
+    before: p.pain,
+    beforeHl: p.painHl || null,
+    after: p.fix,
+    afterHl: p.fixHl || null,
+  }));
+}
+
+function productBeforeAfterIntro(t) {
+  if (t.slug === 'korean-lash-lift-training-manual') {
+    return 'Lash educators and academy owners use this <strong>Canva lash lift training manual</strong> to go from zero curriculum to a branded, resell-ready course — without months of writing.';
+  }
+  if (t.category === 'canva') {
+    return `Small ${t.niche.toLowerCase()} businesses swap DIY website stress for a <strong>${t.platform} website template</strong> built for your industry — publish faster, look professional, win more enquiries.`;
+  }
+  if (t.category === 'wix') {
+    return `Beauty & service businesses replace clunky booking flows with a <strong>${t.niche} Wix Studio template</strong> — luxury look, mobile-ready, live in days not months.`;
+  }
+  return `Tradies and local service businesses launch a <strong>${t.niche} website template</strong> that builds trust — quote forms, reviews, and portfolio sections included.`;
+}
+
+function baHighlight(text, phrase, cls) {
+  if (!phrase || !text.includes(phrase)) return text;
+  return text.replace(phrase, `<em class="${cls}">${phrase}</em>`);
+}
+
+function productPostPurchaseSteps(t) {
+  const editStep =
+    t.category === 'canva'
+      ? {
+          time: '15–60 min',
+          title: 'Open & personalise in Canva',
+          detail:
+            'Click the Canva link from your download. Swap your logo, brand colours, photos, and business name. No design skills needed — everything is drag-and-drop.',
+        }
+      : t.category === 'wix'
+        ? {
+            time: '1–3 hours',
+            title: 'Duplicate into Wix Studio',
+            detail:
+              'Follow the setup guide to add the template to your Wix account. Replace placeholder text and images, connect your booking tool, and preview on mobile.',
+          }
+        : {
+            time: '1–3 hours',
+            title: 'Install on Shopify',
+            detail:
+              'Upload the theme files to your Shopify store. Configure your homepage sections, add services or products, and connect your domain.',
+          };
+
+  const extra =
+    t.slug === 'korean-lash-lift-training-manual'
+      ? {
+          time: 'Same day',
+          title: 'Brand your training manual',
+          detail:
+            'Add your academy logo and name in Canva. Export as PDF for students or share the Canva link for digital access.',
+        }
+      : {
+          time: '30 min',
+          title: 'Connect your essentials',
+          detail:
+            'Link your contact form, booking button, Instagram, and Google Maps. Test on your phone before sharing the URL.',
+        };
+
+  return [
+    {
+      time: 'Instant',
+      title: 'Secure checkout',
+      detail:
+        'Complete payment at checkout. As soon as your order is confirmed, you will receive an instant email with everything you need to access your purchase.',
+    },
+    {
+      time: '1–5 min',
+      title: 'Open your access email',
+      detail:
+        'Check your inbox (and spam folder) for your order confirmation. Follow the link inside to download your template files, setup guide, and any bonus materials.',
+    },
+    editStep,
+    extra,
+    {
+      time: 'This week',
+      title: 'Publish & start converting',
+      detail:
+        t.slug === 'korean-lash-lift-training-manual'
+          ? 'Start enrolling students with a professional manual you own — or bundle it into your course price.'
+          : 'Share your new URL on Instagram, Google Business Profile, and email signature. Start taking bookings or enquiries.',
+    },
+    {
+      time: '30 days',
+      title: 'Email support included',
+      detail:
+        'Stuck on setup? Email hello@bloomiehouse.com.au — we help with template questions for 30 days after purchase.',
+    },
+  ];
+}
+
+function productAudienceHtml(t) {
+  const a = productAudience(t);
+  const cards = a.fits
+    .map(
+      (f, i) =>
+        `<article class="audience-card pdp-reveal" style="--reveal-delay:${i * 70}ms">
+          <span class="audience-icon" aria-hidden="true">${f.icon}</span>
+          <h3>${f.title}</h3>
+          <p>${f.desc}</p>
+        </article>`
+    )
+    .join('');
+  return `
+<section class="pdp-audience section" style="background:var(--cream);">
+  <p class="section-label pdp-reveal">Who it's for</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Is this template <em>right for you</em>?</h2>
+  <p class="audience-intro pdp-reveal" style="--reveal-delay:100ms">${a.intro}</p>
+  <div class="audience-grid">${cards}</div>
+  <p class="audience-not pdp-reveal" style="--reveal-delay:200ms"><strong>Not the best fit?</strong> ${a.notFor}</p>
+</section>`;
+}
+
+function productValueBonuses(t) {
+  const industry = t.niche.toLowerCase();
+  return [
+    { icon: '⚡', label: `${t.platform} template — saves weeks of design`, value: t.originalPrice ? `$${t.originalPrice}` : '$127' },
+    { icon: '🎯', label: `Built accurately for ${industry} businesses`, value: 'Included' },
+    { icon: '📱', label: 'Free Instagram story template bonus', value: '$29' },
+    { icon: '📧', label: 'Updated versions — email notifications', value: 'Included' },
+    { icon: '🆕', label: 'Early access to new course & template drops', value: 'Included' },
+    { icon: '📖', label: 'Step-by-step setup guide + 30-day support', value: '$49' },
+  ];
+}
+
+function productTestimonialsHtml(t) {
+  const items = productTestimonials(t);
+  const bubble = (x) => {
+    const text = x.highlight
+      ? x.text.replace(x.highlight, `<em class="testi-hl">${x.highlight}</em>`)
+      : x.text;
+    return `<div class="testi-card">
+      <div class="testi-avatar">
+        <img src="${x.avatar}" alt="" width="40" height="40" loading="lazy" decoding="async">
+      </div>
+      <div class="testi-card-body">
+        <p>"${text}"</p>
+        <span>${x.name} · ${x.city}</span>
+      </div>
+    </div>`;
+  };
+  const track = items.map(bubble).join('') + items.map(bubble).join('');
+  return `
+<section class="pdp-testimonials section">
+  <p class="section-label pdp-reveal">Social proof</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">What <em>customers</em> say</h2>
+  <p class="testi-sub pdp-reveal" style="--reveal-delay:100ms">Real creators sharing their experience.</p>
+  <div class="testi-stats pdp-reveal" style="--reveal-delay:140ms">
+    <div><strong class="tabular-nums">500+</strong><span>creators worldwide</span></div>
+    <div><strong class="tabular-nums">80+</strong><span>countries</span></div>
+    <div><strong>★ 5.0</strong><span>average rating</span></div>
+    <div><strong class="tabular-nums">30</strong><span>day support</span></div>
+  </div>
+  <div class="testi-marquee-mask pdp-reveal" style="--reveal-delay:180ms">
+    <div class="testi-marquee-track">${track}</div>
+  </div>
+</section>`;
+}
+
+function productBeforeAfterHtml(t) {
+  const ba = productBeforeAfter(t);
+  const isTraining = t.slug === 'korean-lash-lift-training-manual';
+  const seoTitle = isTraining
+    ? 'From blank page to <em>lash lift curriculum</em>'
+    : 'Before vs <em>after</em> you buy';
+  const baPairs = ba
+    .map((row, i) => {
+      const num = String(i + 1).padStart(2, '0');
+      const beforeText = baHighlight(row.before, row.beforeHl, 'ba-hl-before');
+      const afterText = baHighlight(row.after, row.afterHl, 'ba-hl-after');
+      return `<article class="ba-pair pdp-reveal" style="--reveal-delay:${i * 120}ms" aria-label="Transformation step ${i + 1}">
+        <div class="ba-step" aria-hidden="true"><span class="ba-step-num tabular-nums">${num}</span></div>
+        <div class="ba-pair-body">
+          <div class="ba-card ba-before">
+            <span class="ba-tag"><span class="ba-tag-dot ba-tag-dot-before"></span>Before</span>
+            <p>${beforeText}</p>
+          </div>
+          <div class="ba-connector" aria-hidden="true">
+            <span class="ba-connector-line"></span>
+            <span class="ba-connector-pulse"></span>
+            <span class="ba-connector-icon">↓</span>
+          </div>
+          <div class="ba-card ba-after">
+            <span class="ba-tag ba-tag-after"><span class="ba-tag-dot ba-tag-dot-after"></span>After</span>
+            <p>${afterText}</p>
+          </div>
+        </div>
+      </article>`;
+    })
+    .join('');
+  return `
+<section class="pdp-before-after section" aria-labelledby="ba-heading">
+  <div class="ba-bg-glow" aria-hidden="true"></div>
+  <p class="section-label pdp-reveal">The transformation</p>
+  <h2 class="section-title pdp-reveal" id="ba-heading" style="--reveal-delay:60ms">${seoTitle}</h2>
+  <p class="ba-sub pdp-reveal" style="--reveal-delay:100ms">${productBeforeAfterIntro(t)}</p>
+  <div class="ba-timeline">${baPairs}</div>
+</section>`;
+}
+
+function productCalculatorHtml(t) {
+  const isTraining =
+    t.slug === 'korean-lash-lift-training-manual' || /training|academy|educat/i.test(t.niche);
+  const minStudents = 1;
+  const maxStudents = isTraining ? 40 : 24;
+  const minPrice = isTraining ? 297 : 79;
+  const maxPrice = isTraining ? 1997 : 497;
+  const defaultStudents = isTraining ? 8 : 5;
+  const defaultPrice = isTraining ? 697 : 189;
+  const investLabel = isTraining ? 'Template investment (one-time)' : 'Template cost (one-time)';
+  const countLabel = isTraining ? 'Students you enrol' : 'New clients per month';
+  const priceLabel = isTraining ? 'Course price per student' : 'Average booking / sale value';
+  return `
+<section class="pdp-calculator section">
+  <p class="section-label pdp-reveal">ROI calculator</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">See your <em>profit</em> potential</h2>
+  <p class="calc-intro pdp-reveal" style="--reveal-delay:100ms">Drag the sliders — watch your profit per ${isTraining ? 'student' : 'client'} and total return grow.</p>
+  <div class="calc-card pdp-reveal" style="--reveal-delay:140ms" id="profitCalc" data-invest="${t.price}" data-training="${isTraining ? '1' : '0'}">
+    <div class="calc-row">
+      <label for="calcStudents">${countLabel}: <strong id="calcStudentsVal" class="tabular-nums">${defaultStudents}</strong></label>
+      <input type="range" id="calcStudents" min="${minStudents}" max="${maxStudents}" value="${defaultStudents}" class="calc-slider">
+    </div>
+    <div class="calc-row">
+      <label for="calcPrice">${priceLabel}: <strong id="calcPriceVal" class="tabular-nums">$${defaultPrice}</strong></label>
+      <input type="range" id="calcPrice" min="${minPrice}" max="${maxPrice}" step="${isTraining ? 50 : 10}" value="${defaultPrice}" class="calc-slider">
+    </div>
+    <div class="calc-results">
+      <div class="calc-result">
+        <span class="calc-result-label">${investLabel}</span>
+        <span class="calc-result-val tabular-nums" id="calcInvest">$${t.price}</span>
+      </div>
+      <div class="calc-result calc-result-highlight">
+        <span class="calc-result-label">Profit per ${isTraining ? 'student' : 'client'}</span>
+        <span class="calc-result-val tabular-nums" id="calcPerUnit">$${defaultPrice}</span>
+      </div>
+      <div class="calc-result calc-result-total">
+        <span class="calc-result-label">Total ${isTraining ? 'profit' : 'monthly revenue'}</span>
+        <span class="calc-result-val tabular-nums" id="calcTotal">$${(defaultStudents * defaultPrice - t.price).toFixed(0)}</span>
+      </div>
+    </div>
+    <p class="calc-note">*Estimates only. Your results depend on pricing, demand &amp; how you market.</p>
+  </div>
+</section>`;
+}
+
+function productValueStackHtml(t) {
+  const bonuses = productValueBonuses(t);
+  const rows = bonuses
+    .map(
+      (b) =>
+        `<li><span class="value-icon" aria-hidden="true">${b.icon}</span><span class="value-label">${b.label}</span><span class="value-amt">${b.value}</span></li>`
+    )
+    .join('');
+  const totalValue = t.originalPrice
+    ? t.originalPrice + 127
+    : Math.round(t.price * 8);
+  const buyLabel = t.slug === 'korean-lash-lift-training-manual' ? 'Get Instant Access →' : 'Get Instant Access →';
+  return `
+<section class="pdp-value section" style="background:var(--cream);">
+  <div class="value-card pdp-reveal">
+    <span class="value-badge">Everything you get</span>
+    <h2 class="value-title">${t.name}</h2>
+    <div class="star-seller-badge">
+      <span class="star-seller-icon">★</span>
+      <span><strong>Star Seller</strong> · 5.0 average rating · trusted by 500+ creators</span>
+    </div>
+    <ul class="value-list">${rows}</ul>
+    <div class="value-total-row">
+      <span>Total value</span>
+      <span class="value-strike tabular-nums">$${totalValue} AUD</span>
+    </div>
+    <div class="value-price tabular-nums">$${t.price} AUD</div>
+    <p class="value-terms">ONE-TIME PAYMENT · INSTANT DIGITAL ACCESS</p>
+    <p class="value-script">Pay once — have it for life. Keep it forever ✨</p>
+    <button type="button" class="btn btn-dark value-cta" data-add-cart="${t.slug}">${buyLabel}</button>
+  </div>
+</section>`;
+}
+
+function productSocialProofBuyers(t) {
+  const others = templateData.filter((x) => x.slug !== t.slug);
+  const pick = (slug) => others.find((x) => x.slug === slug) || others[0];
+  const luxspa = pick('luxspa-beauty-nails');
+  const studio = pick('the-studio');
+  const wedding = pick('wedding-rsvp');
+  const seoul = pick('seoul-soft-korean-lash');
+  return [
+    {
+      name: 'Talia R.',
+      product: t.name,
+      city: 'Gold Coast',
+      ago: '3 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-talia.jpg` },
+    },
+    {
+      name: 'Monique B.',
+      product: luxspa?.name || 'LuxSpa Beauty & Nails',
+      city: 'Sydney',
+      ago: '7 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-monique.jpg` },
+    },
+    {
+      name: 'Lash Academy AU',
+      product: 'Korean Lash Lift Manual',
+      city: 'Brisbane',
+      ago: '12 min',
+      thumb: { kind: 'logo', src: `${MOCK}/korean-lash-lift-hero.jpg`, brand: false },
+    },
+    {
+      name: 'Hannah C.',
+      product: t.name,
+      city: 'Perth',
+      ago: '16 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-hannah.jpg` },
+    },
+    {
+      name: 'Studio Nine',
+      product: studio?.name || 'The Studio',
+      city: 'Melbourne',
+      ago: '21 min',
+      thumb: { kind: 'initial', text: 'S9', tone: 'pink' },
+    },
+    {
+      name: 'Danielle P.',
+      product: wedding?.name || 'Wedding Invitation RSVP',
+      city: 'Hobart',
+      ago: '28 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-danielle.jpg` },
+    },
+    {
+      name: 'Bloomie House',
+      product: t.name,
+      city: 'Australia',
+      ago: '5 min',
+      thumb: { kind: 'logo', src: LOGO, brand: true },
+    },
+    {
+      name: 'Luxe Wellness',
+      product: luxspa?.name || 'LuxSpa Beauty & Nails',
+      city: 'Canberra',
+      ago: '14 min',
+      thumb: { kind: 'initial', text: 'LW', tone: 'sage' },
+    },
+    {
+      name: 'Ruby F.',
+      product: t.name,
+      city: 'Darwin',
+      ago: '19 min',
+      thumb: { kind: 'photo', src: `${AVATARS}/popup-ruby.jpg` },
+    },
+    {
+      name: 'Seoul Lash Bar',
+      product: seoul?.name || 'Seoul Soft Korean Lash Lift',
+      city: 'Adelaide',
+      ago: '25 min',
+      thumb: { kind: 'logo', src: seoul?.images?.[0] || `${MOCK}/seoul-soft-korean.jpg`, brand: false },
+    },
+  ];
+}
+
+function productSocialProofPopupHtml(t) {
+  const buyers = productSocialProofBuyers(t);
+  const first = buyers[0];
+  return `
+<div class="social-proof-popup" id="socialProofPopup" role="status" aria-live="polite" hidden>
+  <div class="social-proof-avatar social-proof-thumb-photo" id="socialProofAvatar"></div>
+  <div class="social-proof-text">
+    <strong id="socialProofName">${first.name}</strong>
+    <span id="socialProofAction">purchased ${first.product}</span>
+    <small id="socialProofMeta">${first.city} · just now</small>
+  </div>
+  <button type="button" class="social-proof-close" id="socialProofClose" aria-label="Dismiss">×</button>
+</div>
+<script>
+(function(){
+  var buyers = ${JSON.stringify(buyers)};
+  var popup = document.getElementById('socialProofPopup');
+  if(!popup || !buyers.length) return;
+  var lastIdx = -1;
+  var dismissed = false;
+  var avatarEl = document.getElementById('socialProofAvatar');
+  var nameEl = document.getElementById('socialProofName');
+  var actionEl = document.getElementById('socialProofAction');
+  var metaEl = document.getElementById('socialProofMeta');
+  var closeBtn = document.getElementById('socialProofClose');
+  function setThumb(el, thumb){
+    if(!el || !thumb) return;
+    el.innerHTML = '';
+    el.className = 'social-proof-avatar social-proof-thumb-' + thumb.kind + (thumb.tone ? ' is-' + thumb.tone : '') + (thumb.brand ? ' is-brand' : '');
+    if(thumb.kind === 'photo' || thumb.kind === 'logo'){
+      var img = document.createElement('img');
+      img.src = thumb.src;
+      img.alt = '';
+      img.width = 44;
+      img.height = 44;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      el.appendChild(img);
+    } else if(thumb.kind === 'initial'){
+      var span = document.createElement('span');
+      span.className = 'social-proof-initial';
+      span.textContent = thumb.text || '?';
+      el.appendChild(span);
+    }
+  }
+  function pickBuyer(){
+    if(buyers.length === 1) return 0;
+    var i;
+    do { i = Math.floor(Math.random() * buyers.length); } while(i === lastIdx);
+    lastIdx = i;
+    return i;
+  }
+  function show(){
+    if(dismissed) return;
+    var b = buyers[pickBuyer()];
+    setThumb(avatarEl, b.thumb);
+    if(nameEl) nameEl.textContent = b.name;
+    if(actionEl) actionEl.textContent = 'purchased ' + b.product;
+    if(metaEl) metaEl.textContent = b.city + ' · ' + b.ago + ' ago';
+    popup.hidden = false;
+    popup.classList.remove('is-leaving');
+    popup.classList.add('is-visible');
+    setTimeout(function(){
+      popup.classList.add('is-leaving');
+      setTimeout(function(){
+        popup.classList.remove('is-visible');
+        popup.hidden = true;
+      }, 400);
+    }, 5000);
+  }
+  if(closeBtn) closeBtn.addEventListener('click', function(){ dismissed = true; popup.hidden = true; });
+  setTimeout(show, 8000);
+  setInterval(function(){ if(!dismissed) show(); }, 22000);
+})();
+</script>`;
+}
+
+function productProcessHtml(t) {
+  const steps = productPostPurchaseSteps(t);
+  const rows = steps
+    .map(
+      (s, i) =>
+        `<li class="process-step pdp-reveal" style="--reveal-delay:${i * 70}ms">
+          <div class="process-marker"><span class="process-num tabular-nums">${i + 1}</span></div>
+          <div class="process-body">
+            <span class="process-time">${s.time}</span>
+            <strong>${s.title}</strong>
+            <p>${s.detail}</p>
+          </div>
+        </li>`
+    )
+    .join('');
+  return `
+<section class="pdp-process section" style="background:var(--cream);">
+  <p class="section-label pdp-reveal">After you buy</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Your path from <em>purchase</em> to launch</h2>
+  <p class="process-intro pdp-reveal" style="--reveal-delay:100ms">No guesswork — here is exactly what happens once payment is confirmed, step by step.</p>
+  <ol class="process-timeline">${rows}</ol>
+  <div class="process-notice pdp-reveal" style="--reveal-delay:180ms">
+    <p class="process-warning"><strong>Please note:</strong> Digital template purchases are <strong>non-refundable</strong> because access is delivered instantly. Read every section on this page, check what is included, and make sure this template is right for you before you buy.</p>
+    <p class="process-support">Still unsure? Email <a href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a> — our dedicated support team is happy to answer questions before you purchase.</p>
+  </div>
+  <div class="process-cta pdp-reveal" style="--reveal-delay:240ms">
+    <button type="button" class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
+    <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Prefer we set it up? Book now</a>
+  </div>
+</section>`;
+}
+
+function productFunnelHtml(t) {
+  const pains = productPainPoints(t);
+  const painCards = pains
+    .map(
+      (p, i) =>
+        `<article class="pain-card pdp-reveal" style="--reveal-delay:${i * 80}ms">
+          <p class="pain-label">The problem</p>
+          <p class="pain-text">${p.pain}</p>
+          <p class="pain-fix">→ ${p.fix}</p>
+        </article>`
+    )
+    .join('');
+  const buyLabel = t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →';
+  return `
+<section class="pdp-funnel section">
+  <p class="section-label pdp-reveal">Why this template</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:80ms">Stop losing time.<br>Start <em>launching</em>.</h2>
+  <p class="pdp-funnel-intro pdp-reveal" style="--reveal-delay:140ms">Most small businesses stall because the website never ships. This template removes the guesswork — so you can focus on clients, not late-night DIY.</p>
+  <div class="pain-grid">${painCards}</div>
+  <div class="pdp-funnel-cta pdp-reveal" style="--reveal-delay:260ms">
+    <div>
+      <p class="funnel-cta-price"><span class="price-current tabular-nums">$${t.price} AUD</span>${t.originalPrice ? `<span class="price-original tabular-nums">$${t.originalPrice}</span>` : ''}</p>
+      <p style="color:var(--muted);font-size:.9rem;">One-time purchase · instant download</p>
+    </div>
+    <div style="display:flex;gap:.65rem;flex-wrap:wrap;">
+      <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
+      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${buyLabel}</a>
+    </div>
+  </div>
+</section>`;
+}
+
+function productFaqHtml(t) {
+  const items = productFaqs(t)
+    .map(
+      (f, i) =>
+        `<details class="faq-item pdp-reveal" style="--reveal-delay:${i * 60}ms">
+          <summary>${f.q}</summary>
+          <p>${f.a}</p>
+        </details>`
+    )
+    .join('');
+  return `
+<section class="pdp-faq section" style="background:var(--cream);">
+  <p class="section-label pdp-reveal">FAQ</p>
+  <h2 class="section-title pdp-reveal" style="--reveal-delay:60ms">Questions before <em>you buy</em></h2>
+  <div class="faq-list">${items}</div>
+  <p class="pdp-faq-footer pdp-reveal" style="--reveal-delay:120ms">Still unsure? <a href="/contact" style="color:var(--pink);">Message us</a> or <a href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener" style="color:var(--pink);">book a free discovery call</a>.</p>
+</section>`;
+}
 
 export default {
   async fetch(request, env) {
@@ -557,9 +1203,24 @@ function baseStyles() {
   --charcoal: #2C2C2C;
   --muted: #7A7570;
   --border: rgba(0,0,0,0.08);
+  --shadow-border:
+    0px 0px 0px 1px rgba(0, 0, 0, 0.06),
+    0px 1px 2px -1px rgba(0, 0, 0, 0.06),
+    0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+  --shadow-border-hover:
+    0px 0px 0px 1px rgba(0, 0, 0, 0.08),
+    0px 1px 2px -1px rgba(0, 0, 0, 0.08),
+    0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  --shadow-lift:
+    0px 0px 0px 1px rgba(0, 0, 0, 0.06),
+    0px 10px 28px -6px rgba(0, 0, 0, 0.12);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--white);
@@ -568,49 +1229,192 @@ body {
   overflow-x: hidden;
 }
 a { color: inherit; }
-img { max-width: 100%; display: block; }
+img {
+  max-width: 100%;
+  display: block;
+  outline: 1px solid rgba(0, 0, 0, 0.1);
+  outline-offset: -1px;
+}
+h1, h2, h3, .section-title, .page-hero h1 { text-wrap: balance; }
+p, li, .product-info, .page-hero p { text-wrap: pretty; }
+.tabular-nums { font-variant-numeric: tabular-nums; }
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes navEnter {
+  from { opacity: 0; transform: translateY(-14px); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes glassyFloat {
+  0%, 100% { transform: rotateY(-2deg) rotateX(2deg) translateZ(4px); }
+  50% { transform: rotateY(2deg) rotateX(-2deg) translateZ(6px); }
+}
+@keyframes glassySheen {
+  0% { transform: translateX(-120%) skewX(-12deg); }
+  100% { transform: translateX(220%) skewX(-12deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .product-grid .product-card {
+    animation: cardEnter 450ms cubic-bezier(0.2, 0, 0, 1) backwards;
+  }
+  .product-grid .product-card:nth-child(1) { animation-delay: 0ms; }
+  .product-grid .product-card:nth-child(2) { animation-delay: 80ms; }
+  .product-grid .product-card:nth-child(3) { animation-delay: 160ms; }
+  .product-grid .product-card:nth-child(4) { animation-delay: 240ms; }
+  .product-grid .product-card:nth-child(5) { animation-delay: 320ms; }
+  .product-grid .product-card:nth-child(6) { animation-delay: 400ms; }
+  .product-grid .product-card:nth-child(7) { animation-delay: 480ms; }
+  .product-grid .product-card:nth-child(8) { animation-delay: 560ms; }
+  .product-grid .product-card:nth-child(9) { animation-delay: 640ms; }
+  .product-grid .product-card:nth-child(10) { animation-delay: 720ms; }
+  .product-grid .product-card:nth-child(11) { animation-delay: 800ms; }
+  .product-grid .product-card:nth-child(12) { animation-delay: 880ms; }
+  .page-hero-enter > * {
+    animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) backwards;
+  }
+  .page-hero-enter > *:nth-child(1) { animation-delay: 0ms; }
+  .page-hero-enter > *:nth-child(2) { animation-delay: 100ms; }
+  .page-hero-enter > *:nth-child(3) { animation-delay: 200ms; }
+  .page-hero-enter > *:nth-child(4) { animation-delay: 300ms; }
+  .site-nav {
+    animation: navEnter 520ms cubic-bezier(0.2, 0, 0, 1) backwards;
+  }
+  .site-nav .nav-logo { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 60ms backwards; }
+  .site-nav .nav-links li:nth-child(1) { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 120ms backwards; }
+  .site-nav .nav-links li:nth-child(2) { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 180ms backwards; }
+  .site-nav .nav-links li:nth-child(3) { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 240ms backwards; }
+  .site-nav .nav-links li:nth-child(4) { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 300ms backwards; }
+  .site-nav .nav-actions .btn { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 360ms backwards; }
+  .site-nav .nav-actions .cart-link { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 420ms backwards; }
+  .glassy-3d-inner.is-idle { animation: glassyFloat 7s ease-in-out infinite; }
+}
 .site-nav {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; padding: 1rem 4vw;
-  background: rgba(250,250,248,.92); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  background: rgba(250,250,248,.72);
+  backdrop-filter: blur(14px) saturate(1.25);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  box-shadow: var(--shadow-border);
+  transition-property: padding, background-color, box-shadow, backdrop-filter, transform;
+  transition-duration: 280ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+.site-nav.is-scrolled {
+  padding: .62rem 4vw;
+  background: rgba(250,250,248,.86);
+  backdrop-filter: blur(22px) saturate(1.45);
+  -webkit-backdrop-filter: blur(22px) saturate(1.45);
+  box-shadow: var(--shadow-lift);
+  transform: translateZ(0);
 }
 .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
-.nav-logo img { height: 44px; width: auto; }
+.nav-logo img {
+  height: 44px; width: auto;
+  transition-property: height, transform;
+  transition-duration: 280ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+.site-nav.is-scrolled .nav-logo img { height: 38px; }
 .nav-logo span {
   font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em;
+  transition-property: font-size, opacity;
+  transition-duration: 280ms;
 }
+.site-nav.is-scrolled .nav-logo span { font-size: 1.05rem; }
 .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
 .nav-links a {
-  text-decoration: none; font-size: .92rem; color: var(--charcoal);
-  transition: color .2s;
+  position: relative; text-decoration: none; font-size: .92rem; color: var(--charcoal);
+  transition-property: color, transform;
+  transition-duration: 150ms; transition-timing-function: ease-out;
+}
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -5px; height: 2px;
+  background: var(--pink); border-radius: 999px;
+  transform: scaleX(0); transform-origin: left;
+  transition-property: transform;
+  transition-duration: 200ms; transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 .nav-links a:hover, .nav-links a.active { color: var(--pink); }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+.glassy-3d {
+  position: relative; perspective: 1000px; transform-style: preserve-3d;
+  width: 100%; height: 100%;
+}
+.glassy-3d-inner {
+  position: relative; width: 100%; height: 100%; transform-style: preserve-3d;
+  border-radius: inherit;
+  transition-property: transform;
+  transition-duration: 320ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+.glassy-3d-shine {
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 2;
+  background: linear-gradient(
+    125deg,
+    rgba(255,255,255,.55) 0%,
+    rgba(255,255,255,.12) 28%,
+    transparent 48%,
+    rgba(255,255,255,.18) 72%,
+    rgba(255,255,255,.4) 100%
+  );
+  mix-blend-mode: soft-light; opacity: .85;
+}
+.glassy-3d-sheen {
+  position: absolute; inset: -20% -40%; pointer-events: none; z-index: 3;
+  background: linear-gradient(105deg, transparent 42%, rgba(255,255,255,.45) 50%, transparent 58%);
+  opacity: 0;
+}
+.glassy-3d:hover .glassy-3d-sheen { opacity: 1; animation: glassySheen 1.1s ease-out; }
+.glassy-3d-edge {
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 4;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.75),
+    inset 0 -1px 2px rgba(0,0,0,.06);
+}
+.glassy-3d img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: inherit;
+  box-shadow:
+    0 22px 44px -14px rgba(0,0,0,.28),
+    0 10px 20px -10px rgba(0,0,0,.16);
+  transform: translateZ(12px);
+}
+.glassy-3d-pdp { width: 100%; height: 100%; border-radius: 20px; }
+.glassy-3d-pdp .glassy-3d-inner { border-radius: 20px; }
+.glassy-3d-pdp img { object-fit: contain; background: var(--cream); }
+.glassy-3d-thumb { border-radius: 12px; aspect-ratio: 1/1; }
+.glassy-3d-thumb img { object-fit: contain; background: var(--cream); transform: translateZ(6px); }
 .nav-actions { display: flex; align-items: center; gap: .75rem; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
   padding: .85rem 1.4rem; border-radius: 999px; text-decoration: none;
   font-size: .88rem; font-weight: 500; border: 1.5px solid transparent;
-  transition: transform .2s, background .2s, color .2s, border-color .2s; cursor: pointer;
+  transition-property: transform, background-color, color, border-color, box-shadow;
+  transition-duration: 150ms; transition-timing-function: ease-out; cursor: pointer;
 }
-.btn:hover { transform: translateY(-1px); }
-.btn-dark { background: var(--black); color: var(--white); }
+.btn:hover { box-shadow: var(--shadow-border-hover); }
+.btn:active:not(:disabled) { transform: scale(0.96); }
+.btn-dark { background: var(--black); color: var(--white); box-shadow: var(--shadow-border); }
 .btn-dark:hover { background: #2a2a2a; }
-.btn-pink { background: var(--pink); color: #fff; }
+.btn-pink { background: var(--pink); color: #fff; box-shadow: 0 8px 20px -6px rgba(214,125,154,.45); }
 .btn-pink:hover { background: #c96b88; }
-.btn-ghost { background: transparent; border-color: var(--border); color: var(--black); }
-.btn-ghost:hover { border-color: var(--black); }
+.btn-ghost { background: transparent; border-color: var(--border); color: var(--black); box-shadow: var(--shadow-border); }
+.btn-ghost:hover { border-color: rgba(0,0,0,.14); }
 .btn-outline-light { background: transparent; border-color: rgba(255,255,255,.5); color: #fff; }
 .cart-link {
   position: relative; width: 44px; height: 44px; border-radius: 50%;
   display: grid; place-items: center; text-decoration: none;
-  border: 1px solid var(--border); background: var(--white); font-size: 1.1rem;
+  box-shadow: var(--shadow-border); background: var(--white); font-size: 1.1rem;
+  transition-property: transform, box-shadow;
+  transition-duration: 150ms; transition-timing-function: ease-out;
 }
+.cart-link:active { transform: scale(0.96); }
 .cart-count {
   position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px;
   padding: 0 5px; border-radius: 999px; background: var(--pink); color: #fff;
   font-size: 11px; font-weight: 600; display: grid; place-items: center;
+  font-variant-numeric: tabular-nums;
 }
 .page-hero {
   padding: 4.5rem 4vw 2.5rem;
@@ -640,17 +1444,22 @@ img { max-width: 100%; display: block; }
   gap: 1.5rem;
 }
 .product-card {
-  background: #fff; border: 1px solid var(--border); border-radius: 18px;
-  overflow: hidden; text-decoration: none; color: inherit;
-  transition: transform .25s, box-shadow .25s; display: flex; flex-direction: column;
+  background: #fff; border: none; border-radius: 20px;
+  overflow: visible; text-decoration: none; color: inherit;
+  box-shadow: var(--shadow-border);
+  transition-property: transform, box-shadow;
+  transition-duration: 200ms; transition-timing-function: ease-out;
+  display: flex; flex-direction: column;
 }
-.product-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.08); }
+.product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.product-card:active { transform: scale(0.985); }
 .product-thumb {
-  aspect-ratio: 1/1; position: relative; overflow: hidden;
+  aspect-ratio: 1/1; position: relative; overflow: visible;
   display: flex; align-items: center; justify-content: center;
-  background: var(--cream);
+  background: var(--cream); perspective: 1000px;
+  border-radius: 20px 20px 0 0;
 }
-.product-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.product-thumb .glassy-3d { position: absolute; inset: 0; border-radius: 20px 20px 0 0; overflow: hidden; }
 .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .product-thumb-label {
   font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300;
@@ -668,21 +1477,30 @@ img { max-width: 100%; display: block; }
 }
 .badge-platform { left: .85rem; background: rgba(255,255,255,.92); color: var(--black); }
 .badge-sale { right: .85rem; background: var(--black); color: #fff; }
-.product-info { padding: 1.1rem 1.15rem 1.35rem; display: flex; flex-direction: column; gap: .35rem; flex: 1; }
+.product-info {
+  padding: 1.1rem 1.15rem 1.35rem; display: flex; flex-direction: column; gap: .35rem; flex: 1;
+  background: #fff; border-radius: 0 0 20px 20px;
+}
 .product-niche { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .product-name { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 700; }
 .product-price { display: flex; align-items: baseline; gap: .5rem; margin: .35rem 0 .7rem; }
-.price-current { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 700; }
-.price-original { font-size: .9rem; color: var(--muted); text-decoration: line-through; }
+.price-current {
+  font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.price-original { font-size: .9rem; color: var(--muted); text-decoration: line-through; font-variant-numeric: tabular-nums; }
 .filters {
   display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 2rem;
 }
 .filter-btn {
-  border: 1px solid var(--border); background: #fff; border-radius: 999px;
+  border: none; background: #fff; border-radius: 999px;
   padding: .55rem 1rem; font-family: inherit; font-size: .82rem; cursor: pointer;
-  color: var(--muted); transition: .2s;
+  color: var(--muted); box-shadow: var(--shadow-border);
+  transition-property: background-color, color, box-shadow, transform;
+  transition-duration: 150ms; transition-timing-function: ease-out;
 }
-.filter-btn:hover, .filter-btn.active { background: var(--black); color: #fff; border-color: var(--black); }
+.filter-btn:hover, .filter-btn.active { background: var(--black); color: #fff; box-shadow: none; }
+.filter-btn:active { transform: scale(0.96); }
 .site-footer {
   margin-top: 3rem; padding: 3.5rem 4vw 2rem;
   background: var(--black); color: rgba(255,255,255,.78);
@@ -709,12 +1527,19 @@ img { max-width: 100%; display: block; }
   font-size: .85rem; color: rgba(255,255,255,.5);
 }
 .toast {
-  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(12px);
   background: var(--black); color: #fff; padding: .85rem 1.25rem; border-radius: 999px;
-  font-size: .88rem; opacity: 0; pointer-events: none; transition: .3s; z-index: 2000;
+  font-size: .88rem; opacity: 0; pointer-events: none; z-index: 2000;
+  transition-property: opacity, transform;
+  transition-duration: 200ms; transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.nav-toggle { display: none; background: none; border: 1px solid var(--border); border-radius: 10px; width: 42px; height: 42px; font-size: 1.2rem; }
+.nav-toggle {
+  display: none; background: none; border: none; border-radius: 10px; width: 42px; height: 42px;
+  font-size: 1.2rem; box-shadow: var(--shadow-border); cursor: pointer;
+  transition-property: transform, box-shadow; transition-duration: 150ms;
+}
+.nav-toggle:active { transform: scale(0.96); }
 @media (max-width: 860px) {
   .nav-toggle { display: grid; place-items: center; }
   .nav-links {
@@ -797,7 +1622,7 @@ function cartScript(catalogJson) {
         '<button class="btn btn-ghost" type="button" data-remove="'+t.slug+'" style="padding:.45rem .8rem;font-size:.8rem;">Remove</button>'+
         (t.etsy ? '<a class="btn btn-ghost" href="'+t.etsy+'" target="_blank" rel="noopener" style="padding:.45rem .8rem;font-size:.8rem;margin-left:.35rem;">Buy on Etsy →</a>' : '')+
         '</div></div>'+
-        '<div style="font-family:Fraunces,serif;font-weight:700;">$'+line+' AUD</div></div>';
+        '<div class="cart-line-price">$'+line+' AUD</div></div>';
     }).join('');
     var checkoutUrl = '${ETSY_SHOP}';
     if(items.length === 1){
@@ -806,7 +1631,7 @@ function cartScript(catalogJson) {
     }
     root.innerHTML = rows +
       '<div class="cart-summary"><div><div style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);">Estimated total</div>'+
-      '<div style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;">$'+total+' AUD</div></div>'+
+      '<div class="cart-total">$'+total+' AUD</div></div>'+
       '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">'+
       '<a class="btn btn-ghost" href="/shop">Keep shopping</a>'+
       '<a class="btn btn-pink" href="'+checkoutUrl+'" target="_blank" rel="noopener">Checkout on Etsy →</a>'+
@@ -831,6 +1656,55 @@ function cartScript(catalogJson) {
     var links=document.getElementById('navLinks');
     if(toggle && links) toggle.addEventListener('click', function(){ links.classList.toggle('open'); });
     renderCart();
+  });
+})();`;
+}
+
+function glassyImage(innerHtml, extraClass = '') {
+  return `<div class="glassy-3d ${extraClass}">
+    <div class="glassy-3d-inner">
+      ${innerHtml}
+      <span class="glassy-3d-shine" aria-hidden="true"></span>
+      <span class="glassy-3d-sheen" aria-hidden="true"></span>
+      <span class="glassy-3d-edge" aria-hidden="true"></span>
+    </div>
+  </div>`;
+}
+
+function layoutScript() {
+  return `
+(function(){
+  var nav = document.getElementById('siteNav');
+  function onScroll(){
+    if(nav) nav.classList.toggle('is-scrolled', window.scrollY > 16);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canHover = window.matchMedia('(hover: hover)').matches;
+  document.querySelectorAll('.glassy-3d').forEach(function(el){
+    var inner = el.querySelector('.glassy-3d-inner');
+    if(!inner) return;
+    if(reduced) return;
+    if(!canHover){
+      inner.classList.add('is-idle');
+      return;
+    }
+    el.addEventListener('mousemove', function(e){
+      inner.classList.remove('is-idle');
+      var rect = el.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      var tilt = el.classList.contains('glassy-3d-pdp') ? 10 : (el.classList.contains('glassy-3d-thumb') ? 8 : 12);
+      inner.style.transform =
+        'rotateY(' + (x * tilt) + 'deg) rotateX(' + (-y * tilt) + 'deg) translateZ(10px)';
+    });
+    el.addEventListener('mouseleave', function(){
+      inner.style.transform = '';
+      inner.classList.add('is-idle');
+    });
+    inner.classList.add('is-idle');
   });
 })();`;
 }
@@ -860,6 +1734,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   ${bodyHtml}
   ${siteFooter()}
   <div class="toast" id="toast" role="status"></div>
+  <script>${layoutScript()}</script>
   <script>${cartScript(cartCatalogJson)}</script>
 </body>
 </html>`;
@@ -869,7 +1744,7 @@ function siteNav(active) {
   const link = (href, label, key) =>
     `<li><a href="${href}" class="${active === key ? 'active' : ''}">${label}</a></li>`;
   return `
-<nav class="site-nav" aria-label="Primary">
+<nav class="site-nav" id="siteNav" aria-label="Primary">
   <a class="nav-logo" href="/">
     <img src="${LOGO}" alt="Bloomie House">
     <span>Bloomie House</span>
@@ -936,7 +1811,7 @@ function siteFooter() {
 
 function productCard(t) {
   const thumb = t.images?.[0]
-    ? `<img src="${t.images[0]}" alt="${t.name}">`
+    ? glassyImage(`<img src="${t.images[0]}" alt="${t.name}">`)
     : `<div class="product-thumb-label">${t.name}</div>`;
   return `
 <a class="product-card" href="/templates/${t.slug}" data-platform="${t.category}">
@@ -961,7 +1836,7 @@ function productCard(t) {
 function homePage() {
   const featured = templateData.slice(0, 6).map(productCard).join('');
   const body = `
-<section class="page-hero" style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;">
+<section class="page-hero page-hero-enter" style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;">
   <p class="section-label">Template shop · Est. 2025</p>
   <h1>Bloomie House<br><em>for online</em> success.</h1>
   <p>Premium Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies, boutiques &amp; beyond. Buy, personalise, launch — this week.</p>
@@ -1023,7 +1898,7 @@ function shopPage(platform) {
   const active = (platform || 'all').toLowerCase();
   const cards = templateData.map(productCard).join('');
   const body = `
-<section class="page-hero">
+<section class="page-hero page-hero-enter">
   <p class="section-label">Template shop</p>
   <h1>Shop <em>templates</em></h1>
   <p>Premium website templates for Australian small businesses. Filter by platform, open a product page, add to cart, then checkout on Etsy.</p>
@@ -1070,7 +1945,7 @@ function productPage(t) {
          <div class="pdp-main product-thumb ${t.mockClass}" style="background:var(--cream);">
            <button type="button" class="pdp-nav pdp-prev" id="pdpPrev" aria-label="Previous image">‹</button>
            <button type="button" class="pdp-zoom" id="pdpZoom" data-lightbox="${t.images[0]}" aria-label="Enlarge image">
-             <img id="mainImg" src="${t.images[0]}" alt="${t.name}" style="width:100%;height:100%;object-fit:contain;">
+             ${glassyImage(`<img id="mainImg" src="${t.images[0]}" alt="${t.name}">`, 'glassy-3d-pdp')}
              <span class="zoom-hint">Click to enlarge</span>
            </button>
            <button type="button" class="pdp-nav pdp-next" id="pdpNext" aria-label="Next image">›</button>
@@ -1080,7 +1955,7 @@ function productPage(t) {
          <div class="pdp-thumbs">${t.images
            .map(
              (src, i) =>
-               `<button type="button" class="thumb-btn" data-src="${src}" data-idx="${i}" style="border:none;padding:0;border-radius:12px;overflow:hidden;cursor:pointer;opacity:${i === 0 ? 1 : 0.65};background:var(--cream);"><img src="${src}" alt="${t.name} ${i + 1}" style="width:100%;aspect-ratio:1/1;object-fit:contain;"></button>`
+               `<button type="button" class="thumb-btn${i === 0 ? ' is-active' : ''}" data-src="${src}" data-idx="${i}">${glassyImage(`<img src="${src}" alt="${t.name} ${i + 1}">`, 'glassy-3d-thumb')}</button>`
            )
            .join('')}</div>
        </div>`
@@ -1093,24 +1968,36 @@ function productPage(t) {
 
   const body = `
 <style>
-  .pdp { display:grid; grid-template-columns:1.05fr .95fr; gap:3rem; padding:3rem 4vw 4rem; max-width:1200px; margin:0 auto; align-items:start; }
-  .pdp-main { aspect-ratio:1/1; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--cream); position:relative; }
+  .pdp { display:grid; grid-template-columns:1.05fr .95fr; gap:3rem; padding:0 0 3rem; max-width:none; margin:0; align-items:start; }
+  .pdp-main {
+    aspect-ratio:1/1; border-radius:20px; overflow:visible; background:var(--cream); position:relative;
+    box-shadow: var(--shadow-border);
+  }
   .pdp-gallery { display:flex; flex-direction:column; gap:.75rem; }
-  .pdp-zoom { display:block; width:100%; height:100%; border:none; padding:0; background:transparent; cursor:zoom-in; position:relative; }
+  .pdp-zoom { display:block; width:100%; height:100%; border:none; padding:0; background:transparent; cursor:zoom-in; position:relative; overflow:hidden; border-radius:20px; }
   .pdp-nav {
     position:absolute; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%;
     border:none; background:rgba(255,255,255,.92); font-size:1.25rem; cursor:pointer; z-index:2;
-    box-shadow:0 4px 16px rgba(0,0,0,.12); display:grid; place-items:center; line-height:1;
+    box-shadow: var(--shadow-border-hover); display:grid; place-items:center; line-height:1;
+    transition-property: transform, box-shadow; transition-duration: 150ms; transition-timing-function: ease-out;
   }
+  .pdp-nav:active { transform: translateY(-50%) scale(0.96); }
   .pdp-prev { left:10px; }
-  .pdp-next { right:10px; }
+  .pdp-next { right:10px; padding-left:11px; }
   .pdp-counter {
     position:absolute; bottom:12px; left:12px; background:rgba(17,17,17,.72); color:#fff;
     font-size:.72rem; letter-spacing:.06em; padding:.35rem .65rem; border-radius:999px; pointer-events:none;
+    font-variant-numeric: tabular-nums;
   }
   .pdp-dots { display:flex; justify-content:center; gap:.45rem; flex-wrap:wrap; }
   .pdp-dot {
-    width:8px; height:8px; border-radius:50%; border:none; padding:0; background:var(--border); cursor:pointer;
+    position:relative; width:8px; height:8px; border-radius:50%; border:none; padding:0;
+    background:rgba(0,0,0,.12); cursor:pointer;
+    transition-property: transform, background-color; transition-duration: 150ms;
+  }
+  .pdp-dot::after {
+    content:""; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:40px; height:40px;
   }
   .pdp-dot.active { background:var(--pink); transform:scale(1.15); }
   .zoom-hint {
@@ -1119,9 +2006,402 @@ function productPage(t) {
     pointer-events:none; opacity:.9;
   }
   .pdp-thumbs { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:.6rem; }
-  .breadcrumb { font-size:.85rem; color:var(--muted); margin-bottom:1rem; }
+  .thumb-btn {
+    border:none; padding:0; border-radius:12px; overflow:visible; cursor:pointer;
+    background:transparent; opacity:.65; box-shadow: var(--shadow-border);
+    transition-property: opacity, box-shadow, transform;
+    transition-duration: 200ms; transition-timing-function: ease-out;
+  }
+  .thumb-btn .glassy-3d { border-radius: 12px; }
+  .thumb-btn.is-active { opacity:1; box-shadow: var(--shadow-border-hover); }
+  .thumb-btn:active { transform: scale(0.96); }
+  .pdp-zoom img {
+    transition-property: opacity, transform;
+    transition-duration: 220ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+  .thumb-btn img { width:100%; aspect-ratio:1/1; object-fit:contain; border-radius:12px; }
+  .thumb-btn .glassy-3d img { aspect-ratio: 1/1; }
+  .breadcrumb { font-size:.85rem; color:var(--muted); }
   .breadcrumb a { color:var(--muted); text-decoration:none; }
   .breadcrumb a:hover { color:var(--pink); }
+  .pdp-page { max-width:1200px; margin:0 auto; padding:1.25rem 4vw 0; }
+  .pdp-breadcrumb {
+    margin-bottom:1.25rem; padding-bottom:.85rem;
+    border-bottom:1px solid var(--border);
+  }
+  .pdp-breadcrumb span { color:var(--charcoal); }
+  .pdp-reveal {
+    opacity:0; transform:translateY(14px); filter:blur(3px);
+    transition: opacity 500ms cubic-bezier(0.2,0,0,1), transform 500ms cubic-bezier(0.2,0,0,1), filter 500ms cubic-bezier(0.2,0,0,1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .pdp-reveal.is-visible { opacity:1; transform:translateY(0); filter:blur(0); }
+  .pain-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin:2rem 0;
+  }
+  .pain-card {
+    background:#fff; border-radius:16px; padding:1.25rem 1.35rem;
+    box-shadow:var(--shadow-border);
+    transition-property: transform, box-shadow;
+    transition-duration:200ms;
+  }
+  .pain-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
+  .pain-label { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pink); margin-bottom:.45rem; }
+  .pain-text { font-family:Fraunces,serif; font-size:1.05rem; font-weight:700; line-height:1.35; margin-bottom:.55rem; text-wrap:pretty; }
+  .pain-fix { font-size:.88rem; color:var(--muted); line-height:1.6; text-wrap:pretty; }
+  .pdp-funnel-intro { color:var(--muted); max-width:38rem; line-height:1.75; margin-bottom:.5rem; }
+  .funnel-steps {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:1.5rem 0 2rem;
+  }
+  .funnel-step {
+    display:flex; gap:.85rem; align-items:flex-start; background:var(--cream);
+    border-radius:14px; padding:1.1rem 1.2rem; box-shadow:var(--shadow-border);
+  }
+  .funnel-num {
+    flex-shrink:0; width:32px; height:32px; border-radius:50%; background:var(--black); color:#fff;
+    display:grid; place-items:center; font-size:.82rem; font-weight:600; font-variant-numeric:tabular-nums;
+  }
+  .funnel-step strong { display:block; font-family:Fraunces,serif; margin-bottom:.2rem; }
+  .funnel-step p { font-size:.85rem; color:var(--muted); text-wrap:pretty; }
+  .pdp-funnel-cta {
+    display:flex; justify-content:space-between; align-items:center; gap:1.25rem; flex-wrap:wrap;
+    background:linear-gradient(135deg, rgba(214,125,154,.12), rgba(200,213,176,.18));
+    border-radius:18px; padding:1.5rem 1.75rem; box-shadow:var(--shadow-border);
+  }
+  .funnel-cta-price { display:flex; align-items:baseline; gap:.55rem; margin-bottom:.25rem; }
+  .funnel-cta-price .price-current { font-family:Fraunces,serif; font-size:1.75rem; font-weight:900; }
+  .faq-list { display:grid; gap:.65rem; max-width:760px; margin-top:1.5rem; }
+  .faq-item {
+    background:#fff; border-radius:14px; padding:0 1.15rem;
+    box-shadow:var(--shadow-border); overflow:hidden;
+  }
+  .faq-item summary {
+    cursor:pointer; padding:1rem 0; font-family:Fraunces,serif; font-weight:700;
+    list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;
+    transition: color 150ms ease-out;
+  }
+  .faq-item summary::-webkit-details-marker { display:none; }
+  .faq-item summary::after {
+    content:'+'; font-size:1.2rem; color:var(--pink); flex-shrink:0;
+    transition: transform 200ms cubic-bezier(0.2,0,0,1);
+  }
+  .faq-item[open] summary::after { transform:rotate(45deg); }
+  .faq-item[open] summary { color:var(--pink); }
+  .faq-item p {
+    padding:0 0 1rem; color:var(--muted); font-size:.92rem; line-height:1.75; text-wrap:pretty;
+    animation: faqOpen 280ms cubic-bezier(0.2,0,0,1);
+  }
+  @keyframes faqOpen {
+    from { opacity:0; transform:translateY(-6px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .pdp-faq-footer { margin-top:1.75rem; color:var(--muted); font-size:.92rem; }
+  .audience-intro { color:var(--muted); max-width:40rem; line-height:1.75; margin-bottom:1.5rem; }
+  .audience-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-bottom:1.25rem;
+  }
+  .audience-card {
+    background:#fff; border-radius:16px; padding:1.25rem; box-shadow:var(--shadow-border);
+    transition-property: transform, box-shadow; transition-duration:200ms;
+  }
+  .audience-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
+  .audience-icon { font-size:1.5rem; display:block; margin-bottom:.5rem; }
+  .audience-card h3 { font-family:Fraunces,serif; font-size:1.05rem; margin-bottom:.35rem; }
+  .audience-card p { font-size:.88rem; color:var(--muted); line-height:1.6; text-wrap:pretty; }
+  .audience-not { font-size:.9rem; color:var(--muted); padding:1rem 1.15rem; background:rgba(255,255,255,.65); border-radius:12px; text-wrap:pretty; }
+  .testi-sub, .calc-intro { color:var(--muted); max-width:36rem; line-height:1.7; margin-bottom:1.25rem; }
+  .pdp-testimonials .testi-stats {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.75rem; max-width:640px;
+  }
+  .pdp-testimonials .testi-stats div { text-align:center; background:#fff; border-radius:14px; padding:1rem .75rem; box-shadow:var(--shadow-border); }
+  .pdp-testimonials .testi-stats strong { display:block; font-family:Fraunces,serif; font-size:1.5rem; margin-bottom:.2rem; }
+  .pdp-testimonials .testi-stats span { font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .testi-marquee-mask {
+    overflow:hidden; position:relative;
+    mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .testi-marquee-track {
+    display:flex; gap:1rem; width:max-content;
+    animation:testiMarquee 55s ease-in-out infinite alternate;
+  }
+  @keyframes testiMarquee {
+    from { transform:translateX(0); }
+    to { transform:translateX(-50%); }
+  }
+  .testi-card {
+    flex-shrink:0; width:min(300px,78vw); display:flex; gap:.75rem; align-items:flex-start;
+    background:#fff; border-radius:18px; padding:1rem 1.1rem; box-shadow:var(--shadow-border);
+  }
+  .testi-avatar {
+    width:40px; height:40px; border-radius:50%; flex-shrink:0; overflow:hidden;
+    box-shadow:0 0 0 2px #fff, var(--shadow-border);
+  }
+  .testi-avatar img {
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .testi-card-body p { font-size:.88rem; line-height:1.55; margin-bottom:.35rem; text-wrap:pretty; }
+  .testi-hl { font-style:normal; color:#9b7ec8; font-weight:500; }
+  .testi-card-body span { font-size:.75rem; color:var(--muted); }
+  .pdp-before-after {
+    position:relative; overflow:hidden;
+    background:linear-gradient(165deg, #fff8f6 0%, var(--cream) 45%, #f4faf6 100%);
+  }
+  .ba-bg-glow {
+    position:absolute; inset:-20% -10% auto; height:55%; pointer-events:none;
+    background:radial-gradient(ellipse 70% 80% at 50% 0%, rgba(214,125,154,.14), transparent 70%);
+    animation:baGlow 8s ease-in-out infinite alternate;
+  }
+  @keyframes baGlow {
+    from { opacity:.6; transform:translateY(0); }
+    to { opacity:1; transform:translateY(12px); }
+  }
+  .ba-sub { color:var(--muted); max-width:40rem; line-height:1.75; margin-bottom:2rem; text-wrap:pretty; }
+  .ba-sub strong { color:var(--charcoal); font-weight:600; }
+  .ba-timeline {
+    display:grid; gap:0; max-width:640px; margin:0 auto; position:relative;
+  }
+  .ba-timeline::before {
+    content:''; position:absolute; left:19px; top:24px; bottom:24px; width:2px;
+    background:linear-gradient(180deg, rgba(196,68,68,.35), var(--pink) 30%, rgba(45,106,79,.45) 70%, rgba(45,106,79,.2));
+    transform-origin:top; transform:scaleY(0);
+    transition: transform 1.2s cubic-bezier(0.2,0,0,1) 0.2s;
+  }
+  .ba-timeline.is-drawn::before { transform:scaleY(1); }
+  .ba-pair {
+    display:grid; grid-template-columns:40px 1fr; gap:1rem; padding-bottom:1.75rem; position:relative;
+  }
+  .ba-pair:last-child { padding-bottom:0; }
+  .ba-step { display:flex; justify-content:center; padding-top:.35rem; z-index:1; }
+  .ba-step-num {
+    width:40px; height:40px; border-radius:50%; background:#fff; color:var(--pink);
+    font-family:Fraunces,serif; font-weight:700; font-size:.95rem;
+    display:grid; place-items:center; box-shadow:0 0 0 3px var(--cream), var(--shadow-border);
+    transition: transform 500ms cubic-bezier(0.2,0,0,1), box-shadow 500ms cubic-bezier(0.2,0,0,1);
+  }
+  .ba-pair.is-visible .ba-step-num {
+    transform:scale(1.08); box-shadow:0 0 0 3px var(--cream), 0 8px 24px rgba(214,125,154,.25);
+  }
+  .ba-pair-body { display:grid; gap:.65rem; }
+  .ba-card {
+    border-radius:18px; padding:1.1rem 1.2rem; font-size:.9rem; line-height:1.6; text-wrap:pretty;
+    opacity:0; transform:translateY(16px);
+    transition: opacity 550ms cubic-bezier(0.2,0,0,1), transform 550ms cubic-bezier(0.2,0,0,1), box-shadow 550ms cubic-bezier(0.2,0,0,1);
+  }
+  .ba-before {
+    background:linear-gradient(135deg, #fff5f5, #fff);
+    border:1px solid rgba(196,68,68,.12);
+    box-shadow:var(--shadow-border);
+  }
+  .ba-after {
+    background:linear-gradient(135deg, #f0faf4, #fff);
+    border:1px solid rgba(45,106,79,.15);
+    box-shadow:var(--shadow-border);
+  }
+  .ba-pair.is-visible .ba-before {
+    opacity:1; transform:translateX(0) translateY(0);
+    transition-delay:.15s;
+  }
+  .ba-pair.is-visible .ba-after {
+    opacity:1; transform:translateX(0) translateY(0);
+    transition-delay:.45s;
+    box-shadow:0 12px 32px -8px rgba(45,106,79,.18), var(--shadow-border);
+  }
+  .ba-before { transform:translateX(-18px) translateY(8px); }
+  .ba-after { transform:translateX(14px) translateY(8px); }
+  .ba-tag {
+    display:inline-flex; align-items:center; gap:.4rem;
+    font-size:.65rem; letter-spacing:.14em; text-transform:uppercase;
+    font-weight:700; color:#b33; margin-bottom:.5rem;
+  }
+  .ba-tag-after { color:#2d6a4f; }
+  .ba-tag-dot {
+    width:7px; height:7px; border-radius:50%; flex-shrink:0;
+  }
+  .ba-tag-dot-before { background:#e88; box-shadow:0 0 0 3px rgba(232,136,136,.25); }
+  .ba-tag-dot-after { background:#3d9a6a; box-shadow:0 0 0 3px rgba(61,154,106,.2); }
+  .ba-hl-before { font-style:normal; color:#c44; font-weight:600; }
+  .ba-hl-after { font-style:normal; color:#2d6a4f; font-weight:600; }
+  .ba-card p { color:var(--charcoal); margin:0; }
+  .ba-connector {
+    display:flex; flex-direction:column; align-items:center; gap:0; height:28px; position:relative;
+    opacity:0; transform:scaleY(0.4);
+    transition: opacity 400ms ease, transform 500ms cubic-bezier(0.2,0,0,1);
+  }
+  .ba-pair.is-visible .ba-connector {
+    opacity:1; transform:scaleY(1); transition-delay:.32s;
+  }
+  .ba-connector-line {
+    width:2px; flex:1; background:linear-gradient(180deg, #e8a0a0, var(--pink), #7bc49a);
+    border-radius:2px;
+  }
+  .ba-connector-pulse {
+    position:absolute; top:50%; left:50%; width:10px; height:10px; margin:-5px 0 0 -5px;
+    border-radius:50%; background:var(--pink); opacity:0;
+    animation:baPulse 2.2s ease-in-out infinite;
+  }
+  .ba-pair.is-visible .ba-connector-pulse { opacity:.85; animation-delay:.5s; }
+  @keyframes baPulse {
+    0%, 100% { transform:scale(.6); opacity:.4; }
+    50% { transform:scale(1.4); opacity:.9; box-shadow:0 0 12px rgba(214,125,154,.5); }
+  }
+  .ba-connector-icon {
+    font-size:.85rem; color:var(--pink); font-weight:700; line-height:1;
+    animation:baBounce 2s ease-in-out infinite;
+  }
+  @keyframes baBounce {
+    0%, 100% { transform:translateY(0); }
+    50% { transform:translateY(3px); }
+  }
+  .calc-card {
+    max-width:560px; background:#fff; border-radius:20px; padding:1.75rem;
+    box-shadow:var(--shadow-border); border:1px solid rgba(214,125,154,.15);
+  }
+  .calc-row { margin-bottom:1.5rem; }
+  .calc-row label { display:block; font-size:.9rem; margin-bottom:.65rem; color:var(--charcoal); }
+  .calc-row label strong { color:var(--pink); font-family:Fraunces,serif; font-size:1.1rem; }
+  .calc-slider {
+    width:100%; height:6px; border-radius:999px; appearance:none; -webkit-appearance:none;
+    background:linear-gradient(90deg, var(--pink), var(--sage)); cursor:pointer;
+  }
+  .calc-slider::-webkit-slider-thumb {
+    appearance:none; -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+    background:#fff; border:2px solid var(--pink); box-shadow:var(--shadow-border-hover); cursor:grab;
+  }
+  .calc-slider::-moz-range-thumb {
+    width:22px; height:22px; border-radius:50%; background:#fff; border:2px solid var(--pink); cursor:grab;
+  }
+  .calc-results { display:grid; gap:.65rem; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--border); }
+  .calc-result {
+    display:flex; justify-content:space-between; align-items:center; font-size:.9rem;
+  }
+  .calc-result-label { color:var(--muted); }
+  .calc-result-val { font-family:Fraunces,serif; font-weight:700; font-size:1.1rem; }
+  .calc-result-highlight .calc-result-val { color:var(--pink); font-size:1.35rem; }
+  .calc-result-total {
+    background:var(--cream); border-radius:12px; padding:.85rem 1rem; margin-top:.25rem;
+  }
+  .calc-result-total .calc-result-val { font-size:1.6rem; color:var(--black); }
+  .calc-note { font-size:.78rem; color:var(--muted); margin-top:1rem; }
+  .value-card {
+    max-width:520px; margin:0 auto; background:#fff; border-radius:22px; padding:2rem 1.75rem;
+    box-shadow:var(--shadow-lift); border:2px solid rgba(214,125,154,.25); text-align:center;
+  }
+  .value-badge {
+    display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--pink); background:rgba(214,125,154,.12); padding:.35rem .85rem; border-radius:999px; margin-bottom:1rem;
+  }
+  .value-title { font-family:Fraunces,serif; font-size:1.75rem; font-weight:900; margin-bottom:.75rem; text-wrap:balance; }
+  .star-seller-badge {
+    display:inline-flex; align-items:center; gap:.45rem; font-size:.82rem; color:var(--charcoal);
+    background:linear-gradient(135deg, #fff8e6, #fff); border-radius:999px; padding:.45rem .9rem;
+    margin-bottom:1.25rem; box-shadow:var(--shadow-border);
+  }
+  .star-seller-icon { color:#f5a623; font-size:1rem; }
+  .value-list { list-style:none; text-align:left; margin-bottom:1rem; }
+  .value-list li {
+    display:grid; grid-template-columns:auto 1fr auto; gap:.65rem; align-items:center;
+    padding:.75rem 0; border-bottom:1px solid var(--border); font-size:.88rem;
+  }
+  .value-icon { font-size:1.1rem; }
+  .value-label { text-wrap:pretty; color:var(--charcoal); }
+  .value-amt { font-size:.8rem; color:var(--muted); white-space:nowrap; }
+  .value-total-row {
+    display:flex; justify-content:space-between; padding:.75rem 0; font-size:.9rem; color:var(--muted);
+  }
+  .value-strike { text-decoration:line-through; }
+  .value-price { font-family:Fraunces,serif; font-size:2.8rem; font-weight:900; margin:.25rem 0; }
+  .value-terms { font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
+  .value-script { font-family:Fraunces,serif; font-style:italic; color:var(--pink); font-weight:300; margin-bottom:1.25rem; }
+  .value-cta { width:100%; border-radius:999px; padding:1rem; font-size:.95rem; font-family:inherit; }
+  .social-proof-popup {
+    position:fixed; left:16px; bottom:100px; z-index:2500; max-width:min(320px,calc(100vw - 32px));
+    display:flex; align-items:center; gap:.75rem; background:#fff; border-radius:14px;
+    padding:.75rem 2.25rem .75rem .75rem; box-shadow:0 12px 40px rgba(0,0,0,.15);
+    transform:translateX(-120%); opacity:0;
+    transition: transform 450ms cubic-bezier(0.2,0,0,1), opacity 450ms cubic-bezier(0.2,0,0,1);
+  }
+  .social-proof-popup.is-visible { transform:translateX(0); opacity:1; }
+  .social-proof-popup.is-leaving { transform:translateX(-120%); opacity:0; }
+  .social-proof-avatar {
+    width:44px; height:44px; border-radius:50%; flex-shrink:0; overflow:hidden;
+    box-shadow:0 0 0 2px #fff, var(--shadow-border);
+  }
+  .social-proof-avatar img {
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .social-proof-thumb-logo.is-brand img { object-fit:contain; background:var(--cream); padding:5px; }
+  .social-proof-initial {
+    width:100%; height:100%; display:grid; place-items:center;
+    font-weight:700; font-size:.78rem; letter-spacing:.05em; color:#fff;
+    background:linear-gradient(135deg, var(--pink), #e8b4c4);
+  }
+  .social-proof-thumb-initial.is-sage .social-proof-initial {
+    background:linear-gradient(135deg, var(--sage), #9bb5a8);
+  }
+  .social-proof-text { display:grid; gap:.1rem; min-width:0; }
+  .social-proof-text strong { font-size:.88rem; }
+  .social-proof-text span { font-size:.8rem; color:var(--charcoal); line-height:1.35; }
+  .social-proof-text small { font-size:.72rem; color:var(--muted); }
+  .social-proof-close {
+    position:absolute; top:6px; right:8px; border:none; background:none; font-size:1.1rem;
+    color:var(--muted); cursor:pointer; width:28px; height:28px; border-radius:50%;
+  }
+  .social-proof-close:hover { background:var(--cream); }
+  .process-intro { color:var(--muted); max-width:38rem; line-height:1.75; margin-bottom:1.75rem; }
+  .process-timeline {
+    list-style:none; display:grid; gap:0; max-width:720px; margin:0 auto 2rem;
+    position:relative;
+  }
+  .process-timeline::before {
+    content:''; position:absolute; left:19px; top:12px; bottom:12px; width:2px;
+    background:linear-gradient(180deg, var(--pink), rgba(214,125,154,.2));
+  }
+  .process-step {
+    display:flex; gap:1.15rem; padding:0 0 1.5rem; position:relative;
+  }
+  .process-marker { flex-shrink:0; z-index:1; }
+  .process-num {
+    width:40px; height:40px; border-radius:50%; background:var(--black); color:#fff;
+    display:grid; place-items:center; font-size:.85rem; font-weight:600;
+    box-shadow:0 0 0 4px var(--cream);
+  }
+  .process-time {
+    display:inline-block; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--pink); margin-bottom:.2rem;
+  }
+  .process-body strong { display:block; font-family:Fraunces,serif; font-size:1.1rem; margin-bottom:.35rem; }
+  .process-body p { font-size:.9rem; color:var(--muted); line-height:1.7; text-wrap:pretty; }
+  .process-notice {
+    max-width:720px; margin:0 auto 1.75rem; padding:1.15rem 1.25rem;
+    background:rgba(255,255,255,.75); border-radius:14px; border:1px solid rgba(214,125,154,.2);
+    box-shadow:var(--shadow-border);
+  }
+  .process-warning {
+    font-size:.88rem; color:var(--charcoal); line-height:1.7; text-wrap:pretty; margin-bottom:.75rem;
+  }
+  .process-support {
+    font-size:.88rem; color:var(--muted); line-height:1.7; text-wrap:pretty; margin:0;
+  }
+  .process-support a { color:var(--pink); font-weight:500; }
+  .process-cta { display:flex; gap:.65rem; flex-wrap:wrap; justify-content:center; }
+  @media (max-width:640px) {
+    .ba-timeline::before { left:19px; }
+    .ba-pair { grid-template-columns:40px 1fr; gap:.75rem; }
+    .pdp-testimonials .testi-stats { grid-template-columns:repeat(2,1fr); }
+    .social-proof-popup { left:12px; bottom:88px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pdp-reveal { opacity:1; transform:none; filter:none; transition:none; }
+    .faq-item p { animation:none; }
+    .testi-marquee-track { animation:none; }
+    .ba-bg-glow { animation:none; }
+    .ba-timeline::before { transform:scaleY(1); }
+    .ba-card, .ba-connector { opacity:1; transform:none; transition:none; }
+    .ba-connector-pulse, .ba-connector-icon { animation:none; }
+    .ba-pair.is-visible .ba-step-num { transform:none; }
+  }
   .pdp-actions { display:flex; flex-wrap:wrap; gap:.7rem; margin:1.5rem 0 1rem; }
   .pdp-features { margin-top:1.75rem; }
   .pdp-features h3 { font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; margin-bottom:.8rem; }
@@ -1134,56 +2414,77 @@ function productPage(t) {
   }
   .lightbox.open { display:flex; }
   .lightbox img {
-    max-width:min(960px,96vw); max-height:90vh; border-radius:12px; box-shadow:0 24px 80px rgba(0,0,0,.45);
+    max-width:min(960px,96vw); max-height:90vh; border-radius:12px;
+    box-shadow:
+      0 28px 80px -12px rgba(0,0,0,.5),
+      inset 0 1px 1px rgba(255,255,255,.35);
     background:#fff; object-fit:contain; cursor:default;
+    transform: perspective(900px) rotateX(2deg) translateZ(0);
   }
   .lightbox-close {
     position:fixed; top:1rem; right:1rem; width:44px; height:44px; border-radius:50%;
     border:none; background:#fff; font-size:1.4rem; cursor:pointer; z-index:3001;
+    box-shadow: var(--shadow-border-hover);
+    transition-property: transform; transition-duration: 150ms;
   }
+  .lightbox-close:active { transform: scale(0.96); }
   .lightbox-nav {
     position:fixed; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
     border:none; background:rgba(255,255,255,.92); font-size:1.3rem; cursor:pointer; z-index:3001;
+    box-shadow: var(--shadow-border-hover);
+    transition-property: transform; transition-duration: 150ms;
   }
+  .lightbox-nav:active { transform: translateY(-50%) scale(0.96); }
   .lightbox-prev { left:1rem; }
-  .lightbox-next { right:1rem; }
+  .lightbox-next { right:1rem; padding-left:2px; }
   .lightbox-counter {
     position:fixed; bottom:1.25rem; left:50%; transform:translateX(-50%);
     background:rgba(255,255,255,.92); color:var(--charcoal); font-size:.8rem;
     padding:.45rem .85rem; border-radius:999px; z-index:3001; pointer-events:none;
+    font-variant-numeric: tabular-nums; box-shadow: var(--shadow-border);
   }
-  @media (max-width:900px){ .pdp { grid-template-columns:1fr; gap:1.75rem; padding-top:1.5rem; } }
+  @media (max-width:900px){ .pdp { grid-template-columns:1fr; gap:1.75rem; padding-top:0; } }
 </style>
-<div class="pdp">
-  <div>
-    ${galleryMain}
-    ${hasGallery ? '<p style="font-size:.8rem;color:var(--muted);margin-top:.25rem;">Tip: swipe or use arrows · click to view full size</p>' : ''}
-  </div>
-  <div>
-    <div class="breadcrumb"><a href="/shop">Shop</a> / ${t.name}</div>
-    <p class="product-niche">${t.niche}</p>
-    <h1 style="font-family:Fraunces,serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:.4rem 0 1rem;">${t.name}</h1>
-    <span class="badge badge-platform" style="position:static;display:inline-block;margin-bottom:1rem;">${t.platform}</span>
-    <div class="product-price">
-      <span class="price-current" style="font-size:1.8rem;">$${t.price} AUD</span>
-      ${t.originalPrice ? `<span class="price-original">$${t.originalPrice}</span>` : ''}
-      <span class="badge badge-sale" style="position:static;">${t.badge}</span>
-    </div>
-    <p style="color:var(--muted);line-height:1.8;margin-top:.5rem;">${t.description}</p>
-    <div class="pdp-actions">
-      <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
-      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →'}</a>
-      <a class="btn btn-ghost" href="/cart">View cart</a>
-    </div>
-    <p style="font-size:.85rem;color:var(--muted);">Instant delivery via Etsy · setup guide included · 30-day email support</p>
-    <div class="pdp-features">
-      <h3>What's included</h3>
-      <ul>${t.features.map((f) => `<li>${f}</li>`).join('')}</ul>
+<div class="pdp-page">
+  <nav class="breadcrumb pdp-breadcrumb" aria-label="Breadcrumb">
+    <a href="/shop">Shop</a> <span aria-hidden="true">/</span> <span>${t.name}</span>
+  </nav>
+  <div class="pdp">
+    <div class="pdp-reveal is-visible">${galleryMain}</div>
+    <div class="pdp-info pdp-reveal" style="--reveal-delay:100ms">
+      <p class="product-niche">${t.niche}</p>
+      <h1 style="font-family:Fraunces,serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:.4rem 0 1rem;">${t.name}</h1>
+      <span class="badge badge-platform" style="position:static;display:inline-block;margin-bottom:1rem;">${t.platform}</span>
+      <div class="product-price">
+        <span class="price-current" style="font-size:1.8rem;">$${t.price} AUD</span>
+        ${t.originalPrice ? `<span class="price-original">$${t.originalPrice}</span>` : ''}
+        <span class="badge badge-sale" style="position:static;">${t.badge}</span>
+      </div>
+      <p style="color:var(--muted);line-height:1.8;margin-top:.5rem;">${t.description}</p>
+      <div class="pdp-actions">
+        <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
+        <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →'}</a>
+        <a class="btn btn-ghost" href="/cart">View cart</a>
+      </div>
+      <p style="font-size:.85rem;color:var(--muted);">Instant delivery via Etsy · setup guide included · 30-day email support</p>
+      <div class="pdp-features">
+        <h3>What's included</h3>
+        <ul>${t.features.map((f) => `<li>${f}</li>`).join('')}</ul>
+      </div>
     </div>
   </div>
 </div>
+${productAudienceHtml(t)}
+${productTestimonialsHtml(t)}
+${productBeforeAfterHtml(t)}
+${productCalculatorHtml(t)}
+${productValueStackHtml(t)}
+${productFunnelHtml(t)}
+${productProcessHtml(t)}
+${productFaqHtml(t)}
+${productSocialProofPopupHtml(t)}
 <section class="section" style="padding-top:0;">
-  <h2 class="section-title">You may also <em>like</em></h2>
+  <h2 class="section-title pdp-reveal">You may also <em>like</em></h2>
   <div class="product-grid">${related}</div>
 </section>
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
@@ -1213,7 +2514,7 @@ function productPage(t) {
     if(pdpCounter) pdpCounter.textContent = (idx + 1) + ' / ' + gallery.length;
     if(boxCounter) boxCounter.textContent = (idx + 1) + ' / ' + gallery.length;
     document.querySelectorAll('.thumb-btn').forEach(function(btn, i){
-      btn.style.opacity = i === idx ? '1' : '0.65';
+      btn.classList.toggle('is-active', i === idx);
     });
     document.querySelectorAll('.pdp-dot').forEach(function(dot, i){
       dot.classList.toggle('active', i === idx);
@@ -1286,6 +2587,64 @@ function productPage(t) {
   bindSwipe(pdpGallery, function(){ showAt(idx + 1); }, function(){ showAt(idx - 1); });
   bindSwipe(box, function(){ openAt(idx + 1); }, function(){ openAt(idx - 1); });
   syncUI();
+
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var reveals = document.querySelectorAll('.pdp-reveal:not(.is-visible)');
+    if(reveals.length && 'IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      reveals.forEach(function(el){ io.observe(el); });
+    } else {
+      reveals.forEach(function(el){ el.classList.add('is-visible'); });
+    }
+    var baTimeline = document.querySelector('.ba-timeline');
+    if(baTimeline && 'IntersectionObserver' in window){
+      var baIo = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            baTimeline.classList.add('is-drawn');
+            baIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      baIo.observe(baTimeline);
+    } else if(baTimeline) {
+      baTimeline.classList.add('is-drawn');
+    }
+  } else {
+    document.querySelectorAll('.pdp-reveal').forEach(function(el){ el.classList.add('is-visible'); });
+    var baTimelineReduced = document.querySelector('.ba-timeline');
+    if(baTimelineReduced) baTimelineReduced.classList.add('is-drawn');
+  }
+
+  var calc = document.getElementById('profitCalc');
+  if(calc){
+    var invest = parseFloat(calc.dataset.invest) || 0;
+    var students = document.getElementById('calcStudents');
+    var price = document.getElementById('calcPrice');
+    var studentsVal = document.getElementById('calcStudentsVal');
+    var priceVal = document.getElementById('calcPriceVal');
+    var perUnit = document.getElementById('calcPerUnit');
+    var total = document.getElementById('calcTotal');
+    function fmt(n){ return '$' + Math.round(n).toLocaleString(); }
+    function update(){
+      var n = parseInt(students.value, 10) || 1;
+      var p = parseInt(price.value, 10) || 0;
+      if(studentsVal) studentsVal.textContent = String(n);
+      if(priceVal) priceVal.textContent = fmt(p);
+      if(perUnit) perUnit.textContent = fmt(p);
+      if(total) total.textContent = fmt(Math.max(0, n * p - invest));
+    }
+    if(students) students.addEventListener('input', update);
+    if(price) price.addEventListener('input', update);
+    update();
+  }
 })();
 </script>`;
   return layout(
@@ -1313,26 +2672,38 @@ function cartPage() {
   const body = `
 <style>
   .cart-wrap { max-width: 980px; margin: 0 auto; padding: 2rem 4vw 4rem; }
-  .cart-empty { text-align:center; padding: 3rem 1rem; background: var(--cream); border-radius: 20px; }
+  .cart-empty {
+    text-align:center; padding: 3rem 1rem; background: var(--cream); border-radius: 20px;
+    box-shadow: var(--shadow-border);
+  }
   .cart-row {
     display:grid; grid-template-columns: 96px 1fr auto; gap: 1rem; align-items:center;
     padding: 1rem 0; border-bottom: 1px solid var(--border);
+    transition-property: opacity, transform;
+    transition-duration: 150ms; transition-timing-function: ease-in;
   }
-  .cart-thumb { width:96px; height:72px; border-radius:12px; overflow:hidden; }
-  .cart-thumb img { width:100%; height:100%; object-fit:cover; }
-  .cart-meta h3 { font-family:Fraunces,serif; font-size:1.15rem; }
-  .cart-meta p { color:var(--muted); font-size:.85rem; }
+  .cart-thumb {
+    width:96px; height:72px; border-radius:12px; overflow:hidden;
+    box-shadow: var(--shadow-border);
+  }
+  .cart-thumb img { width:100%; height:100%; object-fit:cover; border-radius:12px; }
+  .cart-meta h3 { font-family:Fraunces,serif; font-size:1.15rem; text-wrap: balance; }
+  .cart-meta p { color:var(--muted); font-size:.85rem; text-wrap: pretty; }
+  .cart-line-price { font-family:Fraunces,serif; font-weight:700; font-variant-numeric: tabular-nums; }
   .qty {
     width: 64px; padding: .45rem .5rem; border:1px solid var(--border); border-radius:10px;
-    font-family:inherit; margin-right:.5rem;
+    font-family:inherit; margin-right:.5rem; font-variant-numeric: tabular-nums;
+    box-shadow: var(--shadow-border);
   }
   .cart-summary {
     margin-top: 1.75rem; padding: 1.5rem; border-radius: 18px; background: var(--cream);
     display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; align-items:center;
+    box-shadow: var(--shadow-border);
   }
-  .cart-note { font-size:.9rem; color:var(--muted); max-width: 34rem; margin-top:1rem; }
+  .cart-total { font-family:Fraunces,serif; font-size:2rem; font-weight:900; font-variant-numeric: tabular-nums; }
+  .cart-note { font-size:.9rem; color:var(--muted); max-width: 34rem; margin-top:1rem; text-wrap: pretty; }
 </style>
-<section class="page-hero">
+<section class="page-hero page-hero-enter">
   <p class="section-label">Your bag</p>
   <h1>Cart</h1>
   <p>Save templates here, then checkout on Etsy for secure payment and instant download.</p>
