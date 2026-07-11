@@ -3,14 +3,15 @@
 ## Cursor Cloud specific instructions
 
 ### What this is
-Single Cloudflare Workers app (the Bloomie House marketing website). All app logic —
-routing, page HTML, and the `POST /api/chat` endpoint — lives in `src/index.js`.
-There is no database, no build step, and no test/lint tooling configured. Config is in
-`package.json` and `wrangler.toml`.
+Single Cloudflare Workers app (the Bloomie House marketing website). Public site HTML and
+routing live in `src/index.js`. Member portal + staff CMS live in `src/portal/` and use a
+D1 database (`env.DB`). There is no separate build step and no test/lint tooling configured.
+Config is in `package.json` and `wrangler.toml`.
 
 ### Running / building / testing
 Standard commands are defined in `package.json`:
 - Run dev server: `npm run dev` (`wrangler dev`) — serves on `http://localhost:8787`.
+- Apply local DB migrations: `npm run db:migrate:local` (run once before first portal use).
 - Deploy: `npm run deploy` (`wrangler deploy`) — requires a real Cloudflare account; not needed for local dev.
 - Build: none (Wrangler/Miniflare bundles the Worker on the fly).
 - Tests / lint: none configured.
@@ -27,3 +28,15 @@ without the key. To enable real AI replies locally, create a gitignored `.dev.va
 the repo root containing `GROQ_API_KEY=your_key_here`, then restart `npm run dev`
 (`.dev.vars` is only read at startup). Optionally override the model with `GROQ_MODEL` in
 `wrangler.toml` (defaults to `llama-3.3-70b-versatile`).
+
+### Member portal + staff CMS (D1)
+- Members: `/login` (magic link email) → `/member` (orders, downloads, guidelines, profile, template voting).
+- Staff (2 accounts): `/login/staff` → `/admin` (products, orders, downloads/guidelines, members, votes).
+- Default local staff (override via `.dev.vars`):
+  - `staff1@bloomiehouse.com.au` / `BloomieStaff1!`
+  - `staff2@bloomiehouse.com.au` / `BloomieStaff2!`
+- Without `RESEND_API_KEY`, magic-link login shows a clickable dev link on the login page.
+- Production: create a real D1 DB (`wrangler d1 create bloomie-house`), put its `database_id`
+  in `wrangler.toml`, then `npm run db:migrate:remote`. Change staff passwords via env vars
+  before first seed (`STAFF1_PASSWORD`, `STAFF2_PASSWORD`).
+- Etsy remains a separate sales channel; portal orders are site-managed only.
