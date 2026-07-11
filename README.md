@@ -155,12 +155,57 @@ bloomie-house/
 ## Technologies Used
 
 - Cloudflare Workers
+- Cloudflare D1 (member portal + staff CMS)
 - HTML5
 - CSS3 (Custom styling with animations)
 - JavaScript (Vanilla JS)
-- Google Fonts (Cormorant Garamond & Work Sans)
+- Google Fonts (Cormorant Garamond & Work Sans / Fraunces & DM Sans)
 - Jotform (Form integration)
 
+## Member portal & staff CMS
+
+Site-managed customer accounts (not Etsy):
+
+| Area | URL | Who |
+|------|-----|-----|
+| Member login | `/login` | Customers (email magic link) |
+| Member home | `/member` | Orders, downloads, guidelines, profile, template votes |
+| Staff login | `/login/staff` | Two staff accounts |
+| Staff CMS | `/admin` | Products, orders, downloads/guidelines, members, votes |
+
+### Local setup
+
+```bash
+npm run db:migrate:local
+npm run dev
+```
+
+Default staff (change via `.dev.vars` before first run):
+
+- `staff1@bloomiehouse.com.au` / `BloomieStaff1!`
+- `staff2@bloomiehouse.com.au` / `BloomieStaff2!`
+
+Optional `.dev.vars`:
+
+```
+RESEND_API_KEY=re_xxx          # real magic-link emails
+STAFF1_EMAIL=...
+STAFF1_PASSWORD=...
+STAFF2_EMAIL=...
+STAFF2_PASSWORD=...
+```
+
+Without Resend, the login page shows a one-time link for local testing.
+
+### Production D1
+
+This project uses the existing Cloudflare D1 database `bloomiehouse`. Apply migrations:
+
+```bash
+npm run db:migrate:remote
+```
+
+(Requires a Cloudflare API token with D1 edit permissions.)
 ## License
 
 MIT

@@ -1,7 +1,10 @@
 /**
  * Bloomie House — Cloudflare Worker
  * Ecommerce-style multi-page site (templates shop + services)
+ * + member portal & staff CMS (see src/portal/)
  */
+
+import { handlePortal } from './portal/router.js';
 
 const LOGO =
   'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png';
@@ -936,6 +939,20 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname.replace(/\/$/, '') || '/';
 
+    // Member portal + staff CMS (auth, /member, /admin, related APIs)
+    if (
+      pathname.startsWith('/member') ||
+      pathname.startsWith('/admin') ||
+      pathname.startsWith('/login') ||
+      pathname.startsWith('/auth') ||
+      pathname.startsWith('/api/auth') ||
+      pathname.startsWith('/api/member') ||
+      pathname.startsWith('/api/admin')
+    ) {
+      const portalRes = await handlePortal(request, env, pathname, templateData);
+      if (portalRes) return portalRes;
+    }
+
     switch (pathname) {
       case '/':
         return htmlResponse(homePage());
@@ -1757,6 +1774,7 @@ function siteNav(active) {
     ${link('/contact', 'Contact', 'contact')}
   </ul>
   <div class="nav-actions">
+    <a class="btn btn-ghost" href="/login">Account</a>
     <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book Now</a>
     <a class="cart-link" href="/cart" aria-label="Cart">
       🛒<span class="cart-count" id="cartCount">0</span>
@@ -1798,6 +1816,7 @@ function siteFooter() {
       <ul>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
+        <li><a href="/login">Member login</a></li>
         <li><a href="${ETSY_ALT}" target="_blank" rel="noopener">Bloomie Lash</a></li>
       </ul>
     </div>

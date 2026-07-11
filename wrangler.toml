@@ -19,11 +19,26 @@ zone_name = "bloomiehouse.com.au"
 pattern = "www.bloomiehouse.com.au/*"
 zone_name = "bloomiehouse.com.au"
 
+# D1 — member portal + staff CMS
+# Local: wrangler uses a local SQLite simulation automatically.
+# Production / version previews: database_id must be a real D1 UUID.
+[[d1_databases]]
+binding = "DB"
+database_name = "bloomiehouse"
+database_id = "04ae53df-b8c8-4fea-955d-339b80f150f8"
+migrations_dir = "migrations"
+
 # Chatbot (Groq) configuration
 # The GROQ_API_KEY must be set as a SECRET (never commit it):
 #   npx wrangler secret put GROQ_API_KEY
 # For local dev, put it in a .dev.vars file (already gitignored):
 #   GROQ_API_KEY=your_key_here
+#
+# Optional member magic-link email (Resend):
+#   RESEND_API_KEY=re_xxx
+# Optional staff seed overrides:
+#   STAFF1_EMAIL / STAFF1_PASSWORD / STAFF2_EMAIL / STAFF2_PASSWORD
 [vars]
 # Optional: override the Groq model. Defaults to llama-3.3-70b-versatile in code.
 GROQ_MODEL = "llama-3.3-70b-versatile"
+EMAIL_FROM = "Bloomie House <hello@bloomiehouse.com.au>"
