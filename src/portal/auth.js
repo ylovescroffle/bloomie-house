@@ -81,7 +81,8 @@ export async function hashPassword(password, saltB64) {
     ['deriveBits']
   );
   const bits = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', salt, iterations: 120000, hash: 'SHA-256' },
+    // Cloudflare Workers caps PBKDF2 iterations at 100_000.
+    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
     keyMaterial,
     256
   );

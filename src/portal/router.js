@@ -101,30 +101,24 @@ async function handlePortalInner(request, env, pathname, templateData) {
 
   if (needsDb && dbErr) return dbErr;
 
-  // Create tables if this D1 is empty, then seed staff/catalog when needed.
+  // Create tables if this D1 is empty.
   if (env.DB && needsDb) {
     await ensureSchema(env);
   }
 
-  const shouldSeed =
-    env.DB &&
-    (pathname.startsWith('/api/auth/staff-login') ||
-      pathname.startsWith('/api/auth/magic-link') ||
-      pathname.startsWith('/auth/verify') ||
-      pathname.startsWith('/api/admin') ||
-      pathname.startsWith('/admin') ||
-      pathname.startsWith('/api/member') ||
-      pathname.startsWith('/member'));
-  if (shouldSeed) {
+  // Seed staff only when signing in as staff; seed catalog for portal data pages.
+  if (env.DB && pathname.startsWith('/api/auth/staff-login')) {
     await ensureStaffSeed(env);
-    if (
-      pathname.startsWith('/admin') ||
+  }
+  if (
+    env.DB &&
+    (pathname.startsWith('/admin') ||
       pathname.startsWith('/api/admin') ||
       pathname.startsWith('/member') ||
-      pathname.startsWith('/api/member')
-    ) {
-      await ensureProductSeed(env, templateData);
-    }
+      pathname.startsWith('/api/member'))
+  ) {
+    // Product seed is cheap when already populated; staff seed not required to redirect.
+    await ensureProductSeed(env, templateData);
   }
 
   const url = new URL(request.url);
