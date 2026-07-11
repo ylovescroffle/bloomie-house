@@ -56,6 +56,7 @@ a:hover { text-decoration: underline; }
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto;
     min-height: 0;
+    align-items: stretch;
   }
   .portal-top { padding: .7rem 1rem; gap: .5rem; }
   .portal-brand { font-size: .92rem; }

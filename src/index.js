@@ -5,6 +5,11 @@
  */
 
 import { handlePortal } from './portal/router.js';
+import {
+  createPolarCheckout,
+  handlePolarWebhook,
+  polarConfigured,
+} from './polar.js';
 
 const LOGO =
   'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png';
@@ -44,9 +49,10 @@ const templateData = [
       'Korean lash lift & tint curriculum',
       'Resell rights for trainers & academies',
       'Theory, technique & aftercare sections',
-      'Instant digital delivery via Etsy',
+      'Instant digital delivery',
     ],
     etsy: ETSY_KOREAN_LASH_MANUAL,
+    polarProductId: '019b8f4c-75c7-41c8-b5e3-59d28a0320c1',
   },
   {
     slug: 'wedding-rsvp',
@@ -310,7 +316,7 @@ function productFaqs(t) {
   const base = [
     {
       q: 'How do I get the template after purchase?',
-      a: 'Checkout on Etsy for secure payment. You’ll receive an instant digital download link by email — usually within minutes.',
+      a: 'Pay securely on Bloomie House checkout (powered by Polar). You’ll receive an instant digital download link by email — usually within minutes.',
     },
     {
       q: 'Can I customise it for my brand?',
@@ -326,7 +332,7 @@ function productFaqs(t) {
     },
     {
       q: 'Is this a one-time purchase?',
-      a: `Yes. Pay once ($${t.price} AUD on Etsy), keep the template forever. No monthly template fee from Bloomie House.`,
+      a: `Yes. Pay once ($${t.price} AUD), keep the template forever. No monthly template fee from Bloomie House.`,
     },
   ];
   if (t.slug === 'korean-lash-lift-training-manual') {
@@ -895,7 +901,7 @@ function productFunnelHtml(t) {
         </article>`
     )
     .join('');
-  const buyLabel = t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →';
+  const buyLabel = 'Checkout now →';
   return `
 <section class="pdp-funnel section">
   <p class="section-label pdp-reveal">Why this template</p>
@@ -909,7 +915,7 @@ function productFunnelHtml(t) {
     </div>
     <div style="display:flex;gap:.65rem;flex-wrap:wrap;">
       <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
-      <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${buyLabel}</a>
+      <button type="button" class="btn btn-dark" data-buy-now="${t.slug}">${buyLabel}</button>
     </div>
   </div>
 </section>`;
@@ -966,6 +972,12 @@ export default {
       case '/cart':
         return htmlResponse(cartPage(), 200, 'no-store');
 
+      case '/checkout':
+        return htmlResponse(checkoutPage(), 200, 'no-store');
+
+      case '/checkout/success':
+        return htmlResponse(checkoutSuccessPage(url), 200, 'no-store');
+
       case '/services':
       case '/website-design':
         return htmlResponse(servicesPage());
@@ -984,6 +996,18 @@ export default {
 
       case '/api/chat':
         return handleChat(request, env);
+
+      case '/api/checkout':
+        if (request.method !== 'POST') {
+          return jsonResponse({ error: 'Method not allowed.' }, 405);
+        }
+        return handleCheckoutApi(request, env);
+
+      case '/api/webhooks/polar':
+        if (request.method !== 'POST') {
+          return jsonResponse({ error: 'Method not allowed.' }, 405);
+        }
+        return handlePolarWebhook(request, env, templateData);
 
       case '/favicon.ico':
       case '/favicon.png':
@@ -1023,6 +1047,32 @@ function jsonResponse(data, status = 200) {
   });
 }
 
+async function handleCheckoutApi(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid JSON body.' }, 400);
+  }
+  const items = Array.isArray(body?.items) ? body.items : [];
+  if (!items.length) {
+    return jsonResponse({ error: 'Cart is empty.' }, 400);
+  }
+  const origin = body?.origin || new URL(request.url).origin;
+  const result = await createPolarCheckout(env, request, {
+    items,
+    origin,
+    templateData,
+  });
+  if (!result.ok) {
+    return jsonResponse(
+      { error: result.error, configured: polarConfigured(env) },
+      result.status || 500
+    );
+  }
+  return jsonResponse({ url: result.url, id: result.id, configured: true });
+}
+
 function sitemapResponse() {
   const urls = [
     ['/', '1.0'],
@@ -1032,6 +1082,7 @@ function sitemapResponse() {
     ['/contact', '0.6'],
     ['/about', '0.5'],
     ['/cart', '0.3'],
+    ['/checkout', '0.3'],
     ...templateData.map((t) => [`/templates/${t.slug}`, '0.8']),
   ];
   const body = `<?xml version="1.0" encoding="UTF-8"?>
@@ -1050,7 +1101,7 @@ Your job:
 - Help visitors understand products and services.
 - Recommend a ready-made template (/shop) or a custom build (/services, /full-custom).
 - Answer pricing, timelines, and process questions warmly and briefly.
-- Point people to /shop, /cart (wishlist before Etsy checkout), /contact, or the discovery form on /services.
+- Point people to /shop, /cart, /checkout (secure Polar checkout), /contact, or the discovery form on /services.
 
 Style: warm, modern, encouraging, never pushy. Keep replies short (2–4 sentences) unless asked for detail. Never invent prices. Only discuss Bloomie House and web design.`;
 
@@ -1245,6 +1296,117 @@ body {
   color: var(--black);
   line-height: 1.6;
   overflow-x: hidden;
+}
+.announce-bar { overflow: hidden; }
+.announce-top {
+  background: var(--black);
+  color: #fff;
+  padding: .48rem 0;
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.announce-mid {
+  background: linear-gradient(90deg, rgba(200,213,176,.55), rgba(214,125,154,.22), rgba(200,213,176,.55));
+  padding: .72rem 0;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(.92rem, 2.2vw, 1.12rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--charcoal);
+  letter-spacing: .01em;
+  text-transform: none;
+  border-block: 1px solid var(--border);
+}
+.announce-marquee-mask {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.announce-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: max-content;
+  white-space: nowrap;
+}
+.announce-item { flex-shrink: 0; }
+.announce-sep {
+  flex-shrink: 0;
+  opacity: .4;
+  font-size: .55rem;
+  margin-left: .15rem;
+}
+.announce-top .announce-sep { color: var(--pink); opacity: .65; }
+.announce-marquee-fast {
+  animation: announceScroll 26s linear infinite;
+}
+.announce-marquee-slow {
+  animation: announceScroll 88s linear infinite;
+}
+@keyframes announceScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.home-funnel {
+  background: linear-gradient(165deg, var(--cream) 0%, var(--white) 55%, rgba(200,213,176,.18) 100%);
+}
+.home-funnel-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 2.5rem;
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.home-funnel-intro {
+  color: var(--muted);
+  max-width: 34rem;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+.home-funnel-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 1.75rem 1.65rem;
+  box-shadow: var(--shadow-lift);
+  border: 1px solid rgba(214,125,154,.18);
+}
+.home-funnel-list {
+  list-style: none;
+  display: grid;
+  gap: 0;
+}
+.home-funnel-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .75rem;
+  align-items: center;
+  padding: .72rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: .92rem;
+}
+.home-funnel-list li:last-child { border-bottom: none; }
+.funnel-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(214,125,154,.14);
+  color: var(--pink);
+  font-size: .72rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.funnel-label { color: var(--charcoal); text-wrap: pretty; }
+.home-funnel-footnote {
+  font-size: .72rem;
+  color: var(--muted);
+  margin-top: 1rem;
+  padding-top: .75rem;
+  border-top: 1px dashed var(--border);
 }
 a { color: inherit; }
 img {
@@ -1567,9 +1729,14 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   }
   .nav-links.open { display: flex; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
+  .home-funnel-grid { grid-template-columns: 1fr; gap: 1.75rem; }
 }
 @media (max-width: 560px) {
   .footer-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .announce-marquee-fast,
+  .announce-marquee-slow { animation: none; }
 }
 `;
 }
@@ -1597,6 +1764,10 @@ function cartScript(catalogJson) {
       if(found) found.qty=(found.qty||1)+1; else items.push({slug:slug, qty:1});
       write(items); toast('Added to cart');
     },
+    buyNow: function(slug){
+      write([{slug:slug, qty:1}]);
+      window.location.href='/checkout';
+    },
     remove: function(slug){ write(read().filter(function(i){ return i.slug!==slug; })); },
     setQty: function(slug, qty){
       qty=Math.max(1, parseInt(qty,10)||1);
@@ -1608,9 +1779,16 @@ function cartScript(catalogJson) {
   updateBadge();
   document.addEventListener('click', function(e){
     var btn = e.target.closest && e.target.closest('[data-add-cart]');
-    if(!btn) return;
-    e.preventDefault();
-    window.BloomieCart.add(btn.getAttribute('data-add-cart'));
+    if(btn){
+      e.preventDefault();
+      window.BloomieCart.add(btn.getAttribute('data-add-cart'));
+      return;
+    }
+    var buy = e.target.closest && e.target.closest('[data-buy-now]');
+    if(buy){
+      e.preventDefault();
+      window.BloomieCart.buyNow(buy.getAttribute('data-buy-now'));
+    }
   });
 
   var catalog = ${catalogLiteral};
@@ -1638,23 +1816,17 @@ function cartScript(catalogJson) {
         '<div class="cart-meta"><h3><a href="/templates/'+t.slug+'" style="text-decoration:none;">'+t.name+'</a></h3><p>'+t.platform+' · '+t.niche+'</p>'+
         '<div style="margin-top:.55rem;"><input class="qty" type="number" min="1" value="'+(item.qty||1)+'" data-qty="'+t.slug+'">'+
         '<button class="btn btn-ghost" type="button" data-remove="'+t.slug+'" style="padding:.45rem .8rem;font-size:.8rem;">Remove</button>'+
-        (t.etsy ? '<a class="btn btn-ghost" href="'+t.etsy+'" target="_blank" rel="noopener" style="padding:.45rem .8rem;font-size:.8rem;margin-left:.35rem;">Buy on Etsy →</a>' : '')+
         '</div></div>'+
         '<div class="cart-line-price">$'+line+' AUD</div></div>';
     }).join('');
-    var checkoutUrl = '${ETSY_SHOP}';
-    if(items.length === 1){
-      var one = bySlug(items[0].slug);
-      if(one && one.etsy) checkoutUrl = one.etsy;
-    }
     root.innerHTML = rows +
       '<div class="cart-summary"><div><div style="font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);">Estimated total</div>'+
       '<div class="cart-total">$'+total+' AUD</div></div>'+
       '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">'+
       '<a class="btn btn-ghost" href="/shop">Keep shopping</a>'+
-      '<a class="btn btn-pink" href="'+checkoutUrl+'" target="_blank" rel="noopener">Checkout on Etsy →</a>'+
+      '<a class="btn btn-pink" href="/checkout">Proceed to checkout →</a>'+
       '</div></div>'+
-      '<p class="cart-note">Bloomie House uses Etsy for payment &amp; delivery. Your cart here is a shopping list — open Etsy to complete purchase for each template (or browse the full shop).</p>';
+      '<p class="cart-note">Secure checkout powered by Polar. Add templates here, then complete payment on the checkout page for instant digital delivery.</p>';
 
     root.querySelectorAll('[data-remove]').forEach(function(btn){
       btn.addEventListener('click', function(){ window.BloomieCart.remove(btn.dataset.remove); renderCart(); });
@@ -1727,6 +1899,68 @@ function layoutScript() {
 })();`;
 }
 
+const TOP_ANNOUNCE_SEGMENTS = [
+  'Australia &amp; worldwide',
+  '10% off templates — code LAUNCH10',
+  'Premium Wix, Shopify &amp; Canva templates',
+  'From $37 AUD · Instant download',
+  'Hobart-made · Trusted by 500+ creators',
+];
+
+const MID_ANNOUNCE_SEGMENTS = [
+  'Get it ready this week',
+  'Go from someday to live in record time and on budget.',
+  'Designer-made · Drag &amp; drop · Fully customisable',
+];
+
+const HOME_FUNNEL_ITEMS = [
+  'Designer-Made Template',
+  'Drag + Drop Editor',
+  'Fully Customizable',
+  'Friendly Support',
+  'Mobile responsive',
+  'Launch Checklist + Scorecard',
+  'Launch Lounge Access',
+  '25% off new annual subscription*',
+  'Template Video Tutorials',
+  'And So Much More!',
+];
+
+function announceMarqueeHtml(segments, variant = 'fast') {
+  const item = (text) =>
+    `<span class="announce-item">${text}</span><span class="announce-sep" aria-hidden="true">✦</span>`;
+  const track = segments.map(item).join('') + segments.map(item).join('');
+  const barClass = variant === 'slow' ? 'announce-mid' : 'announce-top';
+  return `
+<div class="announce-bar ${barClass}" role="marquee" aria-live="off">
+  <div class="announce-marquee-mask">
+    <div class="announce-marquee-track announce-marquee-${variant}">${track}</div>
+  </div>
+</div>`;
+}
+
+function homeSellFunnelHtml() {
+  const items = HOME_FUNNEL_ITEMS.map(
+    (label) =>
+      `<li><span class="funnel-check" aria-hidden="true">✓</span><span class="funnel-label">${label}</span></li>`
+  ).join('');
+  return `
+<section class="home-funnel section">
+  <div class="home-funnel-grid">
+    <div class="home-funnel-copy">
+      <p class="section-label">Everything included</p>
+      <h2 class="section-title">Launch with <em>confidence</em></h2>
+      <p class="home-funnel-intro">Not just a template — you get the full toolkit, support, and resources to go from someday to live in record time and on budget.</p>
+      <a class="btn btn-pink" href="/shop">Get your template →</a>
+    </div>
+    <div class="home-funnel-card">
+      <ul class="home-funnel-list">${items}</ul>
+      <p class="home-funnel-footnote">*Wix Studio annual plans only. See checkout for details.</p>
+    </div>
+  </div>
+</section>`;
+}
+
 function layout(title, description, canonical, bodyHtml, active = '', cartCatalogJson = null) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1748,6 +1982,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <style>${baseStyles()}</style>
 </head>
 <body>
+  ${announceMarqueeHtml(TOP_ANNOUNCE_SEGMENTS, 'fast')}
   ${siteNav(active)}
   ${bodyHtml}
   ${siteFooter()}
@@ -1866,6 +2101,9 @@ function homePage() {
   </div>
 </section>
 
+${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
+${homeSellFunnelHtml()}
+
 <section class="section">
   <p class="section-label">Shop the collection</p>
   <h2 class="section-title">Find your <em>perfect</em> template</h2>
@@ -1899,7 +2137,7 @@ function homePage() {
 
 <section class="section" style="text-align:center;">
   <h2 class="section-title">Ready when <em>you</em> are</h2>
-  <p style="color:var(--muted);max-width:32rem;margin:0 auto 1.5rem;">Add templates to your cart, then checkout securely on Etsy — or book a discovery call for done-for-you setup.</p>
+  <p style="color:var(--muted);max-width:32rem;margin:0 auto 1.5rem;">Add templates to your cart, then checkout securely on Bloomie House — or book a discovery call for done-for-you setup.</p>
   <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap;">
     <a class="btn btn-pink" href="/shop">Shop templates</a>
     <a class="btn btn-ghost" href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a>
@@ -1921,7 +2159,7 @@ function shopPage(platform) {
 <section class="page-hero page-hero-enter">
   <p class="section-label">Template shop</p>
   <h1>Shop <em>templates</em></h1>
-  <p>Premium website templates for Australian small businesses. Filter by platform, open a product page, add to cart, then checkout on Etsy.</p>
+  <p>Premium website templates for Australian small businesses. Filter by platform, open a product page, add to cart, then checkout securely.</p>
 </section>
 <section class="section" style="padding-top:1rem;">
   <div class="filters" id="shopFilters">
@@ -1951,7 +2189,7 @@ function shopPage(platform) {
 </script>`;
   return layout(
     'Shop Templates — Bloomie House',
-    'Browse premium Wix Studio, Shopify & Canva website templates from $37 AUD. Instant download via Etsy.',
+    'Browse premium Wix Studio, Shopify & Canva website templates from $37 AUD. Instant digital download.',
     '/shop',
     body,
     'shop'
@@ -2483,10 +2721,10 @@ function productPage(t) {
       <p style="color:var(--muted);line-height:1.8;margin-top:.5rem;">${t.description}</p>
       <div class="pdp-actions">
         <button class="btn btn-pink" data-add-cart="${t.slug}">Add to cart</button>
-        <a class="btn btn-dark" href="${t.etsy}" target="_blank" rel="noopener">${t.slug === 'korean-lash-lift-training-manual' ? 'Buy on Etsy →' : 'Buy now on Etsy →'}</a>
+        <button type="button" class="btn btn-dark" data-buy-now="${t.slug}">Checkout now →</button>
         <a class="btn btn-ghost" href="/cart">View cart</a>
       </div>
-      <p style="font-size:.85rem;color:var(--muted);">Instant delivery via Etsy · setup guide included · 30-day email support</p>
+      <p style="font-size:.85rem;color:var(--muted);">Instant digital delivery · setup guide included · 30-day email support</p>
       <div class="pdp-features">
         <h3>What's included</h3>
         <ul>${t.features.map((f) => `<li>${f}</li>`).join('')}</ul>
@@ -2676,6 +2914,304 @@ ${productSocialProofPopupHtml(t)}
   );
 }
 
+function checkoutPage() {
+  const catalogJson = JSON.stringify(
+    templateData.map((t) => ({
+      slug: t.slug,
+      name: t.name,
+      price: t.price,
+      niche: t.niche,
+      platform: t.platform,
+      image: t.images?.[0] || null,
+      mockClass: t.mockClass,
+    }))
+  );
+  const body = `
+<style>
+  .checkout-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 4vw 4rem; }
+  .checkout-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 1.5rem; align-items: start;
+  }
+  .checkout-panel {
+    background: var(--cream); border-radius: 20px; padding: 1.5rem;
+    box-shadow: var(--shadow-border);
+  }
+  .checkout-steps {
+    list-style: none; display: grid; gap: .85rem; margin: 1.25rem 0 1.5rem;
+  }
+  .checkout-step {
+    display: grid; grid-template-columns: 36px 1fr; gap: .75rem; align-items: start;
+  }
+  .checkout-step-num {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--black); color: #fff;
+    display: grid; place-items: center; font-size: .8rem; font-weight: 600;
+  }
+  .checkout-step.is-active .checkout-step-num { background: var(--pink); }
+  .checkout-step strong { display: block; font-family: Fraunces, serif; font-size: 1rem; }
+  .checkout-step p { color: var(--muted); font-size: .85rem; line-height: 1.55; text-wrap: pretty; }
+  .checkout-trust {
+    display: grid; gap: .55rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
+    font-size: .85rem; color: var(--charcoal);
+  }
+  .checkout-trust li { display: flex; gap: .5rem; align-items: flex-start; }
+  .checkout-trust li::before { content: '✦'; color: var(--pink); font-size: .65rem; margin-top: .35rem; }
+  .checkout-summary-title {
+    font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;
+  }
+  .checkout-line {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: .75rem; align-items: center;
+    padding: .75rem 0; border-bottom: 1px solid var(--border);
+  }
+  .checkout-line:last-of-type { border-bottom: none; }
+  .checkout-thumb {
+    width: 64px; height: 48px; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-border);
+  }
+  .checkout-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .checkout-line h3 { font-family: Fraunces, serif; font-size: .95rem; text-wrap: balance; }
+  .checkout-line p { color: var(--muted); font-size: .78rem; }
+  .checkout-line-price { font-family: Fraunces, serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .checkout-total {
+    display: flex; justify-content: space-between; align-items: baseline; margin-top: 1rem; padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .checkout-total strong { font-family: Fraunces, serif; font-size: 1.75rem; font-variant-numeric: tabular-nums; }
+  .checkout-pay-panel { min-height: 420px; }
+  .checkout-status {
+    text-align: center; padding: 2.5rem 1rem; color: var(--muted);
+  }
+  .checkout-status h2 { font-family: Fraunces, serif; color: var(--black); margin-bottom: .5rem; }
+  .checkout-loader {
+    width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--pink);
+    border-radius: 50%; animation: spin 800ms linear infinite; margin: 0 auto 1rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .checkout-embed { min-height: 520px; }
+  @media (max-width: 900px) {
+    .checkout-grid { grid-template-columns: 1fr; }
+    .checkout-pay-panel { order: -1; }
+  }
+</style>
+<section class="page-hero page-hero-enter">
+  <p class="section-label">Secure checkout</p>
+  <h1>Complete your <em>purchase</em></h1>
+  <p>Review your order, pay securely, and get instant access to your templates.</p>
+</section>
+<div class="checkout-wrap">
+  <div class="checkout-grid">
+    <div class="checkout-panel">
+      <p class="checkout-summary-title">Your sale journey</p>
+      <ol class="checkout-steps">
+        <li class="checkout-step is-active">
+          <span class="checkout-step-num">1</span>
+          <div><strong>Review your cart</strong><p>Confirm templates and pricing before you pay.</p></div>
+        </li>
+        <li class="checkout-step is-active">
+          <span class="checkout-step-num">2</span>
+          <div><strong>Secure payment</strong><p>Pay with card, Apple Pay, or Google Pay via Polar.</p></div>
+        </li>
+        <li class="checkout-step">
+          <span class="checkout-step-num">3</span>
+          <div><strong>Instant delivery</strong><p>Download links arrive by email — usually within minutes.</p></div>
+        </li>
+      </ol>
+      <ul class="checkout-trust">
+        <li>One-time purchase — no subscription</li>
+        <li>30-day email support included</li>
+        <li>Orders also appear in your <a href="/login" style="color:var(--pink);">member portal</a></li>
+      </ul>
+      <div style="margin-top:1.5rem;">
+        <p class="checkout-summary-title">Order summary</p>
+        <div id="checkoutSummary"><p style="color:var(--muted);">Loading…</p></div>
+      </div>
+    </div>
+    <div class="checkout-panel checkout-pay-panel">
+      <p class="checkout-summary-title">Payment</p>
+      <div id="checkoutPay">
+        <div class="checkout-status">
+          <div class="checkout-loader" aria-hidden="true"></div>
+          <h2>Preparing secure checkout</h2>
+          <p>Hang tight — we are loading your payment form.</p>
+        </div>
+      </div>
+      <div id="checkoutEmbed" class="checkout-embed"></div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@polar-sh/checkout@latest/dist/embed.global.js" defer></script>
+<script>${checkoutScript(catalogJson)}</script>`;
+  return layout(
+    'Checkout — Bloomie House',
+    'Secure checkout for Bloomie House digital templates.',
+    '/checkout',
+    body,
+    'shop',
+    catalogJson
+  );
+}
+
+function checkoutSuccessPage(url) {
+  const checkoutId = url.searchParams.get('checkout_id') || '';
+  const body = `
+<style>
+  .success-wrap {
+    max-width: 640px; margin: 0 auto; padding: 2rem 4vw 4rem; text-align: center;
+  }
+  .success-card {
+    background: var(--cream); border-radius: 22px; padding: 2.5rem 2rem;
+    box-shadow: var(--shadow-lift); border: 2px solid rgba(214,125,154,.2);
+  }
+  .success-icon {
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 1.25rem;
+    display: grid; place-items: center; font-size: 1.75rem;
+    background: linear-gradient(135deg, var(--pink), #e8b4c4); color: #fff;
+  }
+</style>
+<section class="page-hero page-hero-enter">
+  <p class="section-label">Thank you</p>
+  <h1>Payment <em>confirmed</em></h1>
+</section>
+<div class="success-wrap">
+  <div class="success-card">
+    <div class="success-icon" aria-hidden="true">✓</div>
+    <h2 style="font-family:Fraunces,serif;font-size:1.75rem;margin-bottom:.75rem;">You are all set!</h2>
+    <p style="color:var(--muted);line-height:1.75;margin-bottom:1.5rem;text-wrap:pretty;">
+      Your order is confirmed. Check your email for download instructions — and sign in to the member portal to access orders, downloads, and setup guides.
+    </p>
+    ${checkoutId ? `<p style="font-size:.8rem;color:var(--muted);margin-bottom:1.25rem;">Reference: ${checkoutId}</p>` : ''}
+    <div style="display:flex;gap:.65rem;flex-wrap:wrap;justify-content:center;">
+      <a class="btn btn-pink" href="/login">Sign in to member portal</a>
+      <a class="btn btn-ghost" href="/shop">Continue shopping</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  try { localStorage.removeItem('bloomie_cart_v1'); } catch(e) {}
+  var badge = document.getElementById('cartCount');
+  if(badge) badge.textContent = '0';
+})();
+</script>`;
+  return layout(
+    'Order confirmed — Bloomie House',
+    'Your Bloomie House order is confirmed.',
+    '/checkout/success',
+    body,
+    'shop'
+  );
+}
+
+function checkoutScript(catalogJson) {
+  const catalogLiteral = catalogJson || 'null';
+  return `
+(function(){
+  var catalog = ${catalogLiteral};
+  function readCart(){
+    try { return JSON.parse(localStorage.getItem('bloomie_cart_v1')||'[]'); }
+    catch(e){ return []; }
+  }
+  function bySlug(slug){
+    if(!catalog) return null;
+    return catalog.find(function(t){ return t.slug===slug; });
+  }
+  function renderSummary(){
+    var root = document.getElementById('checkoutSummary');
+    if(!root) return;
+    var items = readCart();
+    if(!items.length){
+      root.innerHTML = '<p style="color:var(--muted);">Your cart is empty. <a href="/shop" style="color:var(--pink);">Browse the shop</a></p>';
+      return;
+    }
+    var total = 0;
+    var rows = items.map(function(item){
+      var t = bySlug(item.slug);
+      if(!t) return '';
+      var line = t.price * (item.qty||1);
+      total += line;
+      var thumb = t.image
+        ? '<div class="checkout-thumb"><img src="'+t.image+'" alt=""></div>'
+        : '<div class="checkout-thumb product-thumb '+t.mockClass+'"></div>';
+      return '<div class="checkout-line">'+thumb+
+        '<div><h3>'+t.name+'</h3><p>'+t.platform+' · Qty '+(item.qty||1)+'</p></div>'+
+        '<div class="checkout-line-price">$'+line+' AUD</div></div>';
+    }).join('');
+    root.innerHTML = rows +
+      '<div class="checkout-total"><span style="color:var(--muted);">Total</span><strong>$'+total+' AUD</strong></div>'+
+      '<p style="font-size:.82rem;color:var(--muted);margin-top:.75rem;"><a href="/cart" style="color:var(--pink);">← Edit cart</a></p>';
+  }
+  function showPayMessage(title, body, cta){
+    var pay = document.getElementById('checkoutPay');
+    if(!pay) return;
+    pay.innerHTML = '<div class="checkout-status"><h2>'+title+'</h2><p>'+body+'</p>'+(cta||'')+'</div>';
+  }
+  async function startCheckout(){
+    var items = readCart();
+    if(!items.length){
+      showPayMessage('Cart is empty', 'Add a template from the shop before checking out.', '<a class="btn btn-pink" href="/shop" style="margin-top:1rem;">Browse shop</a>');
+      return;
+    }
+    try {
+      var res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: items, origin: window.location.origin })
+      });
+      var data = await res.json();
+      if(!res.ok){
+        var msg = data.error || 'Checkout is not available right now.';
+        var extra = !data.configured
+          ? '<p style="margin-top:.75rem;font-size:.85rem;">Payment is not set up on the server yet. Please try again shortly or email <a href="mailto:hello@bloomiehouse.com.au" style="color:var(--pink);">hello@bloomiehouse.com.au</a>.</p>'
+          : '';
+        showPayMessage('Checkout unavailable', msg, extra + '<a class="btn btn-ghost" href="/cart" style="margin-top:1rem;">Back to cart</a>');
+        return;
+      }
+      var embedRoot = document.getElementById('checkoutEmbed');
+      var pay = document.getElementById('checkoutPay');
+      if(pay) pay.innerHTML = '<p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">Secure payment by Polar</p>';
+      function openEmbed(){
+        if(!window.PolarEmbedCheckout){
+          showPayMessage('Open secure checkout', 'Continue in Polar to complete your purchase.', '<a class="btn btn-pink" href="'+data.url+'" style="margin-top:1rem;">Pay now →</a>');
+          return;
+        }
+        window.PolarEmbedCheckout.create(data.url, { theme: 'light' }).then(function(checkout){
+          checkout.addEventListener('success', function(){
+            try { localStorage.removeItem('bloomie_cart_v1'); } catch(e) {}
+          });
+          if(embedRoot && checkout.iframe){
+            embedRoot.appendChild(checkout.iframe);
+          }
+        }).catch(function(){
+          showPayMessage('Open secure checkout', 'Continue to complete your purchase.', '<a class="btn btn-pink" href="'+data.url+'" style="margin-top:1rem;">Pay now →</a>');
+        });
+      }
+      if(window.PolarEmbedCheckout) openEmbed();
+      else {
+        var tries = 0;
+        var wait = setInterval(function(){
+          tries++;
+          if(window.PolarEmbedCheckout){
+            clearInterval(wait);
+            openEmbed();
+          } else if(tries > 25){
+            clearInterval(wait);
+            openEmbed();
+          }
+        }, 120);
+      }
+    } catch(err){
+      showPayMessage('Connection error', 'Please try again in a moment.', '<a class="btn btn-ghost" href="/checkout" style="margin-top:1rem;">Retry</a>');
+    }
+  }
+  function onReady(fn){
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+  onReady(function(){
+    renderSummary();
+    startCheckout();
+  });
+})();`;
+}
+
 function cartPage() {
   const catalogJson = JSON.stringify(
     templateData.map((t) => ({
@@ -2726,14 +3262,14 @@ function cartPage() {
 <section class="page-hero page-hero-enter">
   <p class="section-label">Your bag</p>
   <h1>Cart</h1>
-  <p>Save templates here, then checkout on Etsy for secure payment and instant download.</p>
+  <p>Save templates here, then complete secure checkout for instant digital download.</p>
 </section>
 <div class="cart-wrap">
   <div id="cartRoot"><p style="color:var(--muted);">Loading cart…</p></div>
 </div>`;
   return layout(
     'Cart — Bloomie House',
-    'Review your Bloomie House templates before checking out on Etsy.',
+    'Review your Bloomie House templates before secure checkout.',
     '/cart',
     body,
     'shop',
