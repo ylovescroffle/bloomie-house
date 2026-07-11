@@ -1296,6 +1296,117 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
 }
+.announce-bar { overflow: hidden; }
+.announce-top {
+  background: var(--black);
+  color: #fff;
+  padding: .48rem 0;
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.announce-mid {
+  background: linear-gradient(90deg, rgba(200,213,176,.55), rgba(214,125,154,.22), rgba(200,213,176,.55));
+  padding: .72rem 0;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(.92rem, 2.2vw, 1.12rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--charcoal);
+  letter-spacing: .01em;
+  text-transform: none;
+  border-block: 1px solid var(--border);
+}
+.announce-marquee-mask {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.announce-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: max-content;
+  white-space: nowrap;
+}
+.announce-item { flex-shrink: 0; }
+.announce-sep {
+  flex-shrink: 0;
+  opacity: .4;
+  font-size: .55rem;
+  margin-left: .15rem;
+}
+.announce-top .announce-sep { color: var(--pink); opacity: .65; }
+.announce-marquee-fast {
+  animation: announceScroll 26s linear infinite;
+}
+.announce-marquee-slow {
+  animation: announceScroll 88s linear infinite;
+}
+@keyframes announceScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.home-funnel {
+  background: linear-gradient(165deg, var(--cream) 0%, var(--white) 55%, rgba(200,213,176,.18) 100%);
+}
+.home-funnel-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 2.5rem;
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.home-funnel-intro {
+  color: var(--muted);
+  max-width: 34rem;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+.home-funnel-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 1.75rem 1.65rem;
+  box-shadow: var(--shadow-lift);
+  border: 1px solid rgba(214,125,154,.18);
+}
+.home-funnel-list {
+  list-style: none;
+  display: grid;
+  gap: 0;
+}
+.home-funnel-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .75rem;
+  align-items: center;
+  padding: .72rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: .92rem;
+}
+.home-funnel-list li:last-child { border-bottom: none; }
+.funnel-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(214,125,154,.14);
+  color: var(--pink);
+  font-size: .72rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.funnel-label { color: var(--charcoal); text-wrap: pretty; }
+.home-funnel-footnote {
+  font-size: .72rem;
+  color: var(--muted);
+  margin-top: 1rem;
+  padding-top: .75rem;
+  border-top: 1px dashed var(--border);
+}
 a { color: inherit; }
 img {
   max-width: 100%;
@@ -1617,9 +1728,14 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   }
   .nav-links.open { display: flex; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
+  .home-funnel-grid { grid-template-columns: 1fr; gap: 1.75rem; }
 }
 @media (max-width: 560px) {
   .footer-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .announce-marquee-fast,
+  .announce-marquee-slow { animation: none; }
 }
 `;
 }
@@ -1782,6 +1898,68 @@ function layoutScript() {
 })();`;
 }
 
+const TOP_ANNOUNCE_SEGMENTS = [
+  'Australia &amp; worldwide',
+  '10% off templates — code LAUNCH10',
+  'Premium Wix, Shopify &amp; Canva templates',
+  'From $37 AUD · Instant download',
+  'Hobart-made · Trusted by 500+ creators',
+];
+
+const MID_ANNOUNCE_SEGMENTS = [
+  'Get it ready this week',
+  'Go from someday to live in record time and on budget.',
+  'Designer-made · Drag &amp; drop · Fully customisable',
+];
+
+const HOME_FUNNEL_ITEMS = [
+  'Designer-Made Template',
+  'Drag + Drop Editor',
+  'Fully Customizable',
+  'Friendly Support',
+  'Mobile responsive',
+  'Launch Checklist + Scorecard',
+  'Launch Lounge Access',
+  '25% off new annual subscription*',
+  'Template Video Tutorials',
+  'And So Much More!',
+];
+
+function announceMarqueeHtml(segments, variant = 'fast') {
+  const item = (text) =>
+    `<span class="announce-item">${text}</span><span class="announce-sep" aria-hidden="true">✦</span>`;
+  const track = segments.map(item).join('') + segments.map(item).join('');
+  const barClass = variant === 'slow' ? 'announce-mid' : 'announce-top';
+  return `
+<div class="announce-bar ${barClass}" role="marquee" aria-live="off">
+  <div class="announce-marquee-mask">
+    <div class="announce-marquee-track announce-marquee-${variant}">${track}</div>
+  </div>
+</div>`;
+}
+
+function homeSellFunnelHtml() {
+  const items = HOME_FUNNEL_ITEMS.map(
+    (label) =>
+      `<li><span class="funnel-check" aria-hidden="true">✓</span><span class="funnel-label">${label}</span></li>`
+  ).join('');
+  return `
+<section class="home-funnel section">
+  <div class="home-funnel-grid">
+    <div class="home-funnel-copy">
+      <p class="section-label">Everything included</p>
+      <h2 class="section-title">Launch with <em>confidence</em></h2>
+      <p class="home-funnel-intro">Not just a template — you get the full toolkit, support, and resources to go from someday to live in record time and on budget.</p>
+      <a class="btn btn-pink" href="/shop">Get your template →</a>
+    </div>
+    <div class="home-funnel-card">
+      <ul class="home-funnel-list">${items}</ul>
+      <p class="home-funnel-footnote">*Wix Studio annual plans only. See checkout for details.</p>
+    </div>
+  </div>
+</section>`;
+}
+
 function layout(title, description, canonical, bodyHtml, active = '', cartCatalogJson = null) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1803,6 +1981,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <style>${baseStyles()}</style>
 </head>
 <body>
+  ${announceMarqueeHtml(TOP_ANNOUNCE_SEGMENTS, 'fast')}
   ${siteNav(active)}
   ${bodyHtml}
   ${siteFooter()}
@@ -1920,6 +2099,9 @@ function homePage() {
     <a class="btn btn-ghost" href="/services">Need us to set it up?</a>
   </div>
 </section>
+
+${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
+${homeSellFunnelHtml()}
 
 <section class="section">
   <p class="section-label">Shop the collection</p>
