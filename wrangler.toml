@@ -42,3 +42,10 @@ migrations_dir = "migrations"
 # Optional: override the Groq model. Defaults to llama-3.3-70b-versatile in code.
 GROQ_MODEL = "llama-3.3-70b-versatile"
 EMAIL_FROM = "Bloomie House <hello@bloomiehouse.com.au>"
+
+# Polar.sh checkout (set secrets via wrangler secret put or .dev.vars):
+#   POLAR_ACCESS_TOKEN=polar_at_xxx
+#   POLAR_WEBHOOK_SECRET=whsec_xxx  (or raw secret from Polar dashboard)
+#   POLAR_MODE = "sandbox"  # or "production"
+# POLAR_PRODUCTS maps template slug → Polar product UUID (JSON string):
+# POLAR_PRODUCTS = '{"the-studio":"<uuid>","wedding-rsvp":"<uuid>"}'
