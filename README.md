@@ -199,12 +199,13 @@ Without Resend, the login page shows a one-time link for local testing.
 
 ### Production D1
 
+This project uses the existing Cloudflare D1 database `bloomiehouse`. Apply migrations:
+
 ```bash
-npx wrangler d1 create bloomie-house
-# paste database_id into wrangler.toml
 npm run db:migrate:remote
 ```
 
+(Requires a Cloudflare API token with D1 edit permissions.)
 ## License
 
 MIT

@@ -20,12 +20,12 @@ pattern = "www.bloomiehouse.com.au/*"
 zone_name = "bloomiehouse.com.au"
 
 # D1 — member portal + staff CMS
-# Local: wrangler uses a local SQLite file automatically.
-# Production: run `npx wrangler d1 create bloomie-house` and replace database_id.
+# Local: wrangler uses a local SQLite file via preview_database_id.
+# Production: database_id must be a real D1 UUID in this Cloudflare account.
 [[d1_databases]]
 binding = "DB"
-database_name = "bloomie-house"
-database_id = "00000000-0000-0000-0000-000000000001"
+database_name = "bloomiehouse"
+database_id = "04ae53df-b8c8-4fea-955d-339b80f150f8"
 preview_database_id = "local-bloomie-house"
 migrations_dir = "migrations"
 

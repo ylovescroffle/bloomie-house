@@ -12,6 +12,7 @@ Config is in `package.json` and `wrangler.toml`.
 Standard commands are defined in `package.json`:
 - Run dev server: `npm run dev` (`wrangler dev`) — serves on `http://localhost:8787`.
 - Apply local DB migrations: `npm run db:migrate:local` (run once before first portal use).
+- Apply remote DB migrations: `npm run db:migrate:remote` (uses D1 `bloomiehouse`).
 - Deploy: `npm run deploy` (`wrangler deploy`) — requires a real Cloudflare account; not needed for local dev.
 - Build: none (Wrangler/Miniflare bundles the Worker on the fly).
 - Tests / lint: none configured.
@@ -36,7 +37,7 @@ the repo root containing `GROQ_API_KEY=your_key_here`, then restart `npm run dev
   - `staff1@bloomiehouse.com.au` / `BloomieStaff1!`
   - `staff2@bloomiehouse.com.au` / `BloomieStaff2!`
 - Without `RESEND_API_KEY`, magic-link login shows a clickable dev link on the login page.
-- Production: create a real D1 DB (`wrangler d1 create bloomie-house`), put its `database_id`
-  in `wrangler.toml`, then `npm run db:migrate:remote`. Change staff passwords via env vars
-  before first seed (`STAFF1_PASSWORD`, `STAFF2_PASSWORD`).
+- Production D1 is `bloomiehouse` (`database_id` in `wrangler.toml`). Apply schema with
+  `npm run db:migrate:remote` (needs Cloudflare API token). Change staff passwords via env
+  vars before first seed (`STAFF1_PASSWORD`, `STAFF2_PASSWORD`).
 - Etsy remains a separate sales channel; portal orders are site-managed only.
