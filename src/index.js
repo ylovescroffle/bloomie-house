@@ -2976,7 +2976,7 @@ function checkoutScript(catalogJson) {
       if(!res.ok){
         var msg = data.error || 'Checkout is not available right now.';
         var extra = !data.configured
-          ? '<p style="margin-top:.75rem;font-size:.85rem;">Add POLAR_ACCESS_TOKEN and product IDs to enable checkout.</p>'
+          ? '<p style="margin-top:.75rem;font-size:.85rem;">Payment is not set up on the server yet. Please try again shortly or email <a href="mailto:hello@bloomiehouse.com.au" style="color:var(--pink);">hello@bloomiehouse.com.au</a>.</p>'
           : '';
         showPayMessage('Checkout unavailable', msg, extra + '<a class="btn btn-ghost" href="/cart" style="margin-top:1rem;">Back to cart</a>');
         return;
@@ -2984,20 +2984,35 @@ function checkoutScript(catalogJson) {
       var embedRoot = document.getElementById('checkoutEmbed');
       var pay = document.getElementById('checkoutPay');
       if(pay) pay.innerHTML = '<p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">Secure payment by Polar</p>';
-      if(!window.PolarEmbedCheckout){
-        showPayMessage('Almost there', 'Payment form is loading…', '<a class="btn btn-pink" href="'+data.url+'" style="margin-top:1rem;">Open checkout →</a>');
-        return;
-      }
-      try {
-        var checkout = await window.PolarEmbedCheckout.create(data.url, { theme: 'light' });
-        checkout.addEventListener('success', function(){
-          try { localStorage.removeItem('bloomie_cart_v1'); } catch(e) {}
-        });
-        if(embedRoot && checkout.iframe){
-          embedRoot.appendChild(checkout.iframe);
+      function openEmbed(){
+        if(!window.PolarEmbedCheckout){
+          showPayMessage('Open secure checkout', 'Continue in Polar to complete your purchase.', '<a class="btn btn-pink" href="'+data.url+'" style="margin-top:1rem;">Pay now →</a>');
+          return;
         }
-      } catch(err){
-        showPayMessage('Open secure checkout', 'Continue to complete your purchase.', '<a class="btn btn-pink" href="'+data.url+'" style="margin-top:1rem;">Pay now →</a>');
+        window.PolarEmbedCheckout.create(data.url, { theme: 'light' }).then(function(checkout){
+          checkout.addEventListener('success', function(){
+            try { localStorage.removeItem('bloomie_cart_v1'); } catch(e) {}
+          });
+          if(embedRoot && checkout.iframe){
+            embedRoot.appendChild(checkout.iframe);
+          }
+        }).catch(function(){
+          showPayMessage('Open secure checkout', 'Continue to complete your purchase.', '<a class="btn btn-pink" href="'+data.url+'" style="margin-top:1rem;">Pay now →</a>');
+        });
+      }
+      if(window.PolarEmbedCheckout) openEmbed();
+      else {
+        var tries = 0;
+        var wait = setInterval(function(){
+          tries++;
+          if(window.PolarEmbedCheckout){
+            clearInterval(wait);
+            openEmbed();
+          } else if(tries > 25){
+            clearInterval(wait);
+            openEmbed();
+          }
+        }, 120);
       }
     } catch(err){
       showPayMessage('Connection error', 'Please try again in a moment.', '<a class="btn btn-ghost" href="/checkout" style="margin-top:1rem;">Retry</a>');
@@ -3009,11 +3024,7 @@ function checkoutScript(catalogJson) {
   }
   onReady(function(){
     renderSummary();
-    function boot(){
-      if(window.PolarEmbedCheckout) startCheckout();
-      else setTimeout(boot, 120);
-    }
-    boot();
+    startCheckout();
   });
 })();`;
 }
