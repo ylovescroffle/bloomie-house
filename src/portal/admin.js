@@ -18,6 +18,7 @@ import {
   nextOrderNumber,
 } from './db.js';
 import { htmlResponse, money, portalLayout, statusBadge } from './ui.js';
+import { handleProductImageUpload } from './media.js';
 
 const ADMIN_NAV = [
   ['/admin', 'Dashboard', 'dashboard'],
@@ -26,6 +27,9 @@ const ADMIN_NAV = [
   ['/admin/members', 'Members', 'members'],
   ['/admin/requests', 'Template votes', 'requests'],
 ];
+
+const PLATFORM_PRESETS = ['Canva', 'Wix Studio', 'Shopify', 'Squarespace', 'WordPress'];
+const CATEGORY_PRESETS = ['canva', 'wix', 'shopify'];
 
 function adminPage(user, active, title, body, flash, flashError) {
   return htmlResponse(
@@ -48,11 +52,11 @@ export async function adminDashboard(env, user) {
 <h1>Staff CMS</h1>
 <p class="lead">Manage products, member orders, downloads, and template votes. Two staff accounts are supported.</p>
 <div class="card-grid">
-  <div class="stat-card"><strong>${stats.members}</strong><span>Members</span></div>
-  <div class="stat-card"><strong>${stats.orders}</strong><span>Orders</span></div>
-  <div class="stat-card"><strong>${stats.openOrders}</strong><span>Open orders</span></div>
-  <div class="stat-card"><strong>${stats.products}</strong><span>Products</span></div>
-  <div class="stat-card"><strong>${stats.openRequests}</strong><span>Open ideas</span></div>
+  <a class="stat-card" href="/admin/members"><strong>${stats.members}</strong><span>Members</span></a>
+  <a class="stat-card" href="/admin/orders"><strong>${stats.orders}</strong><span>Orders</span></a>
+  <a class="stat-card" href="/admin/orders?filter=open"><strong>${stats.openOrders}</strong><span>Open orders</span></a>
+  <a class="stat-card" href="/admin/products"><strong>${stats.products}</strong><span>Products</span></a>
+  <a class="stat-card" href="/admin/requests?filter=open"><strong>${stats.openRequests}</strong><span>Open ideas</span></a>
 </div>
 <div class="panel">
   <h2>Recent orders</h2>
@@ -112,6 +116,137 @@ export async function adminProducts(env, user, flash, flashError) {
   return adminPage(user, 'products', 'Products', body, flash, flashError);
 }
 
+function platformFieldValues(platform) {
+  const raw = platform || '';
+  if (PLATFORM_PRESETS.includes(raw)) {
+    return { select: raw, custom: '' };
+  }
+  if (!raw) return { select: '', custom: '' };
+  return { select: '__other__', custom: raw };
+}
+
+function categoryFieldValues(category) {
+  const raw = category || 'canva';
+  if (CATEGORY_PRESETS.includes(raw)) {
+    return { select: raw, custom: '' };
+  }
+  if (raw === 'other') {
+    return { select: 'other', custom: '' };
+  }
+  return { select: 'other', custom: raw };
+}
+
+function resolvePlatform(form) {
+  const sel = String(form.get('platform') || '').trim();
+  if (sel === '__other__') {
+    return String(form.get('platform_custom') || '').trim();
+  }
+  return sel;
+}
+
+function resolveCategory(form) {
+  const sel = String(form.get('category') || 'canva').trim();
+  if (sel === 'other') {
+    const custom = String(form.get('category_custom') || '').trim();
+    return custom || 'other';
+  }
+  return sel;
+}
+
+function productImageField(images) {
+  const urls = images || [];
+  const previewHtml = urls
+    .map(
+      (url) => `<div class="image-preview-item" data-url="${escapeHtml(url)}">
+      <img src="${escapeHtml(url)}" alt="">
+      <button type="button" aria-label="Remove image" title="Remove">&times;</button>
+    </div>`
+    )
+    .join('');
+  const imagesText = urls.join('\n');
+  return `
+  <div class="form-row">
+    <label>Product images</label>
+    <div class="image-upload-panel">
+      <div class="image-preview-grid" id="image-preview-grid">${previewHtml}</div>
+      <div class="actions" style="margin-top:0">
+        <button class="btn btn-ghost btn-sm" type="button" id="image-upload-btn">Upload images</button>
+        <input type="file" id="image-file-input" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+      </div>
+      <p class="muted">Uploaded images are saved when you upload. You can also paste URLs below (one per line).</p>
+      <textarea id="images" name="images" placeholder="https://… or /media/products/…">${escapeHtml(imagesText)}</textarea>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var grid = document.getElementById('image-preview-grid');
+    var textarea = document.getElementById('images');
+    var fileInput = document.getElementById('image-file-input');
+    var uploadBtn = document.getElementById('image-upload-btn');
+    if (!grid || !textarea) return;
+
+    function linesFromTextarea() {
+      return textarea.value.split('\\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    }
+
+    function syncTextarea(urls) {
+      textarea.value = urls.join('\\n');
+    }
+
+    function addPreview(url) {
+      var item = document.createElement('div');
+      item.className = 'image-preview-item';
+      item.dataset.url = url;
+      item.innerHTML = '<img src="' + url.replace(/"/g, '&quot;') + '" alt=""><button type="button" aria-label="Remove image" title="Remove">&times;</button>';
+      grid.appendChild(item);
+    }
+
+    function rebuildFromTextarea() {
+      grid.innerHTML = '';
+      linesFromTextarea().forEach(addPreview);
+    }
+
+    grid.addEventListener('click', function(e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      var item = btn.closest('.image-preview-item');
+      if (!item) return;
+      var urls = linesFromTextarea().filter(function(u){ return u !== item.dataset.url; });
+      syncTextarea(urls);
+      item.remove();
+    });
+
+    uploadBtn.addEventListener('click', function(){ fileInput.click(); });
+
+    fileInput.addEventListener('change', async function() {
+      var files = Array.from(fileInput.files || []);
+      fileInput.value = '';
+      if (!files.length) return;
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = 'Uploading…';
+      try {
+        for (var i = 0; i < files.length; i++) {
+          var fd = new FormData();
+          fd.append('file', files[i]);
+          var res = await fetch('/api/admin/upload-image', { method: 'POST', body: fd });
+          var data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Upload failed');
+          var urls = linesFromTextarea();
+          urls.push(data.url);
+          syncTextarea(urls);
+          addPreview(data.url);
+        }
+      } catch (err) {
+        alert(err.message || 'Could not upload image.');
+      } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = 'Upload images';
+      }
+    });
+  })();
+  </script>`;
+}
+
 function productForm(product = null) {
   const p = product || {
     slug: '',
@@ -130,7 +265,8 @@ function productForm(product = null) {
     sort_order: 0,
   };
   const featuresText = (p.features || []).join('\n');
-  const imagesText = (p.images || []).join('\n');
+  const platformFields = platformFieldValues(p.platform);
+  const categoryFields = categoryFieldValues(p.category);
   return `
 <form class="form-grid" method="POST" action="${product ? `/api/admin/products/${product.id}` : '/api/admin/products'}">
   <div class="form-row two">
@@ -150,20 +286,28 @@ function productForm(product = null) {
     </div>
     <div class="form-row">
       <label for="platform">Platform</label>
-      <input id="platform" name="platform" value="${escapeHtml(p.platform || '')}" placeholder="Canva, Wix Studio…">
+      <select id="platform" name="platform">
+        <option value="" ${!platformFields.select ? 'selected' : ''}>— Select —</option>
+        ${PLATFORM_PRESETS.map(
+          (opt) =>
+            `<option value="${escapeHtml(opt)}" ${platformFields.select === opt ? 'selected' : ''}>${escapeHtml(opt)}</option>`
+        ).join('')}
+        <option value="__other__" ${platformFields.select === '__other__' ? 'selected' : ''}>Other…</option>
+      </select>
+      <input class="field-other" id="platform_custom" name="platform_custom" value="${escapeHtml(platformFields.custom)}" placeholder="Custom platform name" style="${platformFields.select === '__other__' ? '' : 'display:none'}">
     </div>
   </div>
   <div class="form-row two">
     <div class="form-row">
       <label for="category">Category</label>
       <select id="category" name="category">
-        ${['canva', 'wix', 'shopify', 'other']
-          .map(
-            (c) =>
-              `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c}</option>`
-          )
-          .join('')}
+        ${CATEGORY_PRESETS.map(
+          (c) =>
+            `<option value="${c}" ${categoryFields.select === c ? 'selected' : ''}>${c}</option>`
+        ).join('')}
+        <option value="other" ${categoryFields.select === 'other' ? 'selected' : ''}>other</option>
       </select>
+      <input class="field-other" id="category_custom" name="category_custom" value="${escapeHtml(categoryFields.custom)}" placeholder="Custom category" style="${categoryFields.select === 'other' ? '' : 'display:none'}">
     </div>
     <div class="form-row">
       <label for="badge">Badge</label>
@@ -188,10 +332,7 @@ function productForm(product = null) {
     <label for="features">Features (one per line)</label>
     <textarea id="features" name="features">${escapeHtml(featuresText)}</textarea>
   </div>
-  <div class="form-row">
-    <label for="images">Image URLs (one per line)</label>
-    <textarea id="images" name="images" placeholder="https://…">${escapeHtml(imagesText)}</textarea>
-  </div>
+  ${productImageField(p.images || [])}
   <div class="form-row">
     <label for="video_url">Video URL</label>
     <input id="video_url" name="video_url" value="${escapeHtml(p.video_url || '')}" placeholder="https://…">
@@ -213,7 +354,23 @@ function productForm(product = null) {
     <button class="btn btn-pink" type="submit">${product ? 'Save product' : 'Create product'}</button>
     <a class="btn btn-ghost" href="/admin/products">Cancel</a>
   </div>
-</form>`;
+</form>
+<script>
+(function(){
+  function toggleOther(selectId, inputId, otherValue) {
+    var sel = document.getElementById(selectId);
+    var input = document.getElementById(inputId);
+    if (!sel || !input) return;
+    function sync() {
+      input.style.display = sel.value === otherValue ? '' : 'none';
+    }
+    sel.addEventListener('change', sync);
+    sync();
+  }
+  toggleOther('platform', 'platform_custom', '__other__');
+  toggleOther('category', 'category_custom', 'other');
+})();
+</script>`;
 }
 
 export async function adminProductEdit(env, user, id, flash, flashError) {
@@ -229,11 +386,21 @@ export async function adminProductEdit(env, user, id, flash, flashError) {
   return adminPage(user, 'products', isNew ? 'New product' : 'Edit product', body, flash, flashError);
 }
 
-export async function adminOrders(env, user, flash, flashError) {
-  const orders = await listAllOrders(env);
+export async function adminOrders(env, user, flash, flashError, filter) {
+  let orders = await listAllOrders(env);
+  if (filter === 'open') {
+    orders = orders.filter((o) =>
+      ['pending', 'paid', 'processing'].includes(o.status)
+    );
+  }
+  const filterNote =
+    filter === 'open'
+      ? '<p class="muted" style="margin-bottom:1rem">Showing open orders only. <a href="/admin/orders">View all</a></p>'
+      : '';
   const body = `
 <h1>Orders</h1>
 <p class="lead">Site orders only (not Etsy). Attach downloads and guidelines after payment.</p>
+${filterNote}
 <div class="actions" style="margin-top:0;margin-bottom:1rem">
   <a class="btn btn-pink" href="/admin/orders/new">Create order</a>
 </div>
@@ -459,6 +626,38 @@ export async function adminOrderDetail(env, user, orderId, flash, flashError) {
   return adminPage(user, 'orders', order.order_number, body, flash, flashError);
 }
 
+export async function adminProfile(env, user, flash, flashError) {
+  const fresh = await env.DB.prepare(
+    `SELECT id, email, name, phone, business_name, role FROM users WHERE id = ?`
+  )
+    .bind(user.id)
+    .first();
+  const u = fresh || user;
+  const body = `
+<h1>Profile</h1>
+<p class="lead">Your staff account details.</p>
+<div class="panel">
+  <form class="form-grid" method="POST" action="/api/admin/profile">
+    <div class="form-row">
+      <label for="email">Email</label>
+      <input id="email" value="${escapeHtml(u.email)}" disabled>
+    </div>
+    <div class="form-row two">
+      <div class="form-row">
+        <label for="name">Name</label>
+        <input id="name" name="name" value="${escapeHtml(u.name || '')}" maxlength="120" required>
+      </div>
+      <div class="form-row">
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" value="${escapeHtml(u.phone || '')}" maxlength="40">
+      </div>
+    </div>
+    <button class="btn btn-pink" type="submit">Save profile</button>
+  </form>
+</div>`;
+  return adminPage(user, 'profile', 'Profile', body, flash, flashError);
+}
+
 export async function adminMembers(env, user) {
   const members = await listMembers(env);
   const body = `
@@ -485,11 +684,19 @@ export async function adminMembers(env, user) {
   return adminPage(user, 'members', 'Members', body);
 }
 
-export async function adminRequests(env, user, flash, flashError) {
-  const requests = await listTemplateRequests(env);
+export async function adminRequests(env, user, flash, flashError, filter) {
+  let requests = await listTemplateRequests(env);
+  if (filter === 'open') {
+    requests = requests.filter((r) => r.status === 'open');
+  }
+  const filterNote =
+    filter === 'open'
+      ? '<p class="muted" style="margin-bottom:1rem">Showing open ideas only. <a href="/admin/requests">View all</a></p>'
+      : '';
   const body = `
 <h1>Template votes</h1>
 <p class="lead">Member requests ranked by votes. Update status as you plan or ship ideas.</p>
+${filterNote}
 <div class="panel">
   ${
     requests.length === 0
@@ -538,6 +745,25 @@ function slugify(text) {
 }
 
 export async function handleAdminApi(request, env, user, pathname) {
+  if (pathname === '/api/admin/upload-image' && request.method === 'POST') {
+    return handleProductImageUpload(request, env);
+  }
+
+  if (pathname === '/api/admin/profile' && request.method === 'POST') {
+    const form = await request.formData();
+    const name = String(form.get('name') || '').trim();
+    const phone = String(form.get('phone') || '').trim();
+    if (!name) {
+      return redirect('/admin/profile?error=' + encodeURIComponent('Name is required.'));
+    }
+    await env.DB.prepare(
+      `UPDATE users SET name = ?, phone = ?, updated_at = datetime('now') WHERE id = ?`
+    )
+      .bind(name, phone, user.id)
+      .run();
+    return redirect('/admin/profile?ok=' + encodeURIComponent('Profile saved.'));
+  }
+
   // Create product
   if (pathname === '/api/admin/products' && request.method === 'POST') {
     const form = await request.formData();
@@ -557,8 +783,8 @@ export async function handleAdminApi(request, env, user, pathname) {
           slug,
           name,
           String(form.get('niche') || '').trim(),
-          String(form.get('platform') || '').trim(),
-          String(form.get('category') || 'canva'),
+          resolvePlatform(form),
+          resolveCategory(form),
           String(form.get('badge') || '').trim(),
           Number(form.get('price') || 0),
           original === '' || original == null ? null : Number(original),
@@ -598,8 +824,8 @@ export async function handleAdminApi(request, env, user, pathname) {
         String(form.get('slug') || '').trim(),
         String(form.get('name') || '').trim(),
         String(form.get('niche') || '').trim(),
-        String(form.get('platform') || '').trim(),
-        String(form.get('category') || 'canva'),
+        resolvePlatform(form),
+        resolveCategory(form),
         String(form.get('badge') || '').trim(),
         Number(form.get('price') || 0),
         original === '' || original == null ? null : Number(original),

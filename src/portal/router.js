@@ -21,9 +21,11 @@ import {
   adminOrders,
   adminProductEdit,
   adminProducts,
+  adminProfile,
   adminRequests,
   handleAdminApi,
 } from './admin.js';
+import { serveProductMedia } from './media.js';
 import {
   handleAuthApi,
   handleMemberApi,
@@ -32,6 +34,8 @@ import {
   memberDashboard,
   memberDownloads,
   memberGuidelines,
+  memberInvoiceDetail,
+  memberInvoices,
   memberOrderDetail,
   memberOrders,
   memberProfile,
@@ -91,6 +95,9 @@ export async function handlePortal(request, env, pathname, templateData) {
 }
 
 async function handlePortalInner(request, env, pathname, templateData) {
+  const mediaRes = await serveProductMedia(env, pathname);
+  if (mediaRes) return mediaRes;
+
   const dbErr = requireDb(env);
   // Allow login pages to show even if we need to message about DB — but APIs need DB
   const needsDb =
@@ -152,9 +159,16 @@ async function handlePortalInner(request, env, pathname, templateData) {
     if (!user) return redirect('/login');
 
     if (pathname === '/member') return memberDashboard(env, user);
-    if (pathname === '/member/orders') return memberOrders(env, user);
+    if (pathname === '/member/orders') {
+      return memberOrders(env, user, url.searchParams.get('filter'));
+    }
     const orderMatch = pathname.match(/^\/member\/orders\/(\d+)$/);
     if (orderMatch) return memberOrderDetail(env, user, Number(orderMatch[1]));
+    if (pathname === '/member/invoices') return memberInvoices(env, user);
+    const invoiceMatch = pathname.match(/^\/member\/invoices\/(\d+)$/);
+    if (invoiceMatch) {
+      return memberInvoiceDetail(env, user, Number(invoiceMatch[1]));
+    }
     if (pathname === '/member/downloads') return memberDownloads(env, user);
     if (pathname === '/member/guidelines') return memberGuidelines(env, user);
     if (pathname === '/member/requests') {
@@ -195,7 +209,7 @@ async function handlePortalInner(request, env, pathname, templateData) {
       return adminProductEdit(env, user, Number(prodMatch[1]), flash, flashError);
     }
     if (pathname === '/admin/orders') {
-      return adminOrders(env, user, flash, flashError);
+      return adminOrders(env, user, flash, flashError, url.searchParams.get('filter'));
     }
     if (pathname === '/admin/orders/new') {
       return adminOrderNew(env, user, flash, flashError);
@@ -205,8 +219,16 @@ async function handlePortalInner(request, env, pathname, templateData) {
       return adminOrderDetail(env, user, Number(ordMatch[1]), flash, flashError);
     }
     if (pathname === '/admin/members') return adminMembers(env, user);
+    if (pathname === '/admin/profile') {
+      const fresh = await env.DB.prepare(
+        `SELECT id, email, name, phone, business_name, role FROM users WHERE id = ?`
+      )
+        .bind(user.id)
+        .first();
+      return adminProfile(env, fresh || user, flash, flashError);
+    }
     if (pathname === '/admin/requests') {
-      return adminRequests(env, user, flash, flashError);
+      return adminRequests(env, user, flash, flashError, url.searchParams.get('filter'));
     }
   }
 
