@@ -12,6 +12,7 @@ import {
   redirect,
 } from './auth.js';
 import { ensureProductSeed } from './db.js';
+import { ensureSchema } from './schema.js';
 import {
   adminDashboard,
   adminMembers,
@@ -100,19 +101,30 @@ async function handlePortalInner(request, env, pathname, templateData) {
 
   if (needsDb && dbErr) return dbErr;
 
-  // Seed only when DB work is required — never block the public login screens.
+  // Create tables if this D1 is empty, then seed staff/catalog when needed.
+  if (env.DB && needsDb) {
+    await ensureSchema(env);
+  }
+
   const shouldSeed =
     env.DB &&
-    (pathname.startsWith('/admin') ||
-      pathname.startsWith('/api/admin') ||
-      pathname.startsWith('/api/auth/staff-login') ||
-      pathname.startsWith('/member') ||
-      pathname.startsWith('/api/member') ||
+    (pathname.startsWith('/api/auth/staff-login') ||
       pathname.startsWith('/api/auth/magic-link') ||
-      pathname.startsWith('/auth/'));
+      pathname.startsWith('/auth/verify') ||
+      pathname.startsWith('/api/admin') ||
+      pathname.startsWith('/admin') ||
+      pathname.startsWith('/api/member') ||
+      pathname.startsWith('/member'));
   if (shouldSeed) {
     await ensureStaffSeed(env);
-    await ensureProductSeed(env, templateData);
+    if (
+      pathname.startsWith('/admin') ||
+      pathname.startsWith('/api/admin') ||
+      pathname.startsWith('/member') ||
+      pathname.startsWith('/api/member')
+    ) {
+      await ensureProductSeed(env, templateData);
+    }
   }
 
   const url = new URL(request.url);
