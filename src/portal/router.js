@@ -34,6 +34,8 @@ import {
   memberDashboard,
   memberDownloads,
   memberGuidelines,
+  memberInvoiceDetail,
+  memberInvoices,
   memberOrderDetail,
   memberOrders,
   memberProfile,
@@ -157,9 +159,16 @@ async function handlePortalInner(request, env, pathname, templateData) {
     if (!user) return redirect('/login');
 
     if (pathname === '/member') return memberDashboard(env, user);
-    if (pathname === '/member/orders') return memberOrders(env, user);
+    if (pathname === '/member/orders') {
+      return memberOrders(env, user, url.searchParams.get('filter'));
+    }
     const orderMatch = pathname.match(/^\/member\/orders\/(\d+)$/);
     if (orderMatch) return memberOrderDetail(env, user, Number(orderMatch[1]));
+    if (pathname === '/member/invoices') return memberInvoices(env, user);
+    const invoiceMatch = pathname.match(/^\/member\/invoices\/(\d+)$/);
+    if (invoiceMatch) {
+      return memberInvoiceDetail(env, user, Number(invoiceMatch[1]));
+    }
     if (pathname === '/member/downloads') return memberDownloads(env, user);
     if (pathname === '/member/guidelines') return memberGuidelines(env, user);
     if (pathname === '/member/requests') {

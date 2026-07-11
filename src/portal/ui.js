@@ -204,6 +204,13 @@ textarea { min-height: 110px; resize: vertical; }
 .empty { color: var(--muted); padding: 1rem 0; }
 .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
 .vote-count { font-family: Fraunces, serif; font-weight: 700; font-size: 1.15rem; }
+.invoice-doc { max-width: 48rem; }
+@media print {
+  .portal-top, .portal-side, .no-print { display: none !important; }
+  .portal-shell { display: block; min-height: 0; }
+  .portal-main { padding: 0; max-width: none; }
+  body { background: #fff; }
+}
 `;
 }
 

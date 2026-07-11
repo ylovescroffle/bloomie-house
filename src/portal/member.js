@@ -28,6 +28,7 @@ import { htmlResponse, money, portalLayout, statusBadge } from './ui.js';
 const MEMBER_NAV = [
   ['/member', 'Dashboard', 'dashboard'],
   ['/member/orders', 'Orders', 'orders'],
+  ['/member/invoices', 'Invoices', 'invoices'],
   ['/member/downloads', 'Downloads', 'downloads'],
   ['/member/guidelines', 'Guidelines', 'guidelines'],
   ['/member/requests', 'Template ideas', 'requests'],
@@ -182,15 +183,17 @@ export async function memberDashboard(env, user) {
   const openOrders = orders.filter((o) =>
     ['pending', 'paid', 'processing'].includes(o.status)
   );
+  const invoices = orders.filter((o) => orderIsPaid(o.status));
 
   const body = `
 <h1>Welcome${user.name ? `, ${escapeHtml(user.name.split(' ')[0])}` : ''}</h1>
-<p class="lead">Your Bloomie House account — orders, downloads, and guidelines in one place.</p>
+<p class="lead">Your Bloomie House account — orders, invoices, downloads, and guidelines in one place.</p>
 <div class="card-grid">
-  <div class="stat-card"><strong>${orders.length}</strong><span>Orders</span></div>
-  <div class="stat-card"><strong>${openOrders.length}</strong><span>In progress</span></div>
-  <div class="stat-card"><strong>${downloads.length}</strong><span>Downloads</span></div>
-  <div class="stat-card"><strong>${guidelines.length}</strong><span>Guidelines</span></div>
+  <a class="stat-card" href="/member/orders"><strong>${orders.length}</strong><span>Orders</span></a>
+  <a class="stat-card" href="/member/orders?filter=open"><strong>${openOrders.length}</strong><span>In progress</span></a>
+  <a class="stat-card" href="/member/downloads"><strong>${downloads.length}</strong><span>Downloads</span></a>
+  <a class="stat-card" href="/member/guidelines"><strong>${guidelines.length}</strong><span>Guidelines</span></a>
+  <a class="stat-card" href="/member/invoices"><strong>${invoices.length}</strong><span>Invoices</span></a>
 </div>
 <div class="panel">
   <h2>Recent orders</h2>
@@ -221,11 +224,21 @@ export async function memberDashboard(env, user) {
   return memberPage(user, 'dashboard', 'Member', body);
 }
 
-export async function memberOrders(env, user) {
-  const orders = await listOrdersForUser(env, user.id);
+export async function memberOrders(env, user, filter) {
+  let orders = await listOrdersForUser(env, user.id);
+  if (filter === 'open') {
+    orders = orders.filter((o) =>
+      ['pending', 'paid', 'processing'].includes(o.status)
+    );
+  }
+  const filterNote =
+    filter === 'open'
+      ? '<p class="muted" style="margin-bottom:1rem">Showing in-progress orders only. <a href="/member/orders">View all</a></p>'
+      : '';
   const body = `
 <h1>Orders</h1>
 <p class="lead">Orders placed or managed through Bloomie House (not Etsy).</p>
+${filterNote}
 <div class="panel">
   ${
     orders.length === 0
@@ -247,6 +260,108 @@ export async function memberOrders(env, user) {
   }
 </div>`;
   return memberPage(user, 'orders', 'Orders', body);
+}
+
+export async function memberInvoices(env, user) {
+  const orders = (await listOrdersForUser(env, user.id)).filter((o) =>
+    orderIsPaid(o.status)
+  );
+  const body = `
+<h1>Invoices</h1>
+<p class="lead">Tax invoices for your paid Bloomie House orders.</p>
+<div class="panel">
+  ${
+    orders.length === 0
+      ? `<p class="empty">No invoices yet. Invoices appear once an order is marked paid.</p>`
+      : `<div class="table-wrap"><table>
+        <thead><tr><th>Invoice</th><th>Total</th><th>Date</th><th></th></tr></thead>
+        <tbody>
+          ${orders
+            .map(
+              (o) => `<tr>
+            <td><a href="/member/invoices/${o.id}">${escapeHtml(o.order_number)}</a></td>
+            <td>${money(o.total, o.currency)}</td>
+            <td>${escapeHtml((o.created_at || '').slice(0, 10))}</td>
+            <td><a class="btn btn-ghost btn-sm" href="/member/invoices/${o.id}">View</a></td>
+          </tr>`
+            )
+            .join('')}
+        </tbody></table></div>`
+  }
+</div>`;
+  return memberPage(user, 'invoices', 'Invoices', body);
+}
+
+export async function memberInvoiceDetail(env, user, orderId) {
+  const order = await getOrder(env, orderId);
+  if (!order || order.user_id !== user.id || !orderIsPaid(order.status)) {
+    return memberPage(
+      user,
+      'invoices',
+      'Invoice',
+      `<h1>Invoice not found</h1><p class="lead"><a href="/member/invoices">Back to invoices</a></p>`,
+      null,
+      'We could not find that invoice.'
+    );
+  }
+  const items = await getOrderItems(env, order.id);
+  const invoiceDate = (order.updated_at || order.created_at || '').slice(0, 10);
+  const body = `
+<div class="invoice-doc panel">
+  <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem">
+    <div>
+      <p class="muted" style="margin-bottom:.25rem">Bloomie House</p>
+      <h1 style="font-family:Fraunces,serif;font-size:1.65rem;margin:0">Tax invoice</h1>
+      <p class="muted" style="margin-top:.35rem">${escapeHtml(order.order_number)}</p>
+    </div>
+    <div style="text-align:right">
+      <p class="muted">Date</p>
+      <p><strong>${escapeHtml(invoiceDate)}</strong></p>
+      <p class="muted" style="margin-top:.5rem">Status</p>
+      <p>${statusBadge(order.status)}</p>
+    </div>
+  </div>
+  <div class="form-row two" style="margin-bottom:1.25rem">
+    <div>
+      <p class="muted">Bill to</p>
+      <p><strong>${escapeHtml(user.name || user.email)}</strong></p>
+      <p class="muted">${escapeHtml(user.email)}</p>
+      ${user.business_name ? `<p class="muted">${escapeHtml(user.business_name)}</p>` : ''}
+    </div>
+    <div>
+      <p class="muted">From</p>
+      <p><strong>Bloomie House</strong></p>
+      <p class="muted">hello@bloomiehouse.com.au</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Description</th><th>Qty</th><th>Amount</th></tr></thead>
+      <tbody>
+        ${items
+          .map(
+            (i) => `<tr>
+          <td>${escapeHtml(i.product_name)}</td>
+          <td>${i.quantity}</td>
+          <td>${money(i.price * (i.quantity || 1))}</td>
+        </tr>`
+          )
+          .join('')}
+        <tr>
+          <td colspan="2" style="text-align:right;font-weight:600">Total</td>
+          <td style="font-weight:600">${money(order.total, order.currency)}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  ${order.notes ? `<p class="muted" style="margin-top:1rem">${escapeHtml(order.notes)}</p>` : ''}
+</div>
+<div class="actions no-print">
+  <button class="btn btn-pink btn-sm" type="button" onclick="window.print()">Print invoice</button>
+  <a class="btn btn-ghost btn-sm" href="/member/invoices">All invoices</a>
+  <a class="btn btn-ghost btn-sm" href="/member/orders/${order.id}">View order</a>
+</div>`;
+  return memberPage(user, 'invoices', `Invoice ${order.order_number}`, body);
 }
 
 export async function memberOrderDetail(env, user, orderId) {
@@ -323,6 +438,11 @@ ${
   }
 </div>`
     : `<div class="panel"><p class="muted">Downloads and guidelines unlock once this order is marked paid.</p></div>`
+}
+${
+  orderIsPaid(order.status)
+    ? `<p class="no-print"><a class="btn btn-ghost btn-sm" href="/member/invoices/${order.id}">View invoice</a></p>`
+    : ''
 }
 <p><a href="/member/orders">← All orders</a></p>`;
   return memberPage(user, 'orders', order.order_number, body);
