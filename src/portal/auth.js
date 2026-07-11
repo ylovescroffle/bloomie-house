@@ -208,31 +208,36 @@ export async function sendMagicLinkEmail(env, email, link) {
 /** Seed two staff accounts if none exist (local + first deploy). */
 export async function ensureStaffSeed(env) {
   if (!env.DB) return;
-  const existing = await env.DB.prepare(
-    `SELECT COUNT(*) AS c FROM users WHERE role = 'staff'`
-  ).first();
-  if (existing && existing.c > 0) return;
+  try {
+    const existing = await env.DB.prepare(
+      `SELECT COUNT(*) AS c FROM users WHERE role = 'staff'`
+    ).first();
+    if (existing && Number(existing.c) > 0) return;
 
-  const staff = [
-    {
-      email: (env.STAFF1_EMAIL || 'staff1@bloomiehouse.com.au').toLowerCase(),
-      name: env.STAFF1_NAME || 'Staff One',
-      password: env.STAFF1_PASSWORD || 'BloomieStaff1!',
-    },
-    {
-      email: (env.STAFF2_EMAIL || 'staff2@bloomiehouse.com.au').toLowerCase(),
-      name: env.STAFF2_NAME || 'Staff Two',
-      password: env.STAFF2_PASSWORD || 'BloomieStaff2!',
-    },
-  ];
+    const staff = [
+      {
+        email: (env.STAFF1_EMAIL || 'staff1@bloomiehouse.com.au').toLowerCase(),
+        name: env.STAFF1_NAME || 'Staff One',
+        password: env.STAFF1_PASSWORD || 'BloomieStaff1!',
+      },
+      {
+        email: (env.STAFF2_EMAIL || 'staff2@bloomiehouse.com.au').toLowerCase(),
+        name: env.STAFF2_NAME || 'Staff Two',
+        password: env.STAFF2_PASSWORD || 'BloomieStaff2!',
+      },
+    ];
 
-  for (const s of staff) {
-    const { hash, salt } = await hashPassword(s.password);
-    await env.DB.prepare(
-      `INSERT OR IGNORE INTO users (email, name, role, password_hash, password_salt)
-       VALUES (?, ?, 'staff', ?, ?)`
-    )
-      .bind(s.email, s.name, hash, salt)
-      .run();
+    for (const s of staff) {
+      const { hash, salt } = await hashPassword(s.password);
+      await env.DB.prepare(
+        `INSERT OR IGNORE INTO users (email, name, role, password_hash, password_salt)
+         VALUES (?, ?, 'staff', ?, ?)`
+      )
+        .bind(s.email, s.name, hash, salt)
+        .run();
+    }
+  } catch (err) {
+    console.error('ensureStaffSeed failed:', err && err.message ? err.message : err);
+    throw err;
   }
 }

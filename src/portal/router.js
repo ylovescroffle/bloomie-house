@@ -59,6 +59,37 @@ function requireDb(env) {
 }
 
 export async function handlePortal(request, env, pathname, templateData) {
+  try {
+    return await handlePortalInner(request, env, pathname, templateData);
+  } catch (err) {
+    const message = err && err.message ? err.message : String(err);
+    const stack = err && err.stack ? err.stack : '';
+    console.error('Portal error:', message, stack);
+    // Login must stay reachable even if D1/seed fails.
+    if (pathname === '/login' || pathname === '/login/member' || pathname === '/login/staff') {
+      const url = new URL(request.url);
+      return loginPage({
+        flashError:
+          'Account services are temporarily unavailable. Please try again shortly.',
+        mode: pathname.includes('staff') ? 'staff' : 'member',
+        magicLink: url.searchParams.get('dev_link'),
+      });
+    }
+    return new Response(
+      `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Account error</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <style>body{font-family:system-ui;padding:2rem;max-width:40rem;margin:auto;line-height:1.5}
+      code{background:#f4f4f4;padding:.1rem .35rem;border-radius:4px}</style></head>
+      <body><h1>Account temporarily unavailable</h1>
+      <p>Something went wrong loading this page. Please try again or return <a href="/">home</a>.</p>
+      <p><code>${String(message).replace(/[<>&]/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</code></p>
+      </body></html>`,
+      { status: 500, headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'no-store' } }
+    );
+  }
+}
+
+async function handlePortalInner(request, env, pathname, templateData) {
   const dbErr = requireDb(env);
   // Allow login pages to show even if we need to message about DB — but APIs need DB
   const needsDb =
@@ -69,7 +100,17 @@ export async function handlePortal(request, env, pathname, templateData) {
 
   if (needsDb && dbErr) return dbErr;
 
-  if (env.DB) {
+  // Seed only when DB work is required — never block the public login screens.
+  const shouldSeed =
+    env.DB &&
+    (pathname.startsWith('/admin') ||
+      pathname.startsWith('/api/admin') ||
+      pathname.startsWith('/api/auth/staff-login') ||
+      pathname.startsWith('/member') ||
+      pathname.startsWith('/api/member') ||
+      pathname.startsWith('/api/auth/magic-link') ||
+      pathname.startsWith('/auth/'));
+  if (shouldSeed) {
     await ensureStaffSeed(env);
     await ensureProductSeed(env, templateData);
   }
@@ -103,12 +144,6 @@ export async function handlePortal(request, env, pathname, templateData) {
   // Member area
   if (pathname === '/member' || pathname.startsWith('/member/')) {
     if (!user) return redirect('/login');
-    if (user.role === 'staff') {
-      // Staff can still use member view of their own account if they have one,
-      // but typically redirect staff to admin unless they want member pages.
-      // Allow staff into member area only if they navigate there intentionally —
-      // keep access for testing; admin is separate.
-    }
 
     if (pathname === '/member') return memberDashboard(env, user);
     if (pathname === '/member/orders') return memberOrders(env, user);
@@ -120,7 +155,6 @@ export async function handlePortal(request, env, pathname, templateData) {
       return memberRequests(env, user, flash, flashError);
     }
     if (pathname === '/member/profile') {
-      // refresh user fields
       const fresh = await env.DB.prepare(
         `SELECT id, email, name, phone, business_name, role FROM users WHERE id = ?`
       )

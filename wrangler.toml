@@ -20,13 +20,12 @@ pattern = "www.bloomiehouse.com.au/*"
 zone_name = "bloomiehouse.com.au"
 
 # D1 — member portal + staff CMS
-# Local: wrangler uses a local SQLite file via preview_database_id.
-# Production: database_id must be a real D1 UUID in this Cloudflare account.
+# Local: wrangler uses a local SQLite simulation automatically.
+# Production / version previews: database_id must be a real D1 UUID.
 [[d1_databases]]
 binding = "DB"
 database_name = "bloomiehouse"
 database_id = "04ae53df-b8c8-4fea-955d-339b80f150f8"
-preview_database_id = "local-bloomie-house"
 migrations_dir = "migrations"
 
 # Chatbot (Groq) configuration
