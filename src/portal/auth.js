@@ -206,39 +206,44 @@ export async function sendMagicLinkEmail(env, email, link) {
   return { sent: true };
 }
 
-/** Seed two staff accounts if none exist (local + first deploy). */
+/** Seed / refresh two staff accounts (called on staff login). */
 export async function ensureStaffSeed(env) {
   if (!env.DB) return;
-  try {
+  const staff = [
+    {
+      email: (env.STAFF1_EMAIL || 'staff1@bloomiehouse.com.au').toLowerCase(),
+      name: env.STAFF1_NAME || 'Staff One',
+      password: env.STAFF1_PASSWORD || 'BloomieStaff1!',
+    },
+    {
+      email: (env.STAFF2_EMAIL || 'staff2@bloomiehouse.com.au').toLowerCase(),
+      name: env.STAFF2_NAME || 'Staff Two',
+      password: env.STAFF2_PASSWORD || 'BloomieStaff2!',
+    },
+  ];
+
+  for (const s of staff) {
+    const { hash, salt } = await hashPassword(s.password);
     const existing = await env.DB.prepare(
-      `SELECT COUNT(*) AS c FROM users WHERE role = 'staff'`
-    ).first();
-    if (existing && Number(existing.c) > 0) return;
-
-    const staff = [
-      {
-        email: (env.STAFF1_EMAIL || 'staff1@bloomiehouse.com.au').toLowerCase(),
-        name: env.STAFF1_NAME || 'Staff One',
-        password: env.STAFF1_PASSWORD || 'BloomieStaff1!',
-      },
-      {
-        email: (env.STAFF2_EMAIL || 'staff2@bloomiehouse.com.au').toLowerCase(),
-        name: env.STAFF2_NAME || 'Staff Two',
-        password: env.STAFF2_PASSWORD || 'BloomieStaff2!',
-      },
-    ];
-
-    for (const s of staff) {
-      const { hash, salt } = await hashPassword(s.password);
+      `SELECT id FROM users WHERE email = ? AND role = 'staff'`
+    )
+      .bind(s.email)
+      .first();
+    if (existing) {
+      // Keep login working after hash-parameter changes (e.g. PBKDF2 iteration cap).
       await env.DB.prepare(
-        `INSERT OR IGNORE INTO users (email, name, role, password_hash, password_salt)
+        `UPDATE users SET name = ?, password_hash = ?, password_salt = ?, updated_at = datetime('now')
+         WHERE id = ?`
+      )
+        .bind(s.name, hash, salt, existing.id)
+        .run();
+    } else {
+      await env.DB.prepare(
+        `INSERT INTO users (email, name, role, password_hash, password_salt)
          VALUES (?, ?, 'staff', ?, ?)`
       )
         .bind(s.email, s.name, hash, salt)
         .run();
     }
-  } catch (err) {
-    console.error('ensureStaffSeed failed:', err && err.message ? err.message : err);
-    throw err;
   }
 }
