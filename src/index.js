@@ -947,7 +947,8 @@ export default {
       pathname.startsWith('/auth') ||
       pathname.startsWith('/api/auth') ||
       pathname.startsWith('/api/member') ||
-      pathname.startsWith('/api/admin')
+      pathname.startsWith('/api/admin') ||
+      pathname.startsWith('/media/products/')
     ) {
       const portalRes = await handlePortal(request, env, pathname, templateData);
       if (portalRes) return portalRes;

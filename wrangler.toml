@@ -28,6 +28,11 @@ database_name = "bloomiehouse"
 database_id = "04ae53df-b8c8-4fea-955d-339b80f150f8"
 migrations_dir = "migrations"
 
+# Product images uploaded from staff CMS (served at /media/products/*)
+[[r2_buckets]]
+binding = "PRODUCT_IMAGES"
+bucket_name = "bloomiehouse-product-images"
+
 # Chatbot (Groq) configuration
 # The GROQ_API_KEY must be set as a SECRET (never commit it):
 #   npx wrangler secret put GROQ_API_KEY

@@ -35,14 +35,38 @@ a:hover { text-decoration: underline; }
 .portal-brand img { height: 36px; width: auto; }
 .portal-brand:hover { text-decoration: none; }
 .portal-user { font-size: .88rem; color: var(--muted); display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.portal-user-name { color: var(--muted); text-decoration: none; font-weight: 500; }
+.portal-user-name:hover { color: var(--pink); text-decoration: underline; }
 .portal-shell {
   display: grid; grid-template-columns: 220px 1fr; gap: 0; min-height: calc(100vh - 64px);
 }
 @media (max-width: 860px) {
-  .portal-shell { grid-template-columns: 1fr; }
-  .portal-side { border-right: none; border-bottom: 1px solid var(--border); }
-  .portal-side nav { display: flex; flex-wrap: wrap; gap: .35rem; }
-  .portal-side a { padding: .55rem .85rem; }
+  .portal-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    min-height: 0;
+  }
+  .portal-side {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: .65rem .75rem;
+  }
+  .portal-side nav {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: .35rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .portal-side nav::-webkit-scrollbar { display: none; }
+  .portal-side a {
+    flex: 0 0 auto;
+    padding: .5rem .75rem;
+    font-size: .85rem;
+    white-space: nowrap;
+  }
+  .portal-main { padding-top: 1.15rem; }
 }
 .portal-side {
   padding: 1.25rem 1rem; background: rgba(255,255,255,.55);
@@ -64,8 +88,29 @@ a:hover { text-decoration: underline; }
 .stat-card, .panel {
   background: #fff; border-radius: 16px; padding: 1.15rem 1.25rem; box-shadow: var(--shadow);
 }
+a.stat-card {
+  color: inherit; text-decoration: none; display: block;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+a.stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.1); text-decoration: none; }
 .stat-card strong { display: block; font-family: Fraunces, serif; font-size: 1.75rem; margin-bottom: .15rem; }
 .stat-card span { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.image-preview-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: .65rem;
+  margin-bottom: .75rem;
+}
+.image-preview-item {
+  position: relative; border-radius: 12px; overflow: hidden; background: var(--cream);
+  border: 1px solid var(--border); aspect-ratio: 1;
+}
+.image-preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.image-preview-item button {
+  position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border: none;
+  border-radius: 999px; background: rgba(0,0,0,.65); color: #fff; font-size: .85rem;
+  line-height: 1; cursor: pointer; padding: 0;
+}
+.image-upload-panel .muted { margin-top: .5rem; font-size: .82rem; }
+.field-other { margin-top: .35rem; }
 .panel { margin-bottom: 1.25rem; }
 .panel h2 { font-family: Fraunces, serif; font-size: 1.25rem; margin-bottom: .85rem; }
 .table-wrap { overflow-x: auto; }
@@ -185,7 +230,11 @@ export function portalLayout({
   <div class="portal-top">
     <a class="portal-brand" href="/"><img src="${LOGO}" alt=""> Bloomie House</a>
     <div class="portal-user">
-      <span>${escapeHtml(user?.name || user?.email || '')}</span>
+      ${
+        user?.name || user?.email
+          ? `<a class="portal-user-name" href="${user?.role === 'staff' ? '/admin/profile' : '/member/profile'}">${escapeHtml(user?.name || user?.email || '')}</a>`
+          : ''
+      }
       <a class="btn btn-ghost btn-sm" href="/auth/logout">Log out</a>
     </div>
   </div>
