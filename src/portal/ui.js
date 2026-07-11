@@ -39,10 +39,33 @@ a:hover { text-decoration: underline; }
   display: grid; grid-template-columns: 220px 1fr; gap: 0; min-height: calc(100vh - 64px);
 }
 @media (max-width: 860px) {
-  .portal-shell { grid-template-columns: 1fr; }
-  .portal-side { border-right: none; border-bottom: 1px solid var(--border); }
-  .portal-side nav { display: flex; flex-wrap: wrap; gap: .35rem; }
-  .portal-side a { padding: .55rem .85rem; }
+  .portal-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    min-height: 0;
+    align-items: stretch;
+  }
+  .portal-side {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: .65rem .75rem;
+  }
+  .portal-side nav {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: .35rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .portal-side nav::-webkit-scrollbar { display: none; }
+  .portal-side a {
+    flex: 0 0 auto;
+    padding: .5rem .75rem;
+    font-size: .85rem;
+    white-space: nowrap;
+  }
+  .portal-main { padding-top: 1.15rem; }
 }
 .portal-side {
   padding: 1.25rem 1rem; background: rgba(255,255,255,.55);
