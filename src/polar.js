@@ -15,6 +15,18 @@ export function polarConfigured(env) {
   return Boolean(env.POLAR_ACCESS_TOKEN);
 }
 
+function polarTokenIssue(token) {
+  const t = String(token || '').trim();
+  if (!t) return null;
+  if (t.startsWith('whsec_')) {
+    return 'POLAR_ACCESS_TOKEN is set to a webhook secret (whsec_…). Create an Organization Access Token in Polar and use that instead.';
+  }
+  if (!t.startsWith('polar_')) {
+    return 'POLAR_ACCESS_TOKEN does not look like a Polar access token (expected polar_oat_… or similar).';
+  }
+  return null;
+}
+
 export function parsePolarProductMap(env) {
   if (!env.POLAR_PRODUCTS) return {};
   try {
@@ -79,6 +91,11 @@ export async function createPolarCheckout(env, request, { items, origin, templat
     return { ok: false, status: 503, error: 'Checkout is not configured yet.' };
   }
 
+  const tokenIssue = polarTokenIssue(env.POLAR_ACCESS_TOKEN);
+  if (tokenIssue) {
+    return { ok: false, status: 503, error: tokenIssue };
+  }
+
   const resolved = resolveCartPolarProducts(items, templateData || [], env);
 
   if (!resolved.products.length) {
@@ -121,7 +138,12 @@ export async function createPolarCheckout(env, request, { items, origin, templat
       (Array.isArray(data?.detail) ? data.detail.map((d) => d.msg).join('; ') : null) ||
       data?.error ||
       'Could not start checkout.';
-    return { ok: false, status: res.status, error: String(detail) };
+    const errText = String(detail);
+    const friendly =
+      errText === 'invalid_token'
+        ? 'Polar access token is invalid. In sandbox.polar.sh go to Organization Settings → Access Tokens, create a new token, then run: npx wrangler secret put POLAR_ACCESS_TOKEN'
+        : errText;
+    return { ok: false, status: res.status, error: friendly };
   }
 
   return { ok: true, url: data.url, id: data.id };
