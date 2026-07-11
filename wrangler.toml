@@ -48,4 +48,5 @@ EMAIL_FROM = "Bloomie House <hello@bloomiehouse.com.au>"
 #   POLAR_WEBHOOK_SECRET=whsec_xxx  (or raw secret from Polar dashboard)
 #   POLAR_MODE = "sandbox"  # or "production"
 # POLAR_PRODUCTS maps template slug → Polar product UUID (JSON string):
-# POLAR_PRODUCTS = '{"the-studio":"<uuid>","wedding-rsvp":"<uuid>"}'
+POLAR_PRODUCTS = '{"korean-lash-lift-training-manual":"019b8f4c-75c7-41c8-b5e3-59d28a0320c1"}'
+POLAR_MODE = "sandbox"

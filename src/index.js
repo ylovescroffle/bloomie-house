@@ -49,9 +49,10 @@ const templateData = [
       'Korean lash lift & tint curriculum',
       'Resell rights for trainers & academies',
       'Theory, technique & aftercare sections',
-      'Instant digital delivery via Etsy',
+      'Instant digital delivery',
     ],
     etsy: ETSY_KOREAN_LASH_MANUAL,
+    polarProductId: '019b8f4c-75c7-41c8-b5e3-59d28a0320c1',
   },
   {
     slug: 'wedding-rsvp',
