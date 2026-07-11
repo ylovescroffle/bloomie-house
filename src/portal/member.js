@@ -110,12 +110,19 @@ export async function handleAuthApi(request, env, pathname) {
     }
     await findOrCreateMember(env, email);
     const token = await createMagicLink(env, email);
+    // Relative path so local (localhost) and production both work.
+    const linkPath = `/auth/verify?token=${token}`;
     const url = new URL(request.url);
-    const link = `${url.origin}/auth/verify?token=${token}`;
-    const mail = await sendMagicLinkEmail(env, email, link);
+    const host = request.headers.get('Host') || url.host;
+    const isLocal = /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(host);
+    const absoluteLink = `${isLocal ? 'http' : 'https'}://${host}${linkPath}`;
+    const mail = await sendMagicLinkEmail(env, email, absoluteLink);
     if (!mail.sent) {
       return redirect(
-        '/login?dev_link=' + encodeURIComponent(link) + '&ok=' + encodeURIComponent('Check the link below to continue.')
+        '/login?dev_link=' +
+          encodeURIComponent(linkPath) +
+          '&ok=' +
+          encodeURIComponent('Check the link below to continue.')
       );
     }
     return redirect(
