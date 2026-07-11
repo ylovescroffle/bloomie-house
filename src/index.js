@@ -10,6 +10,13 @@ import {
   handlePolarWebhook,
   polarConfigured,
 } from './polar.js';
+import {
+  FONT_LINKS,
+  designTokens,
+  icon,
+  iconStyles,
+  motionStyles,
+} from './design-system.js';
 
 const LOGO =
   'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png';
@@ -1151,42 +1158,44 @@ const chatWidget = `
   #bloomie-chat-btn {
     position: fixed; bottom: 24px; right: 24px; z-index: 9999;
     width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer;
-    background: #D67D9A; color: #fff; font-size: 26px; line-height: 60px;
-    box-shadow: 0 8px 24px rgba(214,125,154,.35); transition: transform .2s;
+    background: var(--pink); color: #fff; font-size: 26px; line-height: 60px;
+    box-shadow: var(--shadow-pink); transition: transform .2s;
+    display: grid; place-items: center;
   }
+  #bloomie-chat-btn .icon { font-size: 1.5rem; color: #fff; }
   #bloomie-chat-btn:hover { transform: scale(1.06); }
   #bloomie-chat-panel {
     position: fixed; bottom: 96px; right: 24px; z-index: 9999;
     width: min(380px, calc(100vw - 32px)); height: 480px;
-    background: #fff; border-radius: 18px; display: none; flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0,0,0,.18); overflow: hidden; border: 1px solid rgba(0,0,0,.06);
+    background: #fff; border-radius: var(--radius-lg); display: none; flex-direction: column;
+    box-shadow: var(--shadow-lift); overflow: hidden; border: 1px solid var(--border);
   }
   #bloomie-chat-panel.open { display: flex; }
   .bloomie-chat-header {
-    padding: 16px 18px; background: #FAFAF8; border-bottom: 1px solid rgba(0,0,0,.06);
+    padding: 16px 18px; background: var(--white); border-bottom: 1px solid var(--border);
     display: flex; justify-content: space-between; align-items: center;
-    font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 17px;
+    font-family: var(--font-display); font-weight: 600; font-size: 17px;
   }
-  .bloomie-chat-header small { display: block; font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 12px; opacity: .7; margin-top: 2px; }
-  .bloomie-chat-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #111; line-height: 1; }
+  .bloomie-chat-header small { display: block; font-family: var(--font-body); font-weight: 400; font-size: 12px; opacity: .7; margin-top: 2px; }
+  .bloomie-chat-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--black); line-height: 1; }
   .bloomie-chat-log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .bloomie-msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; font-family: 'DM Sans', sans-serif; }
-  .bloomie-msg.user { align-self: flex-end; background: #D67D9A; color: #fff; border-bottom-right-radius: 4px; }
-  .bloomie-msg.bot { align-self: flex-start; background: #F0EBE3; color: #111; border-bottom-left-radius: 4px; }
+  .bloomie-msg { max-width: 82%; padding: 10px 14px; border-radius: var(--radius-md); font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; font-family: var(--font-body); }
+  .bloomie-msg.user { align-self: flex-end; background: var(--pink); color: #fff; border-bottom-right-radius: 4px; }
+  .bloomie-msg.bot { align-self: flex-start; background: var(--cream); color: var(--black); border-bottom-left-radius: 4px; }
   .bloomie-msg.typing { font-style: italic; opacity: .7; }
-  .bloomie-chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid rgba(0,0,0,.08); background: #FAFAF8; }
+  .bloomie-chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border); background: var(--white); }
   .bloomie-chat-input input {
-    flex: 1; border: 1px solid rgba(0,0,0,.12); border-radius: 999px; padding: 10px 14px;
-    font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+    flex: 1; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px;
+    font-family: var(--font-body); font-size: 14px; outline: none;
   }
-  .bloomie-chat-input input:focus { border-color: #D67D9A; }
+  .bloomie-chat-input input:focus { border-color: var(--pink); }
   .bloomie-chat-input button {
-    border: none; background: #111; color: #fff; border-radius: 999px; padding: 0 16px;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer;
+    border: none; background: var(--black); color: #fff; border-radius: var(--radius-sm); padding: 0 16px;
+    font-family: var(--font-body); font-size: 13px; cursor: pointer;
   }
   .bloomie-chat-input button:disabled { opacity: .5; cursor: default; }
 </style>
-<button id="bloomie-chat-btn" aria-label="Open chat">💬</button>
+<button id="bloomie-chat-btn" aria-label="Open chat">${icon('chat')}</button>
 <div id="bloomie-chat-panel" role="dialog" aria-label="Chat with Bloomie">
   <div class="bloomie-chat-header">
     <div>Chat with Bloomie<small>AI assistant · usually replies instantly</small></div>
@@ -1261,28 +1270,9 @@ const chatWidget = `
 // ── SHARED LAYOUT ──
 function baseStyles() {
   return `
-:root {
-  --black: #111111;
-  --white: #FAFAF8;
-  --cream: #F5F0E8;
-  --sage: #C8D5B0;
-  --pink: #D67D9A;
-  --sand: #E8DDD0;
-  --charcoal: #2C2C2C;
-  --muted: #7A7570;
-  --border: rgba(0,0,0,0.08);
-  --shadow-border:
-    0px 0px 0px 1px rgba(0, 0, 0, 0.06),
-    0px 1px 2px -1px rgba(0, 0, 0, 0.06),
-    0px 2px 4px 0px rgba(0, 0, 0, 0.04);
-  --shadow-border-hover:
-    0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-    0px 1px 2px -1px rgba(0, 0, 0, 0.08),
-    0px 2px 4px 0px rgba(0, 0, 0, 0.06);
-  --shadow-lift:
-    0px 0px 0px 1px rgba(0, 0, 0, 0.06),
-    0px 10px 28px -6px rgba(0, 0, 0, 0.12);
-}
+${designTokens()}
+${iconStyles()}
+${motionStyles()}
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html {
   scroll-behavior: smooth;
@@ -1290,7 +1280,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   background: var(--white);
   color: var(--black);
   line-height: 1.6;
@@ -1306,22 +1296,6 @@ img {
 h1, h2, h3, .section-title, .page-hero h1 { text-wrap: balance; }
 p, li, .product-info, .page-hero p { text-wrap: pretty; }
 .tabular-nums { font-variant-numeric: tabular-nums; }
-@keyframes cardEnter {
-  from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-@keyframes navEnter {
-  from { opacity: 0; transform: translateY(-14px); filter: blur(4px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-@keyframes glassyFloat {
-  0%, 100% { transform: rotateY(-2deg) rotateX(2deg) translateZ(4px); }
-  50% { transform: rotateY(2deg) rotateX(-2deg) translateZ(6px); }
-}
-@keyframes glassySheen {
-  0% { transform: translateX(-120%) skewX(-12deg); }
-  100% { transform: translateX(220%) skewX(-12deg); }
-}
 @media (prefers-reduced-motion: no-preference) {
   .product-grid .product-card {
     animation: cardEnter 450ms cubic-bezier(0.2, 0, 0, 1) backwards;
@@ -1361,7 +1335,7 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; padding: 1rem 4vw;
-  background: rgba(250,250,248,.72);
+  background: rgba(254,254,249,.72);
   backdrop-filter: blur(14px) saturate(1.25);
   -webkit-backdrop-filter: blur(14px) saturate(1.25);
   box-shadow: var(--shadow-border);
@@ -1371,7 +1345,7 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 }
 .site-nav.is-scrolled {
   padding: .62rem 4vw;
-  background: rgba(250,250,248,.86);
+  background: rgba(254,254,249,.86);
   backdrop-filter: blur(22px) saturate(1.45);
   -webkit-backdrop-filter: blur(22px) saturate(1.45);
   box-shadow: var(--shadow-lift);
@@ -1386,7 +1360,7 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 }
 .site-nav.is-scrolled .nav-logo img { height: 38px; }
 .nav-logo span {
-  font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em;
+  font-family: var(--font-accent); font-weight: 600; font-size: 1.15rem; letter-spacing: -.01em;
   transition-property: font-size, opacity;
   transition-duration: 280ms;
 }
@@ -1456,17 +1430,19 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 .nav-actions { display: flex; align-items: center; gap: .75rem; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
-  padding: .85rem 1.4rem; border-radius: 999px; text-decoration: none;
-  font-size: .88rem; font-weight: 500; border: 1.5px solid transparent;
+  padding: .85rem 1.4rem; border-radius: var(--radius-sm); text-decoration: none;
+  font-family: var(--font-body); font-size: .88rem; font-weight: 600; border: 1.5px solid transparent;
   transition-property: transform, background-color, color, border-color, box-shadow;
   transition-duration: 150ms; transition-timing-function: ease-out; cursor: pointer;
 }
 .btn:hover { box-shadow: var(--shadow-border-hover); }
 .btn:active:not(:disabled) { transform: scale(0.96); }
 .btn-dark { background: var(--black); color: var(--white); box-shadow: var(--shadow-border); }
-.btn-dark:hover { background: #2a2a2a; }
-.btn-pink { background: var(--pink); color: #fff; box-shadow: 0 8px 20px -6px rgba(214,125,154,.45); }
-.btn-pink:hover { background: #c96b88; }
+.btn-dark:hover { background: var(--charcoal); }
+.btn-pink { background: var(--pink); color: #fff; box-shadow: var(--shadow-pink); }
+.btn-pink:hover { background: var(--pink-hover); }
+.btn-sage { background: var(--sage-deep); color: #fff; box-shadow: var(--shadow-border); }
+.btn-sage:hover { background: #1f5222; }
 .btn-ghost { background: transparent; border-color: var(--border); color: var(--black); box-shadow: var(--shadow-border); }
 .btn-ghost:hover { border-color: rgba(0,0,0,.14); }
 .btn-outline-light { background: transparent; border-color: rgba(255,255,255,.5); color: #fff; }
@@ -1487,32 +1463,33 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 .page-hero {
   padding: 4.5rem 4vw 2.5rem;
   background:
-    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(214,125,154,.18), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 90% 20%, rgba(200,213,176,.25), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(214,125,154,.16), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 20%, rgba(200,213,176,.22), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(241,240,234,.8), transparent 60%),
     linear-gradient(180deg, var(--cream), var(--white));
 }
 .page-hero h1 {
-  font-family: 'Fraunces', serif; font-weight: 900; letter-spacing: -.03em;
+  font-family: var(--font-display); font-weight: 700; letter-spacing: -.03em;
   font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.05; margin-bottom: .75rem;
 }
-.page-hero h1 em { font-style: italic; font-weight: 300; color: var(--pink); }
+.page-hero h1 em { font-family: var(--font-accent); font-style: italic; font-weight: 300; color: var(--pink); }
 .page-hero p { color: var(--muted); max-width: 36rem; font-size: 1.05rem; }
 .section { padding: 4rem 4vw; }
 .section-label {
-  font-size: .75rem; letter-spacing: .16em; text-transform: uppercase;
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted); margin-bottom: .6rem;
 }
 .section-title {
-  font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-family: var(--font-display); font-size: clamp(1.8rem, 3.5vw, 2.6rem);
   font-weight: 700; letter-spacing: -.02em; margin-bottom: 1.5rem;
 }
-.section-title em { font-style: italic; font-weight: 300; color: var(--pink); }
+.section-title em { font-family: var(--font-accent); font-style: italic; font-weight: 300; color: var(--pink); }
 .product-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 .product-card {
-  background: #fff; border: none; border-radius: 20px;
+  background: #fff; border: none; border-radius: var(--radius-lg);
   overflow: visible; text-decoration: none; color: inherit;
   box-shadow: var(--shadow-border);
   transition-property: transform, box-shadow;
@@ -1530,7 +1507,7 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 .product-thumb .glassy-3d { position: absolute; inset: 0; border-radius: 20px 20px 0 0; overflow: hidden; }
 .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .product-thumb-label {
-  font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 300;
+  font-family: var(--font-accent); font-size: 1.6rem; font-weight: 300;
   color: rgba(255,255,255,.92); letter-spacing: .04em; text-shadow: 0 2px 12px rgba(0,0,0,.25);
 }
 .mock-cafe { background: linear-gradient(135deg, #6B4226, #C8A07A); }
@@ -1549,11 +1526,11 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   padding: 1.1rem 1.15rem 1.35rem; display: flex; flex-direction: column; gap: .35rem; flex: 1;
   background: #fff; border-radius: 0 0 20px 20px;
 }
-.product-niche { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.product-name { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 700; }
+.product-niche { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.product-name { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; }
 .product-price { display: flex; align-items: baseline; gap: .5rem; margin: .35rem 0 .7rem; }
 .price-current {
-  font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 700;
+  font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 .price-original { font-size: .9rem; color: var(--muted); text-decoration: line-through; font-variant-numeric: tabular-nums; }
@@ -1561,7 +1538,7 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 2rem;
 }
 .filter-btn {
-  border: none; background: #fff; border-radius: 999px;
+  border: none; background: #fff; border-radius: var(--radius-sm);
   padding: .55rem 1rem; font-family: inherit; font-size: .82rem; cursor: pointer;
   color: var(--muted); box-shadow: var(--shadow-border);
   transition-property: background-color, color, box-shadow, transform;
@@ -1579,10 +1556,10 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 }
 .footer-brand img { height: 52px; margin-bottom: .8rem; }
 .footer-brand strong {
-  display: block; font-family: 'Fraunces', serif; font-size: 1.4rem; color: #fff; margin-bottom: .4rem;
+  display: block; font-family: var(--font-accent); font-size: 1.4rem; color: #fff; margin-bottom: .4rem;
 }
 .footer-col h4 {
-  color: #fff; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+  font-family: var(--font-mono); color: #fff; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
   margin-bottom: 1rem;
 }
 .footer-col ul { list-style: none; display: grid; gap: .55rem; }
@@ -1596,7 +1573,7 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 }
 .toast {
   position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(12px);
-  background: var(--black); color: #fff; padding: .85rem 1.25rem; border-radius: 999px;
+  background: var(--charcoal); color: #fff; padding: .85rem 1.25rem; border-radius: var(--radius-sm);
   font-size: .88rem; opacity: 0; pointer-events: none; z-index: 2000;
   transition-property: opacity, transform;
   transition-duration: 200ms; transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
@@ -1684,7 +1661,7 @@ function cartScript(catalogJson) {
     if(!root || !catalog) return;
     var items=window.BloomieCart.items();
     if(!items.length){
-      root.innerHTML='<div class="cart-empty"><h2 style="font-family:Fraunces,serif;margin-bottom:.5rem;">Your cart is empty</h2><p style="color:var(--muted);margin-bottom:1.25rem;">Browse the shop and add a template to get started.</p><a class="btn btn-pink" href="/shop">Continue shopping</a></div>';
+      root.innerHTML='<div class="cart-empty"><h2 style="font-family:var(--font-display);margin-bottom:.5rem;">Your cart is empty</h2><p style="color:var(--muted);margin-bottom:1.25rem;">Browse the shop and add a template to get started.</p><a class="btn btn-pink" href="/shop">Continue shopping</a></div>';
       return;
     }
     var total=0;
@@ -1798,8 +1775,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <link rel="canonical" href="${SITE}${canonical}">
   <link rel="icon" type="image/png" href="${LOGO}">
   <link rel="apple-touch-icon" href="${LOGO}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  ${FONT_LINKS.trim()}
   <style>${baseStyles()}</style>
 </head>
 <body>
@@ -1822,7 +1798,7 @@ function siteNav(active) {
     <img src="${LOGO}" alt="Bloomie House">
     <span>Bloomie House</span>
   </a>
-  <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">${icon('menu')}</button>
   <ul class="nav-links" id="navLinks">
     ${link('/shop', 'Shop', 'shop')}
     ${link('/services', 'Services', 'services')}
@@ -1833,7 +1809,7 @@ function siteNav(active) {
     <a class="btn btn-ghost" href="/login">Account</a>
     <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book Now</a>
     <a class="cart-link" href="/cart" aria-label="Cart">
-      🛒<span class="cart-count" id="cartCount">0</span>
+      ${icon('shopping_bag')}<span class="cart-count" id="cartCount">0</span>
     </a>
   </div>
 </nav>`;
@@ -1912,11 +1888,12 @@ function homePage() {
   const featured = templateData.slice(0, 6).map(productCard).join('');
   const body = `
 <section class="page-hero page-hero-enter" style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;">
+  <p class="section-stars" aria-hidden="true">✶ ✶ ✶ ✶ ✶</p>
   <p class="section-label">Template shop · Est. 2025</p>
   <h1>Bloomie House<br><em>for online</em> success.</h1>
   <p>Premium Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies, boutiques &amp; beyond. Buy, personalise, launch — this week.</p>
   <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.75rem;">
-    <a class="btn btn-pink" href="/shop">Browse Templates →</a>
+    <a class="btn btn-pink" href="/shop">Browse Templates ${icon('arrow_forward')}</a>
     <a class="btn btn-ghost" href="/services">Need us to set it up?</a>
   </div>
 </section>
@@ -1935,17 +1912,17 @@ function homePage() {
   <h2 class="section-title">Services that <em>ship</em> fast</h2>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;">
     <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">DIY Template</h3>
+      <h3 style="font-family:var(--font-display);font-size:1.4rem;margin-bottom:.4rem;">DIY Template</h3>
       <p style="color:var(--muted);margin-bottom:1rem;">From $37 AUD · Instant download</p>
       <a class="btn btn-ghost" href="/shop">Shop templates</a>
     </article>
     <article style="background:var(--black);color:#fff;border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">One Day Website</h3>
+      <h3 style="font-family:var(--font-display);font-size:1.4rem;margin-bottom:.4rem;">One Day Website</h3>
       <p style="opacity:.75;margin-bottom:1rem;">$397 AUD · Live in 24 hours</p>
       <a class="btn btn-pink" href="/services">Book now →</a>
     </article>
     <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">Full Custom</h3>
+      <h3 style="font-family:var(--font-display);font-size:1.4rem;margin-bottom:.4rem;">Full Custom</h3>
       <p style="color:var(--muted);margin-bottom:1rem;">From $897 AUD · Built from scratch</p>
       <a class="btn btn-ghost" href="/full-custom">Let's chat</a>
     </article>
@@ -2123,7 +2100,7 @@ function productPage(t) {
   }
   .pain-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
   .pain-label { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pink); margin-bottom:.45rem; }
-  .pain-text { font-family:Fraunces,serif; font-size:1.05rem; font-weight:700; line-height:1.35; margin-bottom:.55rem; text-wrap:pretty; }
+  .pain-text { font-family:var(--font-display); font-size:1.05rem; font-weight:700; line-height:1.35; margin-bottom:.55rem; text-wrap:pretty; }
   .pain-fix { font-size:.88rem; color:var(--muted); line-height:1.6; text-wrap:pretty; }
   .pdp-funnel-intro { color:var(--muted); max-width:38rem; line-height:1.75; margin-bottom:.5rem; }
   .funnel-steps {
@@ -2137,7 +2114,7 @@ function productPage(t) {
     flex-shrink:0; width:32px; height:32px; border-radius:50%; background:var(--black); color:#fff;
     display:grid; place-items:center; font-size:.82rem; font-weight:600; font-variant-numeric:tabular-nums;
   }
-  .funnel-step strong { display:block; font-family:Fraunces,serif; margin-bottom:.2rem; }
+  .funnel-step strong { display:block; font-family:var(--font-display); margin-bottom:.2rem; }
   .funnel-step p { font-size:.85rem; color:var(--muted); text-wrap:pretty; }
   .pdp-funnel-cta {
     display:flex; justify-content:space-between; align-items:center; gap:1.25rem; flex-wrap:wrap;
@@ -2145,14 +2122,14 @@ function productPage(t) {
     border-radius:18px; padding:1.5rem 1.75rem; box-shadow:var(--shadow-border);
   }
   .funnel-cta-price { display:flex; align-items:baseline; gap:.55rem; margin-bottom:.25rem; }
-  .funnel-cta-price .price-current { font-family:Fraunces,serif; font-size:1.75rem; font-weight:900; }
+  .funnel-cta-price .price-current { font-family:var(--font-display); font-size:1.75rem; font-weight:900; }
   .faq-list { display:grid; gap:.65rem; max-width:760px; margin-top:1.5rem; }
   .faq-item {
     background:#fff; border-radius:14px; padding:0 1.15rem;
     box-shadow:var(--shadow-border); overflow:hidden;
   }
   .faq-item summary {
-    cursor:pointer; padding:1rem 0; font-family:Fraunces,serif; font-weight:700;
+    cursor:pointer; padding:1rem 0; font-family:var(--font-display); font-weight:700;
     list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;
     transition: color 150ms ease-out;
   }
@@ -2182,7 +2159,7 @@ function productPage(t) {
   }
   .audience-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lift); }
   .audience-icon { font-size:1.5rem; display:block; margin-bottom:.5rem; }
-  .audience-card h3 { font-family:Fraunces,serif; font-size:1.05rem; margin-bottom:.35rem; }
+  .audience-card h3 { font-family:var(--font-display); font-size:1.05rem; margin-bottom:.35rem; }
   .audience-card p { font-size:.88rem; color:var(--muted); line-height:1.6; text-wrap:pretty; }
   .audience-not { font-size:.9rem; color:var(--muted); padding:1rem 1.15rem; background:rgba(255,255,255,.65); border-radius:12px; text-wrap:pretty; }
   .testi-sub, .calc-intro { color:var(--muted); max-width:36rem; line-height:1.7; margin-bottom:1.25rem; }
@@ -2190,7 +2167,7 @@ function productPage(t) {
     display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.75rem; max-width:640px;
   }
   .pdp-testimonials .testi-stats div { text-align:center; background:#fff; border-radius:14px; padding:1rem .75rem; box-shadow:var(--shadow-border); }
-  .pdp-testimonials .testi-stats strong { display:block; font-family:Fraunces,serif; font-size:1.5rem; margin-bottom:.2rem; }
+  .pdp-testimonials .testi-stats strong { display:block; font-family:var(--font-display); font-size:1.5rem; margin-bottom:.2rem; }
   .pdp-testimonials .testi-stats span { font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
   .testi-marquee-mask {
     overflow:hidden; position:relative;
@@ -2251,7 +2228,7 @@ function productPage(t) {
   .ba-step { display:flex; justify-content:center; padding-top:.35rem; z-index:1; }
   .ba-step-num {
     width:40px; height:40px; border-radius:50%; background:#fff; color:var(--pink);
-    font-family:Fraunces,serif; font-weight:700; font-size:.95rem;
+    font-family:var(--font-display); font-weight:700; font-size:.95rem;
     display:grid; place-items:center; box-shadow:0 0 0 3px var(--cream), var(--shadow-border);
     transition: transform 500ms cubic-bezier(0.2,0,0,1), box-shadow 500ms cubic-bezier(0.2,0,0,1);
   }
@@ -2335,7 +2312,7 @@ function productPage(t) {
   }
   .calc-row { margin-bottom:1.5rem; }
   .calc-row label { display:block; font-size:.9rem; margin-bottom:.65rem; color:var(--charcoal); }
-  .calc-row label strong { color:var(--pink); font-family:Fraunces,serif; font-size:1.1rem; }
+  .calc-row label strong { color:var(--pink); font-family:var(--font-display); font-size:1.1rem; }
   .calc-slider {
     width:100%; height:6px; border-radius:999px; appearance:none; -webkit-appearance:none;
     background:linear-gradient(90deg, var(--pink), var(--sage)); cursor:pointer;
@@ -2352,7 +2329,7 @@ function productPage(t) {
     display:flex; justify-content:space-between; align-items:center; font-size:.9rem;
   }
   .calc-result-label { color:var(--muted); }
-  .calc-result-val { font-family:Fraunces,serif; font-weight:700; font-size:1.1rem; }
+  .calc-result-val { font-family:var(--font-display); font-weight:700; font-size:1.1rem; }
   .calc-result-highlight .calc-result-val { color:var(--pink); font-size:1.35rem; }
   .calc-result-total {
     background:var(--cream); border-radius:12px; padding:.85rem 1rem; margin-top:.25rem;
@@ -2367,7 +2344,7 @@ function productPage(t) {
     display:inline-block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
     color:var(--pink); background:rgba(214,125,154,.12); padding:.35rem .85rem; border-radius:999px; margin-bottom:1rem;
   }
-  .value-title { font-family:Fraunces,serif; font-size:1.75rem; font-weight:900; margin-bottom:.75rem; text-wrap:balance; }
+  .value-title { font-family:var(--font-display); font-size:1.75rem; font-weight:900; margin-bottom:.75rem; text-wrap:balance; }
   .star-seller-badge {
     display:inline-flex; align-items:center; gap:.45rem; font-size:.82rem; color:var(--charcoal);
     background:linear-gradient(135deg, #fff8e6, #fff); border-radius:999px; padding:.45rem .9rem;
@@ -2386,10 +2363,10 @@ function productPage(t) {
     display:flex; justify-content:space-between; padding:.75rem 0; font-size:.9rem; color:var(--muted);
   }
   .value-strike { text-decoration:line-through; }
-  .value-price { font-family:Fraunces,serif; font-size:2.8rem; font-weight:900; margin:.25rem 0; }
+  .value-price { font-family:var(--font-display); font-size:2.8rem; font-weight:900; margin:.25rem 0; }
   .value-terms { font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
-  .value-script { font-family:Fraunces,serif; font-style:italic; color:var(--pink); font-weight:300; margin-bottom:1.25rem; }
-  .value-cta { width:100%; border-radius:999px; padding:1rem; font-size:.95rem; font-family:inherit; }
+  .value-script { font-family:var(--font-accent); font-style:italic; color:var(--pink); font-weight:300; margin-bottom:1.25rem; }
+  .value-cta { width:100%; border-radius:var(--radius-sm); padding:1rem; font-size:.95rem; font-family:inherit; }
   .social-proof-popup {
     position:fixed; left:16px; bottom:100px; z-index:2500; max-width:min(320px,calc(100vw - 32px));
     display:flex; align-items:center; gap:.75rem; background:#fff; border-radius:14px;
@@ -2446,7 +2423,7 @@ function productPage(t) {
     display:inline-block; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
     color:var(--pink); margin-bottom:.2rem;
   }
-  .process-body strong { display:block; font-family:Fraunces,serif; font-size:1.1rem; margin-bottom:.35rem; }
+  .process-body strong { display:block; font-family:var(--font-display); font-size:1.1rem; margin-bottom:.35rem; }
   .process-body p { font-size:.9rem; color:var(--muted); line-height:1.7; text-wrap:pretty; }
   .process-notice {
     max-width:720px; margin:0 auto 1.75rem; padding:1.15rem 1.25rem;
@@ -2528,7 +2505,7 @@ function productPage(t) {
     <div class="pdp-reveal is-visible">${galleryMain}</div>
     <div class="pdp-info pdp-reveal" style="--reveal-delay:100ms">
       <p class="product-niche">${t.niche}</p>
-      <h1 style="font-family:Fraunces,serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:.4rem 0 1rem;">${t.name}</h1>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:.4rem 0 1rem;">${t.name}</h1>
       <span class="badge badge-platform" style="position:static;display:inline-block;margin-bottom:1rem;">${t.platform}</span>
       <div class="product-price">
         <span class="price-current" style="font-size:1.8rem;">$${t.price} AUD</span>
@@ -2764,7 +2741,7 @@ function checkoutPage() {
     display: grid; place-items: center; font-size: .8rem; font-weight: 600;
   }
   .checkout-step.is-active .checkout-step-num { background: var(--pink); }
-  .checkout-step strong { display: block; font-family: Fraunces, serif; font-size: 1rem; }
+  .checkout-step strong { display: block; font-family: var(--font-display); font-size: 1rem; }
   .checkout-step p { color: var(--muted); font-size: .85rem; line-height: 1.55; text-wrap: pretty; }
   .checkout-trust {
     display: grid; gap: .55rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
@@ -2784,19 +2761,19 @@ function checkoutPage() {
     width: 64px; height: 48px; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-border);
   }
   .checkout-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .checkout-line h3 { font-family: Fraunces, serif; font-size: .95rem; text-wrap: balance; }
+  .checkout-line h3 { font-family: var(--font-display); font-size: .95rem; text-wrap: balance; }
   .checkout-line p { color: var(--muted); font-size: .78rem; }
-  .checkout-line-price { font-family: Fraunces, serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .checkout-line-price { font-family: var(--font-display); font-weight: 700; font-variant-numeric: tabular-nums; }
   .checkout-total {
     display: flex; justify-content: space-between; align-items: baseline; margin-top: 1rem; padding-top: 1rem;
     border-top: 1px solid var(--border);
   }
-  .checkout-total strong { font-family: Fraunces, serif; font-size: 1.75rem; font-variant-numeric: tabular-nums; }
+  .checkout-total strong { font-family: var(--font-display); font-size: 1.75rem; font-variant-numeric: tabular-nums; }
   .checkout-pay-panel { min-height: 420px; }
   .checkout-status {
     text-align: center; padding: 2.5rem 1rem; color: var(--muted);
   }
-  .checkout-status h2 { font-family: Fraunces, serif; color: var(--black); margin-bottom: .5rem; }
+  .checkout-status h2 { font-family: var(--font-display); color: var(--black); margin-bottom: .5rem; }
   .checkout-loader {
     width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--pink);
     border-radius: 50%; animation: spin 800ms linear infinite; margin: 0 auto 1rem;
@@ -2890,7 +2867,7 @@ function checkoutSuccessPage(url) {
 <div class="success-wrap">
   <div class="success-card">
     <div class="success-icon" aria-hidden="true">✓</div>
-    <h2 style="font-family:Fraunces,serif;font-size:1.75rem;margin-bottom:.75rem;">You are all set!</h2>
+    <h2 style="font-family:var(--font-display);font-size:1.75rem;margin-bottom:.75rem;">You are all set!</h2>
     <p style="color:var(--muted);line-height:1.75;margin-bottom:1.5rem;text-wrap:pretty;">
       Your order is confirmed. Check your email for download instructions — and sign in to the member portal to access orders, downloads, and setup guides.
     </p>
@@ -3060,9 +3037,9 @@ function cartPage() {
     box-shadow: var(--shadow-border);
   }
   .cart-thumb img { width:100%; height:100%; object-fit:cover; border-radius:12px; }
-  .cart-meta h3 { font-family:Fraunces,serif; font-size:1.15rem; text-wrap: balance; }
+  .cart-meta h3 { font-family:var(--font-display); font-size:1.15rem; text-wrap: balance; }
   .cart-meta p { color:var(--muted); font-size:.85rem; text-wrap: pretty; }
-  .cart-line-price { font-family:Fraunces,serif; font-weight:700; font-variant-numeric: tabular-nums; }
+  .cart-line-price { font-family:var(--font-display); font-weight:700; font-variant-numeric: tabular-nums; }
   .qty {
     width: 64px; padding: .45rem .5rem; border:1px solid var(--border); border-radius:10px;
     font-family:inherit; margin-right:.5rem; font-variant-numeric: tabular-nums;
@@ -3073,7 +3050,7 @@ function cartPage() {
     display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; align-items:center;
     box-shadow: var(--shadow-border);
   }
-  .cart-total { font-family:Fraunces,serif; font-size:2rem; font-weight:900; font-variant-numeric: tabular-nums; }
+  .cart-total { font-family:var(--font-display); font-size:2rem; font-weight:900; font-variant-numeric: tabular-nums; }
   .cart-note { font-size:.9rem; color:var(--muted); max-width: 34rem; margin-top:1rem; text-wrap: pretty; }
 </style>
 <section class="page-hero page-hero-enter">
@@ -3104,20 +3081,20 @@ function servicesPage() {
 <section class="section" style="padding-top:1rem;">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-bottom:3rem;">
     <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">One Day Website</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">$397 <span style="font-size:1rem;color:var(--muted);text-decoration:line-through;font-weight:400;">$497</span></p>
+      <h2 style="font-family:var(--font-display);font-size:1.5rem;">One Day Website</h2>
+      <p style="font-family:var(--font-display);font-size:2rem;font-weight:900;margin:.5rem 0;">$397 <span style="font-size:1rem;color:var(--muted);text-decoration:line-through;font-weight:400;">$497</span></p>
       <p style="color:var(--muted);margin-bottom:1rem;">We install &amp; personalise a template for your brand — live in ~24 hours.</p>
       <a class="btn btn-pink" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book now →</a>
     </article>
     <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:var(--black);color:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">Full Custom</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">From $897</p>
+      <h2 style="font-family:var(--font-display);font-size:1.5rem;">Full Custom</h2>
+      <p style="font-family:var(--font-display);font-size:2rem;font-weight:900;margin:.5rem 0;">From $897</p>
       <p style="opacity:.75;margin-bottom:1rem;">Built from scratch — up to 6 pages, strategy session, SEO foundation, 30 days support.</p>
       <a class="btn btn-pink" href="/full-custom">View details →</a>
     </article>
     <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">DIY Templates</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">From $37</p>
+      <h2 style="font-family:var(--font-display);font-size:1.5rem;">DIY Templates</h2>
+      <p style="font-family:var(--font-display);font-size:2rem;font-weight:900;margin:.5rem 0;">From $37</p>
       <p style="color:var(--muted);margin-bottom:1rem;">Buy a template, personalise it yourself, launch this week.</p>
       <a class="btn btn-ghost" href="/shop">Browse shop</a>
     </article>
@@ -3160,7 +3137,7 @@ function fullCustomPage() {
     ]
       .map(
         ([h, p]) =>
-          `<div style="background:var(--cream);border-radius:16px;padding:1.25rem;"><h3 style="font-family:Fraunces,serif;margin-bottom:.35rem;">${h}</h3><p style="color:var(--muted);font-size:.95rem;">${p}</p></div>`
+          `<div style="background:var(--cream);border-radius:16px;padding:1.25rem;"><h3 style="font-family:var(--font-display);margin-bottom:.35rem;">${h}</h3><p style="color:var(--muted);font-size:.95rem;">${p}</p></div>`
       )
       .join('')}
   </div>
