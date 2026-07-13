@@ -2012,93 +2012,218 @@ function homeStyles() {
   background: transparent;
 }
 .page-home .btn-outline-light:hover { background: rgba(255,255,255,.12); }
+.page-home .btn-soft {
+  background: #EFEFEF;
+  color: var(--home-ink);
+  border: 1px solid transparent;
+}
+.page-home .btn-soft:hover { background: #E6E6E6; }
 
 .page-home .home-hero {
-  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 2.5rem;
+  align-items: center;
   min-height: calc(100vh - 7rem);
-  display: flex;
-  align-items: flex-end;
-  padding: 0;
+  padding: 2.5rem 4vw 2rem;
+  background: #fff;
   overflow: hidden;
-  color: #fff;
 }
-.page-home .home-hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+.page-home .home-hero-copy {
+  max-width: 34rem;
+  padding: 1rem 0 2rem;
 }
-.page-home .home-hero-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  outline: none;
+.page-home .home-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .4rem .75rem .4rem .45rem;
+  margin: 0 0 1.25rem;
+  background: #F3F3F3;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--home-muted);
+}
+.page-home .home-hero-badge-dots {
+  display: inline-flex;
+  gap: .28rem;
+}
+.page-home .home-hero-badge-dots span {
+  width: .55rem;
+  height: .55rem;
+  border-radius: 50%;
   display: block;
-  transform: scale(1.02);
 }
-.page-home .home-hero-scrim {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(13,13,14,.28) 0%, rgba(13,13,14,.55) 45%, rgba(13,13,14,.82) 100%),
-    linear-gradient(90deg, rgba(13,13,14,.55) 0%, rgba(13,13,14,.15) 70%, transparent 100%);
-}
-.page-home .home-hero-inner {
-  position: relative;
-  z-index: 1;
-  width: min(720px, 100%);
-  padding: 5.5rem 4vw 4.5rem;
-}
+.page-home .home-hero-badge-dots span:nth-child(1) { background: #7B8FA8; }
+.page-home .home-hero-badge-dots span:nth-child(2) { background: #D67D9A; }
+.page-home .home-hero-badge-dots span:nth-child(3) { background: #C8D5B0; }
 .page-home .home-brand {
-  font-size: clamp(2.6rem, 7vw, 4.4rem);
+  font-size: clamp(2.5rem, 5.5vw, 3.8rem);
   font-weight: 800;
   letter-spacing: -.045em;
   line-height: 1.02;
-  margin: 0 0 .85rem;
+  margin: 0 0 .65rem;
+  color: var(--home-ink);
 }
 .page-home .home-hero h1 {
   font-family: inherit;
-  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
-  font-weight: 500;
-  letter-spacing: -.02em;
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: -.025em;
   line-height: 1.25;
-  margin: 0 0 .85rem;
+  margin: 0 0 1.25rem;
   max-width: 28rem;
-  color: rgba(255,255,255,.92);
+  color: var(--home-ink);
 }
-.page-home .home-hero p {
-  color: rgba(255,255,255,.72);
-  max-width: 32rem;
-  font-size: 1.02rem;
-  margin: 0;
+.page-home .home-hero-points {
+  list-style: none;
+  margin: 0 0 1.6rem;
+  padding: 0;
+  display: grid;
+  gap: .7rem;
 }
+.page-home .home-hero-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  color: var(--home-muted);
+  font-size: .95rem;
+  line-height: 1.45;
+}
+.page-home .home-hero-points strong { color: var(--home-ink); font-weight: 600; }
+.page-home .home-hero-points a {
+  color: var(--home-pink);
+  text-decoration: none;
+  font-weight: 600;
+}
+.page-home .home-hero-points a:hover { text-decoration: underline; }
+.page-home .home-point-icon {
+  flex: 0 0 auto;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-top: .1rem;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #fff;
+}
+.page-home .home-point-icon.tone-a { background: #E8A05C; }
+.page-home .home-point-icon.tone-b { background: #5BB8B0; }
+.page-home .home-point-icon.tone-c { background: #D67D9A; }
+.page-home .home-point-icon.tone-d { background: #5C9E8A; }
 .page-home .home-hero-ctas {
   display: flex;
   flex-wrap: wrap;
   gap: .75rem;
-  margin-top: 1.75rem;
+  margin: 0 0 1.75rem;
+}
+.page-home .home-hero-social {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  flex-wrap: wrap;
+}
+.page-home .home-avatars {
+  display: flex;
+  align-items: center;
+}
+.page-home .home-avatars img {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  object-fit: cover;
+  outline: none;
+  border: 2px solid #fff;
+  margin-left: -.55rem;
+  box-shadow: 0 1px 2px rgba(13,13,14,.12);
+}
+.page-home .home-avatars img:first-child { margin-left: 0; }
+.page-home .home-social-meta {
+  display: grid;
+  gap: .15rem;
+}
+.page-home .home-stars {
+  color: #F5A623;
+  letter-spacing: .08em;
+  font-size: .85rem;
+  line-height: 1;
+}
+.page-home .home-social-meta span {
+  font-size: .86rem;
+  color: var(--home-muted);
+  font-weight: 500;
+}
+
+.page-home .home-whisper {
+  position: relative;
+  height: min(78vh, 720px);
+  min-height: 480px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .85rem;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+.page-home .home-whisper-col {
+  overflow: hidden;
+  position: relative;
+}
+.page-home .home-whisper-track {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+  will-change: transform;
+}
+.page-home .home-whisper-track img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 14px;
+  outline: none;
+  display: block;
+  background: var(--home-surface);
+  box-shadow: 0 0 0 1px var(--home-border);
 }
 @media (prefers-reduced-motion: no-preference) {
   @keyframes homeHeroEnter {
     from { opacity: 0; transform: translateY(18px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  @keyframes homeHeroZoom {
-    from { transform: scale(1.06); }
-    to { transform: scale(1.02); }
+  @keyframes whisperUp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
   }
-  .page-home .home-hero-media img {
-    animation: homeHeroZoom 1.4s cubic-bezier(0.2, 0, 0, 1) both;
+  @keyframes whisperDown {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); }
   }
   .page-home .home-hero-enter > * {
     animation: homeHeroEnter 520ms cubic-bezier(0.2, 0, 0, 1) backwards;
   }
   .page-home .home-hero-enter > *:nth-child(1) { animation-delay: 40ms; }
-  .page-home .home-hero-enter > *:nth-child(2) { animation-delay: 120ms; }
-  .page-home .home-hero-enter > *:nth-child(3) { animation-delay: 200ms; }
-  .page-home .home-hero-enter > *:nth-child(4) { animation-delay: 280ms; }
+  .page-home .home-hero-enter > *:nth-child(2) { animation-delay: 100ms; }
+  .page-home .home-hero-enter > *:nth-child(3) { animation-delay: 160ms; }
+  .page-home .home-hero-enter > *:nth-child(4) { animation-delay: 220ms; }
+  .page-home .home-hero-enter > *:nth-child(5) { animation-delay: 280ms; }
+  .page-home .home-hero-enter > *:nth-child(6) { animation-delay: 340ms; }
+  .page-home .home-whisper-col:nth-child(1) .home-whisper-track {
+    animation: whisperUp 28s linear infinite;
+  }
+  .page-home .home-whisper-col:nth-child(2) .home-whisper-track {
+    animation: whisperDown 34s linear infinite;
+  }
+  .page-home .home-whisper-col:nth-child(3) .home-whisper-track {
+    animation: whisperUp 31s linear infinite;
+  }
   .page-home .home-step.is-visible {
     animation: homeHeroEnter 480ms cubic-bezier(0.2, 0, 0, 1) both;
   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-home .home-whisper-track { transform: none !important; animation: none !important; }
 }
 
 .page-home .home-proof {
@@ -2290,20 +2415,90 @@ function homeStyles() {
 }
 
 @media (max-width: 960px) {
+  .page-home .home-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 1.75rem;
+    padding-top: 1.5rem;
+  }
+  .page-home .home-whisper {
+    height: 420px;
+    min-height: 360px;
+    order: -1;
+  }
   .page-home .home-proof { grid-template-columns: repeat(2, 1fr); }
   .page-home .home-steps,
   .page-home .home-features,
   .page-home .home-services-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
-  .page-home .home-hero { min-height: calc(100vh - 6rem); }
-  .page-home .home-hero-inner { padding: 4.5rem 5vw 3.25rem; }
+  .page-home .home-hero-copy { padding-bottom: 1rem; }
+  .page-home .home-whisper {
+    height: 320px;
+    min-height: 280px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .page-home .home-whisper-col:nth-child(3) { display: none; }
   .page-home .home-proof { grid-template-columns: 1fr 1fr; gap: .75rem; }
   .page-home .home-steps,
   .page-home .home-features,
   .page-home .home-services-grid { grid-template-columns: 1fr; }
 }
 `;
+}
+
+function homeWhisperHtml() {
+  const imgs = templateData
+    .flatMap((t) => (t.images || []).slice(0, 2))
+    .filter(Boolean);
+  const pool = imgs.length
+    ? imgs
+    : [
+        `${MOCK}/luxspa-devices.jpg`,
+        `${MOCK}/studio-hero.jpg`,
+        `${MOCK}/wedding-rsvp-promo.jpg`,
+        `${MOCK}/tradie-hero.jpg`,
+        `${MOCK}/seoul-soft-korean.jpg`,
+        `${MOCK}/lash-academy-hero.jpg`,
+      ];
+  const cols = [
+    [0, 3, 6, 9, 1, 4],
+    [2, 5, 8, 0, 7, 3],
+    [4, 1, 7, 2, 6, 5],
+  ];
+  const renderCol = (indexes) => {
+    const items = indexes.map((i) => pool[i % pool.length]);
+    const doubled = items.concat(items);
+    return `
+    <div class="home-whisper-col" aria-hidden="true">
+      <div class="home-whisper-track">
+        ${doubled.map((src) => `<img src="${src}" alt="" loading="lazy">`).join('')}
+      </div>
+    </div>`;
+  };
+  return `<div class="home-whisper">${cols.map(renderCol).join('')}</div>`;
+}
+
+function homeHeroAvatarsHtml() {
+  const faces = [
+    'avatar-mia.jpg',
+    'avatar-jess.jpg',
+    'avatar-chloe.jpg',
+    'avatar-sophie.jpg',
+    'avatar-amara.jpg',
+  ];
+  return `
+  <div class="home-hero-social">
+    <div class="home-avatars" aria-hidden="true">
+      ${faces
+        .map((f) => `<img src="${AVATARS}/${f}" alt="" width="38" height="38">`)
+        .join('')}
+    </div>
+    <div class="home-social-meta">
+      <div class="home-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <span>500+ happy creators &amp; small businesses</span>
+    </div>
+  </div>`;
 }
 
 function homeProofHtml() {
@@ -2520,24 +2715,40 @@ function productCard(t) {
 // ── PAGES ──
 function homePage() {
   const featured = templateData.slice(0, 6).map(productCard).join('');
-  const heroImage =
-    templateData.find((t) => t.slug === 'luxspa-beauty-nails')?.images?.[0] ||
-    `${MOCK}/luxspa-devices.jpg`;
   const body = `
 <section class="home-hero" aria-label="Bloomie House hero">
-  <div class="home-hero-media" aria-hidden="true">
-    <img src="${heroImage}" alt="">
-    <div class="home-hero-scrim"></div>
-  </div>
-  <div class="home-hero-inner home-hero-enter">
+  <div class="home-hero-copy home-hero-enter">
+    <p class="home-hero-badge">
+      <span class="home-hero-badge-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+      Wix · Shopify · Canva templates for every niche
+    </p>
     <p class="home-brand">Bloomie House</p>
     <h1>Premium templates for brands that mean business.</h1>
-    <p>Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies and boutiques. Buy, personalise, launch — this week.</p>
+    <ul class="home-hero-points">
+      <li>
+        <span class="home-point-icon tone-a" aria-hidden="true">✓</span>
+        <span><a href="/shop">Pick a template</a> → Edit &amp; publish instantly</span>
+      </li>
+      <li>
+        <span class="home-point-icon tone-b" aria-hidden="true">▣</span>
+        <span><strong>Designer-made sections</strong>, curated layouts &amp; polish</span>
+      </li>
+      <li>
+        <span class="home-point-icon tone-c" aria-hidden="true">⚡</span>
+        <span>Responsive, SEO-ready &amp; fast to launch</span>
+      </li>
+      <li>
+        <span class="home-point-icon tone-d" aria-hidden="true">$</span>
+        <span>From <strong>$37 AUD</strong> — less than custom design from scratch</span>
+      </li>
+    </ul>
     <div class="home-hero-ctas">
       <a class="btn btn-pink" href="/shop">Browse Templates →</a>
-      <a class="btn btn-outline-light" href="/services">Need us to set it up?</a>
+      <a class="btn btn-soft" href="/services">Need us to set it up?</a>
     </div>
+    ${homeHeroAvatarsHtml()}
   </div>
+  ${homeWhisperHtml()}
 </section>
 
 ${homeProofHtml()}
