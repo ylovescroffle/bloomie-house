@@ -12,7 +12,7 @@ import {
 } from './polar.js';
 
 const LOGO =
-  'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png';
+  'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png';
 const LOGO_LONG =
   'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-long-house-green-background-transparent.png';
 const ETSY_SHOP = 'https://bloomlashbar.etsy.com';
@@ -1549,20 +1549,26 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   box-shadow: var(--shadow-lift);
   transform: translateZ(0);
 }
-.nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
-.nav-logo img {
-  height: 44px; width: auto;
-  transition-property: height, transform;
+.nav-logo { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: var(--black); }
+.nav-logo .logo-mark {
+  height: 48px; width: 48px; border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(126,99,99,.22); background: #fff;
+  box-shadow: var(--shadow-border);
+  transition-property: height, width, transform;
   transition-duration: 280ms;
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
-.site-nav.is-scrolled .nav-logo img { height: 38px; }
+.nav-logo .logo-mark img {
+  height: 100%; width: 100%; object-fit: cover; outline: none;
+}
+.site-nav.is-scrolled .nav-logo .logo-mark { height: 40px; width: 40px; }
 .nav-logo span {
-  font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em;
+  font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.2rem; letter-spacing: -.03em;
   transition-property: font-size, opacity;
   transition-duration: 280ms;
 }
 .site-nav.is-scrolled .nav-logo span { font-size: 1.05rem; }
+img.logo-img { outline: none; }
 .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
 .nav-links a {
   position: relative; text-decoration: none; font-size: .92rem; color: var(--charcoal);
@@ -1796,7 +1802,7 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 .footer-brandmark {
   max-width: 1180px;
   margin: 0 auto;
-  padding: 1.25rem 0 0.5rem;
+  padding: 1.5rem 0 0.75rem;
   border-top: 1px solid var(--border);
   text-align: center;
 }
@@ -1808,6 +1814,22 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   color: rgba(126, 99, 99, 0.22);
   letter-spacing: -.03em;
   line-height: 1;
+}
+.footer-logo-strip {
+  max-width: 1180px;
+  margin: 0 auto 1.5rem;
+  background: #0E0E0E;
+  border-radius: 12px;
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.footer-logo-strip img {
+  height: clamp(72px, 14vw, 110px);
+  width: auto;
+  outline: none;
 }
 .footer-bottom {
   max-width: 1180px; margin: 0 auto; padding-top: 1rem;
@@ -2232,7 +2254,7 @@ function siteNav(active) {
   return `
 <nav class="site-nav" id="siteNav" aria-label="Primary">
   <a class="nav-logo" href="/">
-    <img src="${LOGO}" alt="Bloomie House">
+    <span class="logo-mark"><img class="logo-img" src="${LOGO}" alt=""></span>
     <span>Bloomie House</span>
   </a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
@@ -2299,6 +2321,9 @@ function siteFooter() {
       <p>Keep up to date with our latest templates, launches and studio notes. Sign up to the newsletter today.</p>
       <a class="btn" href="mailto:hello@bloomiehouse.com.au?subject=Newsletter%20signup">Sign Up</a>
     </div>
+  </div>
+  <div class="footer-logo-strip">
+    <img class="logo-img" src="${LOGO_LONG}" alt="Bloomie House">
   </div>
   <div class="footer-brandmark" aria-hidden="true">
     <div class="mark">Bloomie House</div>
