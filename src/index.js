@@ -1907,23 +1907,41 @@ const TOP_ANNOUNCE_SEGMENTS = [
   'Hobart-made · Trusted by 500+ creators',
 ];
 
-const MID_ANNOUNCE_SEGMENTS = [
-  'Get it ready this week',
-  'Go from someday to live in record time and on budget.',
-  'Designer-made · Drag &amp; drop · Fully customisable',
+const HOME_FEATURE_ITEMS = [
+  {
+    title: 'Designer-made templates',
+    body: 'Premium layouts built for cafes, beauty studios, tradies, boutiques and more.',
+  },
+  {
+    title: 'Drag + drop editing',
+    body: 'Personalise colours, copy and images in Wix Studio, Shopify or Canva — no code.',
+  },
+  {
+    title: 'Launch toolkit',
+    body: 'Checklists, tutorials and support so you go from download to live this week.',
+  },
+  {
+    title: 'Mobile & SEO ready',
+    body: 'Responsive by default with clean structure for search and fast performance.',
+  },
 ];
 
-const HOME_FUNNEL_ITEMS = [
-  'Designer-Made Template',
-  'Drag + Drop Editor',
-  'Fully Customizable',
-  'Friendly Support',
-  'Mobile responsive',
-  'Launch Checklist + Scorecard',
-  'Launch Lounge Access',
-  '25% off new annual subscription*',
-  'Template Video Tutorials',
-  'And So Much More!',
+const HOME_STEPS = [
+  {
+    num: '01',
+    title: 'Choose a template',
+    body: 'Browse Wix Studio, Shopify and Canva designs made for Australian small businesses.',
+  },
+  {
+    num: '02',
+    title: 'Personalise it',
+    body: 'Swap in your brand, services and photos — keep the layout that already converts.',
+  },
+  {
+    num: '03',
+    title: 'Launch this week',
+    body: 'Publish yourself, or book One Day Website if you want us to ship it live for you.',
+  },
 ];
 
 function announceMarqueeHtml(segments, variant = 'fast') {
@@ -1939,29 +1957,674 @@ function announceMarqueeHtml(segments, variant = 'fast') {
 </div>`;
 }
 
-function homeSellFunnelHtml() {
-  const items = HOME_FUNNEL_ITEMS.map(
-    (label) =>
-      `<li><span class="funnel-check" aria-hidden="true">✓</span><span class="funnel-label">${label}</span></li>`
-  ).join('');
+function homeStyles() {
   return `
-<section class="home-funnel section">
-  <div class="home-funnel-grid">
-    <div class="home-funnel-copy">
-      <p class="section-label">Everything included</p>
-      <h2 class="section-title">Launch with <em>confidence</em></h2>
-      <p class="home-funnel-intro">Not just a template — you get the full toolkit, support, and resources to go from someday to live in record time and on budget.</p>
-      <a class="btn btn-pink" href="/shop">Get your template →</a>
+.page-home {
+  --home-bg: #FAFAFA;
+  --home-surface: #F6F6F6;
+  --home-ink: #0D0D0E;
+  --home-muted: #6B6B70;
+  --home-border: rgba(13,13,14,.08);
+  --home-pink: #D67D9A;
+  --home-pink-hover: #c96b88;
+  --home-radius: 12px;
+  --home-font-heading: 'Inter', sans-serif;
+  --home-font-body: 'Noto Sans', sans-serif;
+  font-family: var(--home-font-body);
+  background: var(--home-bg);
+  color: var(--home-ink);
+}
+.page-home .site-nav {
+  background: rgba(250,250,250,.78);
+  box-shadow: 0 0 0 1px var(--home-border);
+}
+.page-home .site-nav.is-scrolled {
+  background: rgba(250,250,250,.92);
+}
+.page-home .nav-logo span {
+  font-family: var(--home-font-heading);
+  font-weight: 700;
+  letter-spacing: -.03em;
+}
+.page-home .nav-links a { color: var(--home-ink); }
+.page-home .btn {
+  border-radius: 999px;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+.page-home .btn-pink {
+  background: var(--home-pink);
+  box-shadow: 0 8px 24px -10px rgba(214,125,154,.55);
+}
+.page-home .btn-pink:hover { background: var(--home-pink-hover); }
+.page-home .btn-ghost {
+  border-color: var(--home-border);
+  color: var(--home-ink);
+  background: rgba(255,255,255,.72);
+}
+.page-home .btn-ghost:hover { background: #fff; }
+.page-home .btn-dark {
+  background: var(--home-ink);
+  color: #fff;
+}
+.page-home .btn-outline-light {
+  border: 1px solid rgba(255,255,255,.55);
+  color: #fff;
+  background: transparent;
+}
+.page-home .btn-outline-light:hover { background: rgba(255,255,255,.12); }
+.page-home .btn-soft {
+  background: #EFEFEF;
+  color: var(--home-ink);
+  border: 1px solid transparent;
+}
+.page-home .btn-soft:hover { background: #E6E6E6; }
+
+.page-home .home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 2.5rem;
+  align-items: center;
+  min-height: calc(100vh - 7rem);
+  padding: 2.5rem 4vw 2rem;
+  background: #fff;
+  overflow: hidden;
+}
+.page-home .home-hero-copy {
+  max-width: 34rem;
+  padding: 1rem 0 2rem;
+}
+.page-home .home-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .4rem .75rem .4rem .45rem;
+  margin: 0 0 1.25rem;
+  background: #F3F3F3;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--home-muted);
+}
+.page-home .home-hero-badge-dots {
+  display: inline-flex;
+  gap: .28rem;
+}
+.page-home .home-hero-badge-dots span {
+  width: .55rem;
+  height: .55rem;
+  border-radius: 50%;
+  display: block;
+}
+.page-home .home-hero-badge-dots span:nth-child(1) { background: #7B8FA8; }
+.page-home .home-hero-badge-dots span:nth-child(2) { background: #D67D9A; }
+.page-home .home-hero-badge-dots span:nth-child(3) { background: #C8D5B0; }
+.page-home .home-brand {
+  font-family: var(--home-font-heading);
+  font-size: clamp(2.5rem, 5.5vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.02;
+  margin: 0 0 .65rem;
+  color: var(--home-ink);
+}
+.page-home .home-hero h1 {
+  font-family: var(--home-font-heading);
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: -.025em;
+  line-height: 1.25;
+  margin: 0 0 1.25rem;
+  max-width: 28rem;
+  color: var(--home-ink);
+}
+.page-home .home-hero-points {
+  list-style: none;
+  margin: 0 0 1.6rem;
+  padding: 0;
+  display: grid;
+  gap: .7rem;
+}
+.page-home .home-hero-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  color: var(--home-muted);
+  font-size: .95rem;
+  line-height: 1.45;
+}
+.page-home .home-hero-points strong { color: var(--home-ink); font-weight: 600; }
+.page-home .home-hero-points a {
+  color: var(--home-pink);
+  text-decoration: none;
+  font-weight: 600;
+}
+.page-home .home-hero-points a:hover { text-decoration: underline; }
+.page-home .home-point-icon {
+  flex: 0 0 auto;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-top: .1rem;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #fff;
+}
+.page-home .home-point-icon.tone-a { background: #E8A05C; }
+.page-home .home-point-icon.tone-b { background: #5BB8B0; }
+.page-home .home-point-icon.tone-c { background: #D67D9A; }
+.page-home .home-point-icon.tone-d { background: #5C9E8A; }
+.page-home .home-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin: 0 0 1.75rem;
+}
+.page-home .home-hero-social {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  flex-wrap: wrap;
+}
+.page-home .home-avatars {
+  display: flex;
+  align-items: center;
+}
+.page-home .home-avatars img {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  object-fit: cover;
+  outline: none;
+  border: 2px solid #fff;
+  margin-left: -.55rem;
+  box-shadow: 0 1px 2px rgba(13,13,14,.12);
+}
+.page-home .home-avatars img:first-child { margin-left: 0; }
+.page-home .home-social-meta {
+  display: grid;
+  gap: .15rem;
+}
+.page-home .home-stars {
+  color: #F5A623;
+  letter-spacing: .08em;
+  font-size: .85rem;
+  line-height: 1;
+}
+.page-home .home-social-meta span {
+  font-size: .86rem;
+  color: var(--home-muted);
+  font-weight: 500;
+}
+
+.page-home .home-whisper {
+  position: relative;
+  height: min(78vh, 720px);
+  min-height: 480px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .85rem;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+.page-home .home-whisper-col {
+  overflow: hidden;
+  position: relative;
+}
+.page-home .home-whisper-track {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+  will-change: transform;
+}
+.page-home .home-whisper-track img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 14px;
+  outline: none;
+  display: block;
+  background: var(--home-surface);
+  box-shadow: 0 0 0 1px var(--home-border);
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes homeHeroEnter {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes whisperUp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+  }
+  @keyframes whisperDown {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); }
+  }
+  .page-home .home-hero-enter > * {
+    animation: homeHeroEnter 520ms cubic-bezier(0.2, 0, 0, 1) backwards;
+  }
+  .page-home .home-hero-enter > *:nth-child(1) { animation-delay: 40ms; }
+  .page-home .home-hero-enter > *:nth-child(2) { animation-delay: 100ms; }
+  .page-home .home-hero-enter > *:nth-child(3) { animation-delay: 160ms; }
+  .page-home .home-hero-enter > *:nth-child(4) { animation-delay: 220ms; }
+  .page-home .home-hero-enter > *:nth-child(5) { animation-delay: 280ms; }
+  .page-home .home-hero-enter > *:nth-child(6) { animation-delay: 340ms; }
+  .page-home .home-whisper-col:nth-child(1) .home-whisper-track {
+    animation: whisperUp 28s linear infinite;
+  }
+  .page-home .home-whisper-col:nth-child(2) .home-whisper-track {
+    animation: whisperDown 34s linear infinite;
+  }
+  .page-home .home-whisper-col:nth-child(3) .home-whisper-track {
+    animation: whisperUp 31s linear infinite;
+  }
+  .page-home .home-step.is-visible {
+    animation: homeHeroEnter 480ms cubic-bezier(0.2, 0, 0, 1) both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-home .home-whisper-track { transform: none !important; animation: none !important; }
+}
+
+.page-home .home-proof {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1.35rem 4vw;
+  border-bottom: 1px solid var(--home-border);
+  background: #fff;
+}
+.page-home .home-proof-item {
+  text-align: center;
+  padding: .35rem .5rem;
+}
+.page-home .home-proof-item strong {
+  display: block;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--home-ink);
+}
+.page-home .home-proof-item span {
+  display: block;
+  margin-top: .2rem;
+  font-size: .78rem;
+  color: var(--home-muted);
+}
+
+.page-home .home-section {
+  padding: 4.5rem 4vw;
+}
+.page-home .home-section-muted { background: var(--home-surface); }
+.page-home .home-kicker {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--home-muted);
+  margin: 0 0 .85rem;
+}
+.page-home .home-heading {
+  font-family: var(--home-font-heading);
+  font-size: clamp(1.75rem, 3.4vw, 2.55rem);
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1.12;
+  margin: 0 0 .75rem;
+  color: var(--home-ink);
+}
+.page-home .home-heading em {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--home-pink);
+}
+.page-home .home-hero h1 em,
+.page-home .home-brand em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--home-pink);
+}
+.page-home .home-lede em,
+.page-home .home-hero-points em {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--home-ink);
+}
+.page-home .home-lede {
+  color: var(--home-muted);
+  max-width: 36rem;
+  margin: 0 0 2rem;
+  font-size: 1.02rem;
+}
+
+.page-home .home-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: .5rem;
+}
+.page-home .home-step {
+  padding: 0;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.page-home .home-step.is-visible,
+.page-home .home-step.no-motion {
+  opacity: 1;
+  transform: none;
+}
+.page-home .home-step-num {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--home-pink);
+  margin-bottom: .65rem;
+}
+.page-home .home-step h3 {
+  font-family: var(--home-font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin: 0 0 .45rem;
+}
+.page-home .home-step p {
+  color: var(--home-muted);
+  font-size: .95rem;
+  margin: 0;
+  max-width: 22rem;
+}
+
+.page-home .home-features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.75rem 1.5rem;
+}
+.page-home .home-feature h3 {
+  font-family: var(--home-font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin: 0 0 .4rem;
+}
+.page-home .home-feature p {
+  color: var(--home-muted);
+  font-size: .92rem;
+  margin: 0;
+}
+
+.page-home .home-templates .product-grid { margin-top: .25rem; }
+.page-home .home-templates .product-card {
+  border-radius: var(--home-radius);
+  box-shadow: 0 0 0 1px var(--home-border);
+  background: #fff;
+}
+.page-home .home-templates .product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -12px rgba(13,13,14,.18);
+}
+.page-home .home-templates .product-thumb {
+  border-radius: var(--home-radius) var(--home-radius) 0 0;
+  background: var(--home-surface) !important;
+}
+.page-home .home-templates .product-name {
+  font-family: var(--home-font-heading);
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.page-home .home-templates .price-current {
+  font-family: var(--home-font-heading);
+  font-weight: 700;
+}
+.page-home .home-templates-cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.page-home .home-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: .25rem;
+}
+.page-home .home-service {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--home-border);
+}
+.page-home .home-service h3 {
+  font-family: var(--home-font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  margin: 0 0 .35rem;
+}
+.page-home .home-service p {
+  color: var(--home-muted);
+  margin: 0 0 1rem;
+  font-size: .95rem;
+}
+.page-home .home-service.is-featured h3 { color: var(--home-pink); }
+
+.page-home .home-final {
+  text-align: center;
+  background: var(--home-ink);
+  color: #fff;
+  padding: 5rem 4vw;
+}
+.page-home .home-final .home-heading { color: #fff; }
+.page-home .home-final .home-lede {
+  color: rgba(255,255,255,.68);
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-home .home-final-ctas {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.page-home .site-footer {
+  background: #111;
+}
+
+@media (max-width: 960px) {
+  .page-home .home-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: 1.5rem;
+    min-height: calc(100vh - 6.5rem);
+    padding: 1.5rem 4vw 1.25rem;
+    align-items: center;
+  }
+  .page-home .home-whisper {
+    height: min(70vh, 560px);
+    min-height: 380px;
+  }
+  .page-home .home-whisper-col:nth-child(3) { display: none; }
+  .page-home .home-whisper { grid-template-columns: 1fr 1fr; }
+  .page-home .home-brand { font-size: clamp(2rem, 5vw, 2.8rem); }
+  .page-home .home-hero h1 { font-size: clamp(1.15rem, 2.2vw, 1.45rem); }
+  .page-home .home-proof { grid-template-columns: repeat(2, 1fr); }
+  .page-home .home-steps,
+  .page-home .home-features,
+  .page-home .home-services-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .page-home .home-hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 1rem;
+    padding: 1.25rem 4vw 1rem;
+  }
+  .page-home .home-hero-points { gap: .55rem; }
+  .page-home .home-hero-points li { font-size: .88rem; }
+  .page-home .home-whisper {
+    height: min(62vh, 460px);
+    min-height: 320px;
+  }
+  .page-home .home-hero-social { gap: .55rem; }
+  .page-home .home-social-meta span { font-size: .78rem; }
+}
+@media (max-width: 560px) {
+  .page-home .home-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 1.25rem;
+  }
+  .page-home .home-hero-copy { padding-bottom: .5rem; }
+  .page-home .home-whisper {
+    height: 280px;
+    min-height: 240px;
+    order: -1;
+  }
+  .page-home .home-proof { grid-template-columns: 1fr 1fr; gap: .75rem; }
+  .page-home .home-steps,
+  .page-home .home-features,
+  .page-home .home-services-grid { grid-template-columns: 1fr; }
+}
+`;
+}
+
+function homeWhisperHtml() {
+  const imgs = templateData
+    .flatMap((t) => (t.images || []).slice(0, 2))
+    .filter(Boolean);
+  const pool = imgs.length
+    ? imgs
+    : [
+        `${MOCK}/luxspa-devices.jpg`,
+        `${MOCK}/studio-hero.jpg`,
+        `${MOCK}/wedding-rsvp-promo.jpg`,
+        `${MOCK}/tradie-hero.jpg`,
+        `${MOCK}/seoul-soft-korean.jpg`,
+        `${MOCK}/lash-academy-hero.jpg`,
+      ];
+  const cols = [
+    [0, 3, 6, 9, 1, 4],
+    [2, 5, 8, 0, 7, 3],
+    [4, 1, 7, 2, 6, 5],
+  ];
+  const renderCol = (indexes) => {
+    const items = indexes.map((i) => pool[i % pool.length]);
+    const doubled = items.concat(items);
+    return `
+    <div class="home-whisper-col" aria-hidden="true">
+      <div class="home-whisper-track">
+        ${doubled.map((src) => `<img src="${src}" alt="" loading="lazy">`).join('')}
+      </div>
+    </div>`;
+  };
+  return `<div class="home-whisper">${cols.map(renderCol).join('')}</div>`;
+}
+
+function homeHeroAvatarsHtml() {
+  const faces = [
+    'avatar-mia.jpg',
+    'avatar-jess.jpg',
+    'avatar-chloe.jpg',
+    'avatar-sophie.jpg',
+    'avatar-amara.jpg',
+  ];
+  return `
+  <div class="home-hero-social">
+    <div class="home-avatars" aria-hidden="true">
+      ${faces
+        .map((f) => `<img src="${AVATARS}/${f}" alt="" width="38" height="38">`)
+        .join('')}
     </div>
-    <div class="home-funnel-card">
-      <ul class="home-funnel-list">${items}</ul>
-      <p class="home-funnel-footnote">*Wix Studio annual plans only. See checkout for details.</p>
+    <div class="home-social-meta">
+      <div class="home-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <span>500+ happy creators &amp; small businesses</span>
     </div>
+  </div>`;
+}
+
+function homeProofHtml() {
+  const items = [
+    ['500+ creators', 'Trusted worldwide'],
+    ['Wix · Shopify · Canva', 'Platforms covered'],
+    ['From $37 AUD', 'Instant download'],
+    ['Hobart-made', 'AU support'],
+  ];
+  return `
+<section class="home-proof" aria-label="Social proof">
+  ${items
+    .map(
+      ([strong, span]) =>
+        `<div class="home-proof-item"><strong>${strong}</strong><span>${span}</span></div>`
+    )
+    .join('')}
+</section>`;
+}
+
+function homeStepsHtml() {
+  return `
+<section class="home-section">
+  <p class="home-kicker">Speed &amp; simplicity</p>
+  <h2 class="home-heading">From idea to live site <em>this week</em></h2>
+  <p class="home-lede">Skip starting from a blank page. Pick a designer-made template, make it yours, and publish — or let us set it up for you.</p>
+  <div class="home-steps" id="homeSteps">
+    ${HOME_STEPS.map(
+      (s) => `
+    <article class="home-step">
+      <div class="home-step-num">Step ${s.num}</div>
+      <h3>${s.title}</h3>
+      <p>${s.body}</p>
+    </article>`
+    ).join('')}
   </div>
 </section>`;
 }
 
+function homeFeaturesHtml() {
+  return `
+<section class="home-section home-section-muted">
+  <p class="home-kicker">Everything included</p>
+  <h2 class="home-heading">Smart templates built to <em>customise</em></h2>
+  <p class="home-lede">Not just a file download — each template comes with the toolkit to launch with confidence.</p>
+  <div class="home-features">
+    ${HOME_FEATURE_ITEMS.map(
+      (f) => `
+    <article class="home-feature">
+      <h3>${f.title}</h3>
+      <p>${f.body}</p>
+    </article>`
+    ).join('')}
+  </div>
+</section>`;
+}
+
+function homeScript() {
+  return `
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var steps = document.querySelectorAll('#homeSteps .home-step');
+  if(!steps.length) return;
+  if(reduced || !('IntersectionObserver' in window)){
+    steps.forEach(function(el){ el.classList.add('no-motion'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
+  steps.forEach(function(el, i){
+    el.style.animationDelay = (i * 90) + 'ms';
+    io.observe(el);
+  });
+})();`;
+}
+
 function layout(title, description, canonical, bodyHtml, active = '', cartCatalogJson = null) {
+  const isHome = active === 'home';
+  const fonts = isHome
+    ? `<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`
+    : `<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1978,10 +2641,10 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <link rel="icon" type="image/png" href="${LOGO}">
   <link rel="apple-touch-icon" href="${LOGO}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>${baseStyles()}</style>
+  ${fonts}
+  <style>${baseStyles()}${isHome ? homeStyles() : ''}</style>
 </head>
-<body>
+<body class="${isHome ? 'page-home' : ''}">
   ${announceMarqueeHtml(TOP_ANNOUNCE_SEGMENTS, 'fast')}
   ${siteNav(active)}
   ${bodyHtml}
@@ -1989,6 +2652,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <div class="toast" id="toast" role="status"></div>
   <script>${layoutScript()}</script>
   <script>${cartScript(cartCatalogJson)}</script>
+  ${isHome ? `<script>${homeScript()}</script>` : ''}
 </body>
 </html>`;
 }
@@ -2091,56 +2755,84 @@ function productCard(t) {
 function homePage() {
   const featured = templateData.slice(0, 6).map(productCard).join('');
   const body = `
-<section class="page-hero page-hero-enter" style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;">
-  <p class="section-label">Template shop · Est. 2025</p>
-  <h1>Bloomie House<br><em>for online</em> success.</h1>
-  <p>Premium Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies, boutiques &amp; beyond. Buy, personalise, launch — this week.</p>
-  <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.75rem;">
-    <a class="btn btn-pink" href="/shop">Browse Templates →</a>
-    <a class="btn btn-ghost" href="/services">Need us to set it up?</a>
+<section class="home-hero" aria-label="Bloomie House hero">
+  <div class="home-hero-copy home-hero-enter">
+    <p class="home-hero-badge">
+      <span class="home-hero-badge-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+      Wix · Shopify · Canva templates for every niche
+    </p>
+    <p class="home-brand">Bloomie House</p>
+    <h1>Premium templates for brands that <em>mean business</em>.</h1>
+    <ul class="home-hero-points">
+      <li>
+        <span class="home-point-icon tone-a" aria-hidden="true">✓</span>
+        <span><a href="/shop">Pick a template</a> → Edit &amp; publish <em>instantly</em></span>
+      </li>
+      <li>
+        <span class="home-point-icon tone-b" aria-hidden="true">▣</span>
+        <span><strong>Designer-made sections</strong>, curated layouts &amp; polish</span>
+      </li>
+      <li>
+        <span class="home-point-icon tone-c" aria-hidden="true">⚡</span>
+        <span>Responsive, SEO-ready &amp; <em>fast to launch</em></span>
+      </li>
+      <li>
+        <span class="home-point-icon tone-d" aria-hidden="true">$</span>
+        <span>From <strong>$37 AUD</strong> — less than custom design from scratch</span>
+      </li>
+    </ul>
+    <div class="home-hero-ctas">
+      <a class="btn btn-pink" href="/shop">Browse Templates →</a>
+      <a class="btn btn-soft" href="/services">Need us to set it up?</a>
+    </div>
+    ${homeHeroAvatarsHtml()}
   </div>
+  ${homeWhisperHtml()}
 </section>
 
-${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
-${homeSellFunnelHtml()}
+${homeProofHtml()}
+${homeStepsHtml()}
+${homeFeaturesHtml()}
 
-<section class="section">
-  <p class="section-label">Shop the collection</p>
-  <h2 class="section-title">Find your <em>perfect</em> template</h2>
+<section class="home-section home-templates">
+  <p class="home-kicker">Shop the collection</p>
+  <h2 class="home-heading">Find your <em>perfect</em> template</h2>
+  <p class="home-lede">Designer-made layouts ready to personalise — pick a niche, open the product page, and checkout securely.</p>
   <div class="product-grid">${featured}</div>
-  <div style="text-align:center;margin-top:2rem;">
+  <div class="home-templates-cta">
     <a class="btn btn-dark" href="/shop">View all templates →</a>
   </div>
 </section>
 
-<section class="section" style="background:var(--cream);">
-  <p class="section-label">Done-for-you</p>
-  <h2 class="section-title">Services that <em>ship</em> fast</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;">
-    <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">DIY Template</h3>
-      <p style="color:var(--muted);margin-bottom:1rem;">From $37 AUD · Instant download</p>
+<section class="home-section home-section-muted">
+  <p class="home-kicker">Done-for-you</p>
+  <h2 class="home-heading">Services that <em>ship</em> fast</h2>
+  <p class="home-lede">DIY if you want control. Book us if you want it live without the learning curve.</p>
+  <div class="home-services-grid">
+    <article class="home-service">
+      <h3>DIY Template</h3>
+      <p>From $37 AUD · Instant download</p>
       <a class="btn btn-ghost" href="/shop">Shop templates</a>
     </article>
-    <article style="background:var(--black);color:#fff;border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">One Day Website</h3>
-      <p style="opacity:.75;margin-bottom:1rem;">$397 AUD · Live in 24 hours</p>
+    <article class="home-service is-featured">
+      <h3>One Day Website</h3>
+      <p>$397 AUD · Live in 24 hours</p>
       <a class="btn btn-pink" href="/services">Book now →</a>
     </article>
-    <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">Full Custom</h3>
-      <p style="color:var(--muted);margin-bottom:1rem;">From $897 AUD · Built from scratch</p>
+    <article class="home-service">
+      <h3>Full Custom</h3>
+      <p>From $897 AUD · Built from scratch</p>
       <a class="btn btn-ghost" href="/full-custom">Let's chat</a>
     </article>
   </div>
 </section>
 
-<section class="section" style="text-align:center;">
-  <h2 class="section-title">Ready when <em>you</em> are</h2>
-  <p style="color:var(--muted);max-width:32rem;margin:0 auto 1.5rem;">Add templates to your cart, then checkout securely on Bloomie House — or book a discovery call for done-for-you setup.</p>
-  <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap;">
+<section class="home-final">
+  <h2 class="home-heading">Ready when <em>you</em> are</h2>
+  <p class="home-lede">Add templates to your cart and checkout on Bloomie House — or email us for done-for-you setup.</p>
+  <div class="home-final-ctas">
     <a class="btn btn-pink" href="/shop">Shop templates</a>
-    <a class="btn btn-ghost" href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a>
+    <a class="btn btn-outline-light" href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a>
   </div>
 </section>`;
   return layout(
