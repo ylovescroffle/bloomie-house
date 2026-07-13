@@ -1907,23 +1907,41 @@ const TOP_ANNOUNCE_SEGMENTS = [
   'Hobart-made · Trusted by 500+ creators',
 ];
 
-const MID_ANNOUNCE_SEGMENTS = [
-  'Get it ready this week',
-  'Go from someday to live in record time and on budget.',
-  'Designer-made · Drag &amp; drop · Fully customisable',
+const HOME_FEATURE_ITEMS = [
+  {
+    title: 'Designer-made templates',
+    body: 'Premium layouts built for cafes, beauty studios, tradies, boutiques and more.',
+  },
+  {
+    title: 'Drag + drop editing',
+    body: 'Personalise colours, copy and images in Wix Studio, Shopify or Canva — no code.',
+  },
+  {
+    title: 'Launch toolkit',
+    body: 'Checklists, tutorials and support so you go from download to live this week.',
+  },
+  {
+    title: 'Mobile & SEO ready',
+    body: 'Responsive by default with clean structure for search and fast performance.',
+  },
 ];
 
-const HOME_FUNNEL_ITEMS = [
-  'Designer-Made Template',
-  'Drag + Drop Editor',
-  'Fully Customizable',
-  'Friendly Support',
-  'Mobile responsive',
-  'Launch Checklist + Scorecard',
-  'Launch Lounge Access',
-  '25% off new annual subscription*',
-  'Template Video Tutorials',
-  'And So Much More!',
+const HOME_STEPS = [
+  {
+    num: '01',
+    title: 'Choose a template',
+    body: 'Browse Wix Studio, Shopify and Canva designs made for Australian small businesses.',
+  },
+  {
+    num: '02',
+    title: 'Personalise it',
+    body: 'Swap in your brand, services and photos — keep the layout that already converts.',
+  },
+  {
+    num: '03',
+    title: 'Launch this week',
+    body: 'Publish yourself, or book One Day Website if you want us to ship it live for you.',
+  },
 ];
 
 function announceMarqueeHtml(segments, variant = 'fast') {
@@ -1939,29 +1957,440 @@ function announceMarqueeHtml(segments, variant = 'fast') {
 </div>`;
 }
 
-function homeSellFunnelHtml() {
-  const items = HOME_FUNNEL_ITEMS.map(
-    (label) =>
-      `<li><span class="funnel-check" aria-hidden="true">✓</span><span class="funnel-label">${label}</span></li>`
-  ).join('');
+function homeStyles() {
   return `
-<section class="home-funnel section">
-  <div class="home-funnel-grid">
-    <div class="home-funnel-copy">
-      <p class="section-label">Everything included</p>
-      <h2 class="section-title">Launch with <em>confidence</em></h2>
-      <p class="home-funnel-intro">Not just a template — you get the full toolkit, support, and resources to go from someday to live in record time and on budget.</p>
-      <a class="btn btn-pink" href="/shop">Get your template →</a>
-    </div>
-    <div class="home-funnel-card">
-      <ul class="home-funnel-list">${items}</ul>
-      <p class="home-funnel-footnote">*Wix Studio annual plans only. See checkout for details.</p>
-    </div>
+.page-home {
+  --home-bg: #FAFAFA;
+  --home-surface: #F6F6F6;
+  --home-ink: #0D0D0E;
+  --home-muted: #6B6B70;
+  --home-border: rgba(13,13,14,.08);
+  --home-pink: #D67D9A;
+  --home-pink-hover: #c96b88;
+  --home-radius: 12px;
+  font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+  background: var(--home-bg);
+  color: var(--home-ink);
+}
+.page-home .site-nav {
+  background: rgba(250,250,250,.78);
+  box-shadow: 0 0 0 1px var(--home-border);
+}
+.page-home .site-nav.is-scrolled {
+  background: rgba(250,250,250,.92);
+}
+.page-home .nav-logo span {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -.03em;
+}
+.page-home .nav-links a { color: var(--home-ink); }
+.page-home .btn {
+  border-radius: 999px;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+.page-home .btn-pink {
+  background: var(--home-pink);
+  box-shadow: 0 8px 24px -10px rgba(214,125,154,.55);
+}
+.page-home .btn-pink:hover { background: var(--home-pink-hover); }
+.page-home .btn-ghost {
+  border-color: var(--home-border);
+  color: var(--home-ink);
+  background: rgba(255,255,255,.72);
+}
+.page-home .btn-ghost:hover { background: #fff; }
+.page-home .btn-dark {
+  background: var(--home-ink);
+  color: #fff;
+}
+.page-home .btn-outline-light {
+  border: 1px solid rgba(255,255,255,.55);
+  color: #fff;
+  background: transparent;
+}
+.page-home .btn-outline-light:hover { background: rgba(255,255,255,.12); }
+
+.page-home .home-hero {
+  position: relative;
+  min-height: calc(100vh - 7rem);
+  display: flex;
+  align-items: flex-end;
+  padding: 0;
+  overflow: hidden;
+  color: #fff;
+}
+.page-home .home-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.page-home .home-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  outline: none;
+  display: block;
+  transform: scale(1.02);
+}
+.page-home .home-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(13,13,14,.28) 0%, rgba(13,13,14,.55) 45%, rgba(13,13,14,.82) 100%),
+    linear-gradient(90deg, rgba(13,13,14,.55) 0%, rgba(13,13,14,.15) 70%, transparent 100%);
+}
+.page-home .home-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: min(720px, 100%);
+  padding: 5.5rem 4vw 4.5rem;
+}
+.page-home .home-brand {
+  font-size: clamp(2.6rem, 7vw, 4.4rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.02;
+  margin: 0 0 .85rem;
+}
+.page-home .home-hero h1 {
+  font-family: inherit;
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.25;
+  margin: 0 0 .85rem;
+  max-width: 28rem;
+  color: rgba(255,255,255,.92);
+}
+.page-home .home-hero p {
+  color: rgba(255,255,255,.72);
+  max-width: 32rem;
+  font-size: 1.02rem;
+  margin: 0;
+}
+.page-home .home-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: 1.75rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes homeHeroEnter {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes homeHeroZoom {
+    from { transform: scale(1.06); }
+    to { transform: scale(1.02); }
+  }
+  .page-home .home-hero-media img {
+    animation: homeHeroZoom 1.4s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+  .page-home .home-hero-enter > * {
+    animation: homeHeroEnter 520ms cubic-bezier(0.2, 0, 0, 1) backwards;
+  }
+  .page-home .home-hero-enter > *:nth-child(1) { animation-delay: 40ms; }
+  .page-home .home-hero-enter > *:nth-child(2) { animation-delay: 120ms; }
+  .page-home .home-hero-enter > *:nth-child(3) { animation-delay: 200ms; }
+  .page-home .home-hero-enter > *:nth-child(4) { animation-delay: 280ms; }
+  .page-home .home-step.is-visible {
+    animation: homeHeroEnter 480ms cubic-bezier(0.2, 0, 0, 1) both;
+  }
+}
+
+.page-home .home-proof {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1.35rem 4vw;
+  border-bottom: 1px solid var(--home-border);
+  background: #fff;
+}
+.page-home .home-proof-item {
+  text-align: center;
+  padding: .35rem .5rem;
+}
+.page-home .home-proof-item strong {
+  display: block;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--home-ink);
+}
+.page-home .home-proof-item span {
+  display: block;
+  margin-top: .2rem;
+  font-size: .78rem;
+  color: var(--home-muted);
+}
+
+.page-home .home-section {
+  padding: 4.5rem 4vw;
+}
+.page-home .home-section-muted { background: var(--home-surface); }
+.page-home .home-kicker {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--home-muted);
+  margin: 0 0 .85rem;
+}
+.page-home .home-heading {
+  font-family: inherit;
+  font-size: clamp(1.75rem, 3.4vw, 2.55rem);
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1.12;
+  margin: 0 0 .75rem;
+  color: var(--home-ink);
+}
+.page-home .home-heading em {
+  font-style: normal;
+  color: var(--home-pink);
+}
+.page-home .home-lede {
+  color: var(--home-muted);
+  max-width: 36rem;
+  margin: 0 0 2rem;
+  font-size: 1.02rem;
+}
+
+.page-home .home-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: .5rem;
+}
+.page-home .home-step {
+  padding: 0;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.page-home .home-step.is-visible,
+.page-home .home-step.no-motion {
+  opacity: 1;
+  transform: none;
+}
+.page-home .home-step-num {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--home-pink);
+  margin-bottom: .65rem;
+}
+.page-home .home-step h3 {
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin: 0 0 .45rem;
+}
+.page-home .home-step p {
+  color: var(--home-muted);
+  font-size: .95rem;
+  margin: 0;
+  max-width: 22rem;
+}
+
+.page-home .home-features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.75rem 1.5rem;
+}
+.page-home .home-feature h3 {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin: 0 0 .4rem;
+}
+.page-home .home-feature p {
+  color: var(--home-muted);
+  font-size: .92rem;
+  margin: 0;
+}
+
+.page-home .home-templates .product-grid { margin-top: .25rem; }
+.page-home .home-templates .product-card {
+  border-radius: var(--home-radius);
+  box-shadow: 0 0 0 1px var(--home-border);
+  background: #fff;
+}
+.page-home .home-templates .product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -12px rgba(13,13,14,.18);
+}
+.page-home .home-templates .product-thumb {
+  border-radius: var(--home-radius) var(--home-radius) 0 0;
+  background: var(--home-surface) !important;
+}
+.page-home .home-templates .product-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.page-home .home-templates .price-current {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+}
+.page-home .home-templates-cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.page-home .home-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: .25rem;
+}
+.page-home .home-service {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--home-border);
+}
+.page-home .home-service h3 {
+  font-family: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  margin: 0 0 .35rem;
+}
+.page-home .home-service p {
+  color: var(--home-muted);
+  margin: 0 0 1rem;
+  font-size: .95rem;
+}
+.page-home .home-service.is-featured h3 { color: var(--home-pink); }
+
+.page-home .home-final {
+  text-align: center;
+  background: var(--home-ink);
+  color: #fff;
+  padding: 5rem 4vw;
+}
+.page-home .home-final .home-heading { color: #fff; }
+.page-home .home-final .home-lede {
+  color: rgba(255,255,255,.68);
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-home .home-final-ctas {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.page-home .site-footer {
+  background: #111;
+}
+
+@media (max-width: 960px) {
+  .page-home .home-proof { grid-template-columns: repeat(2, 1fr); }
+  .page-home .home-steps,
+  .page-home .home-features,
+  .page-home .home-services-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .page-home .home-hero { min-height: calc(100vh - 6rem); }
+  .page-home .home-hero-inner { padding: 4.5rem 5vw 3.25rem; }
+  .page-home .home-proof { grid-template-columns: 1fr 1fr; gap: .75rem; }
+  .page-home .home-steps,
+  .page-home .home-features,
+  .page-home .home-services-grid { grid-template-columns: 1fr; }
+}
+`;
+}
+
+function homeProofHtml() {
+  const items = [
+    ['500+ creators', 'Trusted worldwide'],
+    ['Wix · Shopify · Canva', 'Platforms covered'],
+    ['From $37 AUD', 'Instant download'],
+    ['Hobart-made', 'AU support'],
+  ];
+  return `
+<section class="home-proof" aria-label="Social proof">
+  ${items
+    .map(
+      ([strong, span]) =>
+        `<div class="home-proof-item"><strong>${strong}</strong><span>${span}</span></div>`
+    )
+    .join('')}
+</section>`;
+}
+
+function homeStepsHtml() {
+  return `
+<section class="home-section">
+  <p class="home-kicker">Speed &amp; simplicity</p>
+  <h2 class="home-heading">From idea to live site this week</h2>
+  <p class="home-lede">Skip starting from a blank page. Pick a designer-made template, make it yours, and publish — or let us set it up for you.</p>
+  <div class="home-steps" id="homeSteps">
+    ${HOME_STEPS.map(
+      (s) => `
+    <article class="home-step">
+      <div class="home-step-num">Step ${s.num}</div>
+      <h3>${s.title}</h3>
+      <p>${s.body}</p>
+    </article>`
+    ).join('')}
   </div>
 </section>`;
 }
 
+function homeFeaturesHtml() {
+  return `
+<section class="home-section home-section-muted">
+  <p class="home-kicker">Everything included</p>
+  <h2 class="home-heading">Smart templates built to customise</h2>
+  <p class="home-lede">Not just a file download — each template comes with the toolkit to launch with confidence.</p>
+  <div class="home-features">
+    ${HOME_FEATURE_ITEMS.map(
+      (f) => `
+    <article class="home-feature">
+      <h3>${f.title}</h3>
+      <p>${f.body}</p>
+    </article>`
+    ).join('')}
+  </div>
+</section>`;
+}
+
+function homeScript() {
+  return `
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var steps = document.querySelectorAll('#homeSteps .home-step');
+  if(!steps.length) return;
+  if(reduced || !('IntersectionObserver' in window)){
+    steps.forEach(function(el){ el.classList.add('no-motion'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
+  steps.forEach(function(el, i){
+    el.style.animationDelay = (i * 90) + 'ms';
+    io.observe(el);
+  });
+})();`;
+}
+
 function layout(title, description, canonical, bodyHtml, active = '', cartCatalogJson = null) {
+  const isHome = active === 'home';
+  const fonts = isHome
+    ? `<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`
+    : `<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1978,10 +2407,10 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <link rel="icon" type="image/png" href="${LOGO}">
   <link rel="apple-touch-icon" href="${LOGO}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>${baseStyles()}</style>
+  ${fonts}
+  <style>${baseStyles()}${isHome ? homeStyles() : ''}</style>
 </head>
-<body>
+<body class="${isHome ? 'page-home' : ''}">
   ${announceMarqueeHtml(TOP_ANNOUNCE_SEGMENTS, 'fast')}
   ${siteNav(active)}
   ${bodyHtml}
@@ -1989,6 +2418,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <div class="toast" id="toast" role="status"></div>
   <script>${layoutScript()}</script>
   <script>${cartScript(cartCatalogJson)}</script>
+  ${isHome ? `<script>${homeScript()}</script>` : ''}
 </body>
 </html>`;
 }
@@ -2090,57 +2520,69 @@ function productCard(t) {
 // ── PAGES ──
 function homePage() {
   const featured = templateData.slice(0, 6).map(productCard).join('');
+  const heroImage =
+    templateData.find((t) => t.slug === 'luxspa-beauty-nails')?.images?.[0] ||
+    `${MOCK}/luxspa-devices.jpg`;
   const body = `
-<section class="page-hero page-hero-enter" style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;">
-  <p class="section-label">Template shop · Est. 2025</p>
-  <h1>Bloomie House<br><em>for online</em> success.</h1>
-  <p>Premium Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies, boutiques &amp; beyond. Buy, personalise, launch — this week.</p>
-  <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.75rem;">
-    <a class="btn btn-pink" href="/shop">Browse Templates →</a>
-    <a class="btn btn-ghost" href="/services">Need us to set it up?</a>
+<section class="home-hero" aria-label="Bloomie House hero">
+  <div class="home-hero-media" aria-hidden="true">
+    <img src="${heroImage}" alt="">
+    <div class="home-hero-scrim"></div>
+  </div>
+  <div class="home-hero-inner home-hero-enter">
+    <p class="home-brand">Bloomie House</p>
+    <h1>Premium templates for brands that mean business.</h1>
+    <p>Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies and boutiques. Buy, personalise, launch — this week.</p>
+    <div class="home-hero-ctas">
+      <a class="btn btn-pink" href="/shop">Browse Templates →</a>
+      <a class="btn btn-outline-light" href="/services">Need us to set it up?</a>
+    </div>
   </div>
 </section>
 
-${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
-${homeSellFunnelHtml()}
+${homeProofHtml()}
+${homeStepsHtml()}
+${homeFeaturesHtml()}
 
-<section class="section">
-  <p class="section-label">Shop the collection</p>
-  <h2 class="section-title">Find your <em>perfect</em> template</h2>
+<section class="home-section home-templates">
+  <p class="home-kicker">Shop the collection</p>
+  <h2 class="home-heading">Find your perfect template</h2>
+  <p class="home-lede">Designer-made layouts ready to personalise — pick a niche, open the product page, and checkout securely.</p>
   <div class="product-grid">${featured}</div>
-  <div style="text-align:center;margin-top:2rem;">
+  <div class="home-templates-cta">
     <a class="btn btn-dark" href="/shop">View all templates →</a>
   </div>
 </section>
 
-<section class="section" style="background:var(--cream);">
-  <p class="section-label">Done-for-you</p>
-  <h2 class="section-title">Services that <em>ship</em> fast</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;">
-    <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">DIY Template</h3>
-      <p style="color:var(--muted);margin-bottom:1rem;">From $37 AUD · Instant download</p>
+<section class="home-section home-section-muted">
+  <p class="home-kicker">Done-for-you</p>
+  <h2 class="home-heading">Services that ship fast</h2>
+  <p class="home-lede">DIY if you want control. Book us if you want it live without the learning curve.</p>
+  <div class="home-services-grid">
+    <article class="home-service">
+      <h3>DIY Template</h3>
+      <p>From $37 AUD · Instant download</p>
       <a class="btn btn-ghost" href="/shop">Shop templates</a>
     </article>
-    <article style="background:var(--black);color:#fff;border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">One Day Website</h3>
-      <p style="opacity:.75;margin-bottom:1rem;">$397 AUD · Live in 24 hours</p>
+    <article class="home-service is-featured">
+      <h3>One Day Website</h3>
+      <p>$397 AUD · Live in 24 hours</p>
       <a class="btn btn-pink" href="/services">Book now →</a>
     </article>
-    <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">Full Custom</h3>
-      <p style="color:var(--muted);margin-bottom:1rem;">From $897 AUD · Built from scratch</p>
+    <article class="home-service">
+      <h3>Full Custom</h3>
+      <p>From $897 AUD · Built from scratch</p>
       <a class="btn btn-ghost" href="/full-custom">Let's chat</a>
     </article>
   </div>
 </section>
 
-<section class="section" style="text-align:center;">
-  <h2 class="section-title">Ready when <em>you</em> are</h2>
-  <p style="color:var(--muted);max-width:32rem;margin:0 auto 1.5rem;">Add templates to your cart, then checkout securely on Bloomie House — or book a discovery call for done-for-you setup.</p>
-  <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap;">
+<section class="home-final">
+  <h2 class="home-heading">Ready when you are</h2>
+  <p class="home-lede">Add templates to your cart and checkout on Bloomie House — or email us for done-for-you setup.</p>
+  <div class="home-final-ctas">
     <a class="btn btn-pink" href="/shop">Shop templates</a>
-    <a class="btn btn-ghost" href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a>
+    <a class="btn btn-outline-light" href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a>
   </div>
 </section>`;
   return layout(
