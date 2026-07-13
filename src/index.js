@@ -1968,7 +1968,9 @@ function homeStyles() {
   --home-pink: #D67D9A;
   --home-pink-hover: #c96b88;
   --home-radius: 12px;
-  font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+  --home-font-heading: 'Inter', sans-serif;
+  --home-font-body: 'Noto Sans', sans-serif;
+  font-family: var(--home-font-body);
   background: var(--home-bg);
   color: var(--home-ink);
 }
@@ -1980,7 +1982,7 @@ function homeStyles() {
   background: rgba(250,250,250,.92);
 }
 .page-home .nav-logo span {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--home-font-heading);
   font-weight: 700;
   letter-spacing: -.03em;
 }
@@ -2059,6 +2061,7 @@ function homeStyles() {
 .page-home .home-hero-badge-dots span:nth-child(2) { background: #D67D9A; }
 .page-home .home-hero-badge-dots span:nth-child(3) { background: #C8D5B0; }
 .page-home .home-brand {
+  font-family: var(--home-font-heading);
   font-size: clamp(2.5rem, 5.5vw, 3.8rem);
   font-weight: 800;
   letter-spacing: -.045em;
@@ -2067,7 +2070,7 @@ function homeStyles() {
   color: var(--home-ink);
 }
 .page-home .home-hero h1 {
-  font-family: inherit;
+  font-family: var(--home-font-heading);
   font-size: clamp(1.35rem, 2.4vw, 1.85rem);
   font-weight: 600;
   letter-spacing: -.025em;
@@ -2265,7 +2268,7 @@ function homeStyles() {
   margin: 0 0 .85rem;
 }
 .page-home .home-heading {
-  font-family: inherit;
+  font-family: var(--home-font-heading);
   font-size: clamp(1.75rem, 3.4vw, 2.55rem);
   font-weight: 800;
   letter-spacing: -.035em;
@@ -2308,7 +2311,7 @@ function homeStyles() {
   margin-bottom: .65rem;
 }
 .page-home .home-step h3 {
-  font-family: inherit;
+  font-family: var(--home-font-heading);
   font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: -.02em;
@@ -2327,7 +2330,7 @@ function homeStyles() {
   gap: 1.75rem 1.5rem;
 }
 .page-home .home-feature h3 {
-  font-family: inherit;
+  font-family: var(--home-font-heading);
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: -.02em;
@@ -2354,12 +2357,12 @@ function homeStyles() {
   background: var(--home-surface) !important;
 }
 .page-home .home-templates .product-name {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--home-font-heading);
   font-weight: 700;
   letter-spacing: -.02em;
 }
 .page-home .home-templates .price-current {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--home-font-heading);
   font-weight: 700;
 }
 .page-home .home-templates-cta {
@@ -2378,7 +2381,7 @@ function homeStyles() {
   border-top: 1px solid var(--home-border);
 }
 .page-home .home-service h3 {
-  font-family: inherit;
+  font-family: var(--home-font-heading);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -.025em;
@@ -2607,7 +2610,7 @@ function homeScript() {
 function layout(title, description, canonical, bodyHtml, active = '', cartCatalogJson = null) {
   const isHome = active === 'home';
   const fonts = isHome
-    ? `<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`
+    ? `<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`
     : `<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`;
   return `<!DOCTYPE html>
 <html lang="en">
