@@ -2157,7 +2157,13 @@ img.logo-img { outline: none; }
 }
 .step h3 { font-family: 'Fraunces', serif; color: #2D3E24; margin-bottom: .4rem; font-size: 1.05rem; }
 .step p { color: var(--muted); font-size: .9rem; margin: 0; }
-.step .flower-wm { position: absolute; right: .7rem; bottom: .5rem; opacity: .18; color: var(--pink); font-size: 1.4rem; }
+.step .flower-wm {
+  position: absolute; right: .7rem; bottom: .5rem; opacity: .22; color: var(--pink); font-size: 1.4rem;
+  animation: flowerBounce 3s ease-in-out infinite;
+}
+.step:nth-child(2) .flower-wm { animation-delay: .5s; }
+.step:nth-child(3) .flower-wm { animation-delay: 1s; }
+.step:nth-child(4) .flower-wm { animation-delay: 1.5s; }
 .testi-marquee { overflow: hidden; margin-top: 1.5rem; display: grid; gap: .85rem; }
 .marquee-row {
   overflow: hidden; min-width: 0; position: relative;
