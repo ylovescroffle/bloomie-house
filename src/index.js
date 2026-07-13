@@ -1756,7 +1756,7 @@ img.logo-img { outline: none; }
 .filter-btn:hover, .filter-btn.active { background: var(--black); color: #fff; box-shadow: none; }
 .filter-btn:active { transform: scale(0.96); }
 .site-footer {
-  margin-top: 4rem; padding: 3.5rem 4vw 2rem;
+  margin-top: 0; padding: 2.5rem 4vw 2rem;
   background: #fff;
   color: var(--charcoal);
   border-top: 1px solid var(--border);
@@ -1946,11 +1946,35 @@ img.logo-img { outline: none; }
 .article { max-width: 720px; margin: 0 auto; padding: 2rem 4vw 3rem; }
 .article .meta { color: var(--muted); font-size: .85rem; margin-bottom: 1rem; }
 .article h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 1.25rem; }
-.article h2 { font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 .75rem; }
+.article h2 { font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 .75rem; color: #2D3E24; }
+.article h3 { font-family: 'Fraunces', serif; font-size: 1.12rem; margin: 1.35rem 0 .55rem; color: #2D3E24; }
 .article p { color: var(--charcoal); margin-bottom: 1rem; line-height: 1.8; }
-.article-cta {
-  margin: 1.75rem 0; padding: 1.25rem; border-radius: 16px; background: var(--pink-soft);
+.article-back {
+  display: inline-flex; align-items: center; gap: .35rem;
+  color: var(--sage-deep); text-decoration: none; font-size: .88rem; font-weight: 600;
+  margin-bottom: 1.25rem; letter-spacing: .02em;
 }
+.article-back:hover { color: var(--pink-deep); }
+.article blockquote {
+  margin: 1.25rem 0; padding: 1rem 1.15rem; border-left: 3px solid var(--pink);
+  background: var(--cream); border-radius: 0 14px 14px 0; color: var(--charcoal);
+  font-style: italic; line-height: 1.65;
+}
+.article ul, .article ol { margin: 0 0 1rem 1.25rem; color: var(--charcoal); line-height: 1.75; }
+.article li { margin-bottom: .4rem; }
+.article a { color: var(--sage-deep); font-weight: 600; }
+.article a:hover { color: var(--pink-deep); }
+.article-cta {
+  margin: 1.75rem 0; padding: 1.35rem 1.4rem; border-radius: 20px;
+  background: linear-gradient(145deg, #faf6ef, #f3ede3);
+  border: 1px solid rgba(45,62,36,.08);
+}
+.article-cta h3 {
+  font-family: 'Fraunces', serif; color: #2D3E24; font-size: 1.15rem; margin-bottom: .45rem;
+}
+.article-cta p { color: var(--charcoal); margin-bottom: .9rem; line-height: 1.6; }
+.section-tight-footer { padding-bottom: 2rem !important; }
+.email-capture-article { margin-top: 0; }
 .cta-band {
   text-align: center; background: var(--black); color: #fff; border-radius: 24px;
   padding: 2.5rem 1.5rem; box-shadow: 6px 6px 0 var(--sage);
@@ -2092,14 +2116,24 @@ img.logo-img { outline: none; }
 .step p { color: var(--muted); font-size: .9rem; margin: 0; }
 .step .flower-wm { position: absolute; right: .7rem; bottom: .5rem; opacity: .18; color: var(--pink); font-size: 1.4rem; }
 .testi-marquee { overflow: hidden; margin-top: 1.5rem; display: grid; gap: .85rem; }
-.marquee-row { overflow: hidden; }
-.marquee-track {
-  display: flex; gap: .85rem; width: max-content; animation: testiScroll 55s linear infinite;
+.marquee-row {
+  overflow: hidden; min-width: 0;
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
-.marquee-row.reverse .marquee-track { animation-direction: reverse; animation-duration: 65s; }
-@keyframes testiScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track {
+  display: flex; flex-wrap: nowrap; gap: .85rem; width: max-content;
+  animation: testiScroll 38s linear infinite; will-change: transform;
+}
+.marquee-row:hover .marquee-track { animation-play-state: paused; }
+.marquee-row.reverse .marquee-track { animation-direction: reverse; animation-duration: 48s; }
+@keyframes testiScroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
 .testi-pill {
-  width: min(360px, 80vw); background: #fff; border-radius: 999px; padding: .85rem 1.1rem .85rem .85rem;
+  flex: 0 0 auto; width: min(360px, 80vw); background: #fff; border-radius: 999px;
+  padding: .85rem 1.1rem .85rem .85rem;
   display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: center; box-shadow: var(--shadow-border);
 }
 .testi-pill .avatar {
@@ -2143,10 +2177,14 @@ img.logo-img { outline: none; }
 .checks li { position: relative; padding-left: 1.3rem; color: var(--charcoal); }
 .checks li::before { content: '✓'; position: absolute; left: 0; color: var(--pink-deep); font-weight: 700; }
 .reveal {
-  opacity: 0; transform: translateY(16px);
-  transition: opacity 550ms cubic-bezier(.2,0,0,1), transform 550ms cubic-bezier(.2,0,0,1);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 600ms cubic-bezier(.2,0,0,1), transform 600ms cubic-bezier(.2,0,0,1);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 .reveal.is-visible { opacity: 1; transform: none; }
+.reveal-fade { transform: none; }
+.reveal-scale { transform: scale(.97); }
+.reveal-scale.is-visible { transform: none; }
 .footer-brand-block {
   background: #2D3E24; color: rgba(255,255,255,.88); border-radius: 16px; padding: 1.4rem 1.3rem;
 }
@@ -2347,11 +2385,27 @@ function layoutScript() {
 
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if (en.isIntersecting) en.target.classList.add('is-visible'); });
-    }, { threshold: 0.12 });
+      entries.forEach(function(en){
+        if (en.isIntersecting) {
+          en.target.classList.add('is-visible');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
   } else {
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-visible'); });
+  }
+  var articleForm = document.querySelector('[data-article-newsletter]');
+  var articleSuccess = document.querySelector('[data-article-newsletter-success]');
+  if (articleForm) {
+    articleForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var email = (new FormData(articleForm).get('email') || '').toString();
+      window.location.href = 'mailto:hello@bloomiehouse.com.au?subject=' + encodeURIComponent('Bloomie Letter signup') + '&body=' + encodeURIComponent('Email: ' + email);
+      if (articleSuccess) articleSuccess.classList.add('show');
+      articleForm.reset();
+    });
   }
 })();`;
 }
@@ -2365,9 +2419,11 @@ const TOP_ANNOUNCE_SEGMENTS = [
 ];
 
 const MID_ANNOUNCE_SEGMENTS = [
-  'Get it ready this week',
-  'Go from someday to live in record time and on budget.',
-  'Designer-made · Drag &amp; drop · Fully customisable',
+  '⚡ Last chance — <strong>50% off your one-day website</strong> — ends soon',
+  'Use code: <strong>BLOOM50</strong>',
+  '30% off all templates — code <strong>BLOOM30</strong>',
+  'Templates from A$29',
+  'Ships worldwide from Australia',
 ];
 
 const HOME_FUNNEL_ITEMS = [
@@ -2440,6 +2496,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
 </head>
 <body>
   ${announceMarqueeHtml(TOP_ANNOUNCE_SEGMENTS, 'fast')}
+  ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
   ${siteNav(active)}
   ${bodyHtml}
   ${siteFooter()}
@@ -2621,9 +2678,7 @@ function homePage() {
   <p style="margin-top:1.1rem;font-size:.9rem;color:var(--muted);">✿ Shopify Partners · Canva, Shopify, Wix &amp; custom builds · Based in Australia, delivering worldwide</p>
 </section>
 
-${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
-
-<section class="section">
+<section class="section reveal">
   <div class="bh-center">
     <span class="bh-eyebrow pink">Browse by category</span>
     <h2 class="section-title">Find your <em>perfect</em> template</h2>
@@ -2651,9 +2706,9 @@ ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
   </div>
 </section>
 
-<section class="section" style="background:rgba(255,255,255,.55);">
+<section class="section reveal" style="background:rgba(255,255,255,.55);">
   <div class="bh-pain">
-    <span class="bh-eyebrow pink">Let's be honest</span>
+    <span class="bh-eyebrow pink reveal">Let's be honest</span>
     <h2>You didn't become a lash artist to spend your days <em>tweaking a website</em></h2>
     <p>After all, that next fully-booked week isn't going to lash itself. Luckily, we're here to save you valuable time so you can get back to doing what you love.</p>
     <p>While you focus on <strong>perfecting every set, training your students and filling your books</strong>, we're behind the scenes designing stunning websites, booking systems and online stores that connect with your audience and keep your calendar (and cart) full.</p>
@@ -2669,9 +2724,9 @@ ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
   </div>
 </section>
 
-<section class="section">
+<section class="section reveal">
   <div class="bh-center">
-    <span class="bh-eyebrow sage">Why Bloomie House</span>
+    <span class="bh-eyebrow sage reveal">Why Bloomie House</span>
     <h2 class="section-title">Templates with a <em>strategy</em> inside</h2>
     <p class="lead">Pretty is the baseline. Every Bloomie House template is built like a little sales funnel for your business.</p>
   </div>
@@ -2685,9 +2740,9 @@ ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
   </div>
 </section>
 
-<section class="section" style="background:rgba(255,255,255,.55);">
+<section class="section reveal" style="background:rgba(255,255,255,.55);">
   <div class="bh-center">
-    <span class="bh-eyebrow pink">Three ways to work with us</span>
+    <span class="bh-eyebrow pink reveal">Three ways to work with us</span>
     <h2 class="section-title">From template to <em>totally bespoke</em></h2>
   </div>
   <div class="svc-cards">
@@ -2712,14 +2767,14 @@ ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
   </div>
 </section>
 
-<section class="section collage">
+<section class="section collage reveal">
   <h2 class="line-1 reveal">Goodbye boring websites</h2>
   <div class="collage-grid">${collageImgs}</div>
   <h2 class="line-2 reveal">Hello aesthetic &amp; strategic design.</h2>
   <div class="bh-center"><a class="btn btn-primary" href="/shop">Check Our Work</a></div>
 </section>
 
-<section class="section">
+<section class="section reveal">
   <div class="freebie reveal">
     <div>
       <span class="tag-free">Free download</span>
@@ -2739,7 +2794,7 @@ ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
   </div>
 </section>
 
-<section class="section" style="padding-top:0;">
+<section class="section reveal" style="padding-top:0;">
   <div class="stats-band reveal">
     <div class="stats-grid">
       <div class="stat"><div class="num">6+</div><div class="lbl">Years Experience</div></div>
@@ -2752,9 +2807,9 @@ ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
 
 ${homeSellFunnelHtml()}
 
-<section class="section" style="background:var(--pink-soft);">
+<section class="section reveal" style="background:var(--pink-soft);">
   <div class="bh-center">
-    <span class="bh-eyebrow sage">The Bloomie way</span>
+    <span class="bh-eyebrow sage reveal">The Bloomie way</span>
     <h2 class="section-title">How it works</h2>
   </div>
   <div class="steps">
@@ -2766,12 +2821,12 @@ ${homeSellFunnelHtml()}
   <div class="bh-center" style="margin-top:2rem;"><a class="btn btn-primary" href="/start-a-project">Start Your Project</a></div>
 </section>
 
-<section class="section">
-  <div class="bh-center">
+<section class="section section-tight-footer">
+  <div class="bh-center reveal">
     <span class="bh-eyebrow pink">Don't just take our word for it</span>
     <h2 class="section-title">Loved by <em>hundreds</em> of artists, brides &amp; tradies</h2>
   </div>
-  <div class="testi-marquee" aria-label="Customer testimonials">
+  <div class="testi-marquee reveal" aria-label="Customer testimonials">
     <div class="marquee-row"><div class="marquee-track">
       <div class="testi-pill"><div class="avatar">🌸</div><p>“Bought the lash booking template Tuesday, taking online bookings by Thursday.”<span>Mia — Lash Artist, Melbourne</span></p></div>
       <div class="testi-pill"><div class="avatar">💍</div><p>“The 1-day customisation was worth every cent — our wedding website matched our invitations.”<span>Sarah &amp; Tom — Hobart</span></p></div>
@@ -2795,8 +2850,8 @@ ${homeSellFunnelHtml()}
   </div>
 </section>
 
-<section class="section" style="padding-top:0;">
-  <div class="bh-center">
+<section class="section section-tight-footer" style="padding-top:0;">
+  <div class="bh-center reveal">
     <span class="bh-eyebrow sage">From the blog</span>
     <h2 class="section-title">Learn, launch &amp; <em>grow</em></h2>
   </div>
@@ -4435,7 +4490,7 @@ function blogPage() {
     { href: '/blog/ai-tools-for-lash-artists', cover: '🌸', bg: 'var(--pink-soft)', meta: 'Beauty · AI Tips', title: '7 Ways Lash Artists Can Use AI to Get More Bookings', excerpt: 'From caption writing to aftercare automation — practical AI workflows.' },
     { href: '/blog/template-vs-custom-website', cover: '🌿', bg: 'var(--sage-soft)', meta: 'Guides', title: 'Template vs Custom Website', excerpt: 'An honest breakdown of cost, speed and results for small businesses.' },
   ].map((p) => `
-    <a class="blog-card" href="${p.href}">
+    <a class="blog-card reveal" href="${p.href}">
       <div class="cover" style="background:${p.bg};">${p.cover}</div>
       <div class="body">
         <div class="meta">${p.meta}</div>
@@ -4444,7 +4499,7 @@ function blogPage() {
       </div>
     </a>`).join('');
   const body = `
-<section class="page-hero">
+<section class="page-hero reveal">
   <p class="script" style="font-size:1.6rem;">the bloomie blog —</p>
   <h1>Learn, launch &amp; <em>grow</em></h1>
   <p>Practical guides on building websites, growing your beauty business and getting more out of your templates.</p>
@@ -4455,51 +4510,189 @@ function blogPage() {
   return layout('Blog — Bloomie House', 'Website tips, AI workflows and small business guides from Bloomie House.', '/blog', body, 'blog');
 }
 
+function articleCta(title, text, href, buttonLabel) {
+  return `<div class="article-cta reveal">
+    <h3>${title}</h3>
+    <p>${text}</p>
+    <a class="btn btn-primary btn-sm" href="${href}">${buttonLabel}</a>
+  </div>`;
+}
+
+function articleNewsletterSection() {
+  return `
+<section class="section section-tight-footer" style="padding-top:1rem;">
+  <div class="email-capture email-capture-article reveal">
+    <span class="script" style="font-size:1.8rem;">liked this?</span>
+    <h2>Get the next guide by email</h2>
+    <p>Free template drops, website tips and AI workflows for small businesses — about once a fortnight.</p>
+    <form class="email-form" data-article-newsletter style="justify-content:center;max-width:440px;margin:0 auto;">
+      <input type="email" name="email" placeholder="Your email address" required>
+      <button class="btn btn-primary" type="submit">Join Free</button>
+    </form>
+    <div class="form-success" data-article-newsletter-success>🌸 You're in! Check your inbox for a little welcome gift.</div>
+  </div>
+</section>`;
+}
+
 function blogArticlePage(slug) {
   const articles = {
     'build-a-website-with-claude-ai': {
-      meta: 'AI · Tutorial · 12 min read',
+      meta: 'AI · Tutorial · 12 min read · June 2026',
       title: 'How to Build a Website with Claude AI (Beginner Guide)',
-      html: `<p>AI can help you plan structure, draft copy and even generate layout ideas for a small business site. Start with your offer, audience and one clear call-to-action — then let Claude help you turn that brief into pages.</p>
-      <h2>1. Write a clear brief</h2>
-      <p>Tell the AI who you serve, what you sell, and what action you want visitors to take (book, buy, enquire).</p>
-      <h2>2. Outline pages</h2>
-      <p>Ask for a homepage, services, about and contact outline with section-by-section goals.</p>
-      <h2>3. Draft conversion copy</h2>
-      <p>Generate headlines and body text, then edit in your voice. Pretty words still need your expertise.</p>
-      <div class="article-cta"><h3>Prefer a head start?</h3><p>Browse Bloomie House templates and customise one in a day.</p><a class="btn btn-primary btn-sm" href="/shop">Shop Templates</a></div>`,
+      html: `
+      <p>You don't need to be a developer to build a genuinely good website anymore. With an AI assistant like <strong>Claude</strong>, you can plan your pages, write your copy, and even generate working code — all in plain English. In this guide we'll walk through the exact process we recommend to small business owners, from blank page to published site.</p>
+      <blockquote>“The hardest part of building a website isn't the technology — it's knowing what to say and where to put it. AI is shockingly good at exactly that.”</blockquote>
+
+      <h2>Step 1: Let AI plan your site structure</h2>
+      <p>Before touching any website builder, open Claude and describe your business. Be specific — the more context, the better the plan. Try a prompt like:</p>
+      <blockquote>“I'm a lash artist in Melbourne. I need a website where clients can see my services and prices, read my policies, and book online. Suggest a page structure and what should go on each page.”</blockquote>
+      <p>Claude will map out a homepage, services page, booking page, policies and contact — plus what sections each page needs. This alone saves most people a week of second-guessing.</p>
+
+      <h2>Step 2: Write your copy with AI (then make it yours)</h2>
+      <p>Copy is where DIY websites usually fall down. For each page, ask Claude to draft the content, giving it your details:</p>
+      <ul>
+        <li>Your services and prices</li>
+        <li>What makes you different (speed? retention? gentle technique?)</li>
+        <li>Who your dream client is</li>
+        <li>Your vibe — luxe, playful, minimal, warm</li>
+      </ul>
+      <p>Then edit it. AI gets you 80% of the way; your voice is the 20% that makes people trust you. Read every line out loud and change anything you wouldn't actually say.</p>
+
+      <h2>Step 3: Choose where to build</h2>
+      <p>Three good options, depending on your needs:</p>
+      <ol>
+        <li><strong>Canva</strong> — free to publish, perfect for bio pages and simple one-pagers.</li>
+        <li><strong>Wix</strong> — best for booking-based businesses (lash artists, this is you).</li>
+        <li><strong>Shopify</strong> — if you're selling products, courses or aftercare kits.</li>
+      </ol>
+      <p>If you're comfortable going a step further, Claude can generate real HTML and CSS for a fully custom site — describe the design you want and iterate section by section. It's how modern studios (ours included) prototype at speed.</p>
+      ${articleCta(
+        'Skip the blank page entirely',
+        'Our templates give you a professionally designed starting point — then use AI for your copy. The Studio lash booking template is ready for Wix and live in a day.',
+        '/templates/the-studio',
+        'View The Lash Booking Template'
+      )}
+
+      <h2>Step 4: Generate your imagery and brand assets</h2>
+      <p>Ask Claude to suggest a colour palette and font pairing based on your vibe, then apply it consistently. For photos: your own work always beats stock. AI tools can clean up backgrounds and improve lighting, but clients book <em>your</em> lashes, <em>your</em> cakes, <em>your</em> renovations.</p>
+
+      <h2>Step 5: Launch checklist</h2>
+      <ul>
+        <li>Every page has one clear call-to-action (book, quote, buy)</li>
+        <li>Your phone number / booking link works on mobile</li>
+        <li>Policies and prices are easy to find</li>
+        <li>You've connected a custom domain</li>
+        <li>Google Business Profile links to your new site</li>
+      </ul>
+
+      <h2>When to call in help</h2>
+      <p>AI + templates will get most small businesses online beautifully. Bring in a designer when you need booking systems configured, e-commerce set up properly, or a brand that has to compete at a higher level. (That's our whole job — templates when you're starting, bespoke design when you're scaling.)</p>
+      ${articleCta(
+        'Want it done for you — in one day?',
+        "Pick any Bloomie House template and we'll customise it with your brand and content within one business day.",
+        '/start-a-project',
+        'Start a 1-Day Customisation'
+      )}`,
     },
     'ai-tools-for-lash-artists': {
-      meta: 'Beauty · AI Tips · 8 min read',
+      meta: 'Beauty · AI Tips · 8 min read · June 2026',
       title: '7 Ways Lash Artists Can Use AI to Get More Bookings',
-      html: `<p>You became a lash artist to do lashes — not to be a full-time copywriter and admin assistant. AI can handle the boring 80%.</p>
-      <h2>1. Captions on demand</h2>
-      <p>Feed a photo description and vibe, then save your favourite captions as templates.</p>
-      <h2>2. DM quick replies</h2>
-      <p>Draft polished answers to pricing, infills and aftercare questions once, then reuse them.</p>
-      <h2>3. Clear policies clients actually read</h2>
-      <p>Turn messy notes into a friendly-but-firm policies page that protects your calendar.</p>
-      <div class="article-cta"><h3>Want the website that converts?</h3><p>Explore beauty &amp; lash templates built for bookings.</p><a class="btn btn-primary btn-sm" href="/beauty">Browse Beauty Templates</a></div>`,
+      html: `
+      <p>You became a lash artist to do lashes — not to be a copywriter, social media manager, admin assistant and web designer on the side. The good news: AI now handles the boring 80% of those jobs. Here are seven workflows our beauty clients actually use, ranked from easiest to most powerful.</p>
+
+      <h2>1. Never write a caption from scratch again</h2>
+      <p>Give an AI assistant (Claude, ChatGPT — either works) a photo description and your vibe: <em>“Write 3 Instagram captions for a wispy hybrid set, playful tone, include a booking call-to-action.”</em> Save your favourites as templates and rotate.</p>
+
+      <h2>2. Answer DMs with saved AI-drafted replies</h2>
+      <p>Draft polished answers to your ten most common questions (prices, infills, allergies, lash baths) once, with AI's help, and save them as quick replies in Instagram. You'll reclaim hours every week.</p>
+
+      <h2>3. Turn your policies into a page clients actually read</h2>
+      <p>Paste your messy policy notes into AI and ask for a friendly-but-firm policies page. Clear deposits and late policies protect your income — and they land better when they're beautifully written.</p>
+      ${articleCta(
+        'Make your policies gorgeous too',
+        'The Korean Lash Lift Training Manual includes editable policy sections, consent guidance and aftercare pages — all matching, all Canva.',
+        '/templates/korean-lash-lift-training-manual',
+        'View The Training Manual'
+      )}
+
+      <h2>4. Plan a month of content in 30 minutes</h2>
+      <p>Ask AI for a 30-day content calendar mixing education, before/afters, promos and personality. Pair it with a social media template kit and you'll batch a month of posts in one coffee-fuelled session.</p>
+
+      <h2>5. Write your course manual (if you educate)</h2>
+      <p>Educators: AI is brilliant at structuring training content. Outline your modules, let AI draft explanations of theory you already know, then review every word for accuracy — your expertise is the product, AI is just the typist.</p>
+      ${articleCta(
+        'Launching a lash course?',
+        'Drop your content into our 200+ page Lash Lift &amp; Tint Training Manual and look established from day one.',
+        '/templates/korean-lash-lift-training-manual',
+        'View The Course Kit'
+      )}
+
+      <h2>6. Automate your aftercare messages</h2>
+      <p>Draft a warm aftercare follow-up sequence with AI (24 hours, 1 week, 2-week infill reminder) and schedule it through your booking system. Retention is the most profitable marketing there is.</p>
+
+      <h2>7. Build a website that books while you lash</h2>
+      <p>The biggest one. A booking website works 24/7: services, prices, policies and a book-now button. Use AI for your copy (see our <a href="/blog/build-a-website-with-claude-ai">Claude website guide</a>) and a template for the design — you can genuinely be taking online bookings this week.</p>
+      ${articleCta(
+        'Your booking site, live this week',
+        'The Studio template is designed for lash artists — booking flow, services menu, policies and gallery included.',
+        '/templates/the-studio',
+        'View The Booking Template'
+      )}
+
+      <h2>The honest caveat</h2>
+      <p>AI drafts; you decide. Check every price, policy and health claim before publishing, and never let it write anything you wouldn't say to a client's face. Used that way, it's like hiring an assistant for the price of a lash bath.</p>`,
     },
     'template-vs-custom-website': {
-      meta: 'Guides · 6 min read',
+      meta: 'Guides · 6 min read · May 2026',
       title: 'Template vs Custom Website: What Your Small Business Actually Needs',
-      html: `<p>Templates win on speed and budget. Custom wins when your offer, brand or integrations are too specific for a ready-made layout.</p>
-      <h2>Choose a template when…</h2>
-      <p>You need to launch this week, your offer is clear, and you can work within a proven structure.</p>
-      <h2>Choose custom when…</h2>
-      <p>You're scaling, selling online at volume, or need unique flows that templates can't stretch into.</p>
-      <div class="article-cta"><h3>Still unsure?</h3><p>Start a project and we'll recommend the right path.</p><a class="btn btn-primary btn-sm" href="/start-a-project">Start a Project</a></div>`,
+      html: `
+      <p>Somewhere between “free website builder” and “$10k agency build” is the right answer for your business. After building sites for lash artists, couples and tradies, here's our honest framework for choosing — including when <em>not</em> to buy from us.</p>
+
+      <h2>The three real options</h2>
+      <h3>1. Ready-made template (A$29–$249)</h3>
+      <p><strong>Best when:</strong> you're starting out, you're comfortable following a setup guide, and speed matters more than uniqueness. A good template gets you a professional site this week. The trade-off: you do the customising.</p>
+      <h3>2. Template + professional customisation (from A$149 on top)</h3>
+      <p><strong>Best when:</strong> you want it done properly but don't need a from-scratch design. You get professional polish, your branding, and — at Bloomie House at least — a one-business-day turnaround. This is the sweet spot for most small businesses, honestly.</p>
+      <h3>3. Bespoke design (quoted per project)</h3>
+      <p><strong>Best when:</strong> you have specific functionality needs (memberships, complex booking, big e-commerce), a brand that must stand apart, or you're scaling past what templates handle gracefully. Pricing reflects design and backend scope — not a mysterious flat fee.</p>
+
+      <h2>The questions that actually decide it</h2>
+      <ul>
+        <li><strong>Do you need it this week or this quarter?</strong> This week → template (± customisation). This quarter → bespoke is on the table.</li>
+        <li><strong>Is your website your shopfront or your engine?</strong> Shopfront (portfolio, booking, info) → template territory. Engine (sales funnels, courses, inventory) → invest in custom.</li>
+        <li><strong>Will you edit it yourself?</strong> If yes, platforms like Wix and Shopify with a template base are far friendlier than custom code.</li>
+        <li><strong>What's your realistic budget?</strong> Under $500: template + DIY. Under $1,000: template + customisation. Beyond: bespoke becomes worth the conversation.</li>
+      </ul>
+
+      <blockquote>Beware the middle trap: paying custom prices for what is secretly a template, or spending months DIY-ing what a $150 customisation would have finished in a day.</blockquote>
+
+      <h2>What about hosting and domains?</h2>
+      <p>Whoever you build with, hosting and domains are separate, ongoing costs paid to the platform (roughly A$20–60/month on Wix or Shopify, plus ~A$20/year for a domain). Any designer bundling them invisibly into “the price” is charging you for it somewhere. We keep them separate on purpose — you own your accounts, always.</p>
+
+      <h2>Our honest recommendation</h2>
+      <ol>
+        <li><strong>Just starting?</strong> Buy a template. Launch. Improve later.</li>
+        <li><strong>Trading well but embarrassed by your site?</strong> Template + 1-day customisation. Biggest bang for buck in this industry.</li>
+        <li><strong>Scaling, selling, or standing out?</strong> Book a discovery call and scope a bespoke build properly.</li>
+      </ol>
+      ${articleCta(
+        'Still not sure which you need?',
+        "Fill in the project form, tell us your budget and goals, and we'll recommend the right path — even if it's the cheapest one.",
+        '/start-a-project',
+        'Get a Free Recommendation'
+      )}`,
     },
   };
   const a = articles[slug];
   if (!a) return null;
   const body = `
 <article class="article">
-  <div class="meta">${a.meta}</div>
-  <h1>${a.title}</h1>
-  ${a.html}
-</article>`;
+  <a class="article-back reveal" href="/blog">← Back to Blog</a>
+  <div class="meta reveal">${a.meta}</div>
+  <h1 class="reveal">${a.title}</h1>
+  <div class="article-body">${a.html}</div>
+</article>
+${articleNewsletterSection()}`;
   return layout(`${a.title} — Bloomie House`, a.title, `/blog/${slug}`, body, 'blog');
 }
 
