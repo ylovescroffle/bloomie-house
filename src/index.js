@@ -17,6 +17,7 @@ const LOGO_LONG =
   'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-long-house-green-background-transparent.png';
 /** Cropped horizontal wordmark (transparent PNG, served from /public). */
 const LOGO_WORDMARK = '/logo-wordmark.png';
+const LOGO_WORDMARK_PINK = '/logo-wordmark-pink.png';
 const ETSY_SHOP = 'https://bloomlashbar.etsy.com';
 const ETSY_ALT = 'https://bloomlashbar.etsy.com';
 const ETSY_KOREAN_LASH_MANUAL = 'https://bloomlashbar.etsy.com';
@@ -2149,8 +2150,8 @@ img.logo-img { outline: none; }
 .footer-brand-block {
   background: #2D3E24; color: rgba(255,255,255,.88); border-radius: 16px; padding: 1.4rem 1.3rem;
 }
-.footer-brand-block img {
-  height: auto; width: min(220px, 100%); max-height: 72px;
+.footer-brand-block img.footer-wordmark {
+  height: auto; width: min(260px, 100%); max-height: 88px;
   outline: none; margin-bottom: .85rem; display: block;
 }
 .footer-brand-block p { font-size: .92rem; line-height: 1.55; margin: 0; }
@@ -2488,7 +2489,7 @@ function siteFooter() {
 <footer class="site-footer">
   <div class="footer-top footer-top-brand">
     <div class="footer-brand-block">
-      <img class="logo-img" src="${LOGO_WORDMARK}" alt="Bloomie House">
+      <img class="logo-img footer-wordmark" src="${LOGO_WORDMARK_PINK}" alt="Bloomie House">
       <p>Aesthetic website &amp; template studio for beauty artists, brides and trade businesses. Based in Australia, delivering worldwide.</p>
       <div class="shopify-chip">Shopify Partners 🌿</div>
     </div>
