@@ -2277,8 +2277,21 @@ function homeStyles() {
   color: var(--home-ink);
 }
 .page-home .home-heading em {
-  font-style: normal;
+  font-style: italic;
+  font-weight: 600;
   color: var(--home-pink);
+}
+.page-home .home-hero h1 em,
+.page-home .home-brand em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--home-pink);
+}
+.page-home .home-lede em,
+.page-home .home-hero-points em {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--home-ink);
 }
 .page-home .home-lede {
   color: var(--home-muted);
@@ -2549,7 +2562,7 @@ function homeStepsHtml() {
   return `
 <section class="home-section">
   <p class="home-kicker">Speed &amp; simplicity</p>
-  <h2 class="home-heading">From idea to live site this week</h2>
+  <h2 class="home-heading">From idea to live site <em>this week</em></h2>
   <p class="home-lede">Skip starting from a blank page. Pick a designer-made template, make it yours, and publish — or let us set it up for you.</p>
   <div class="home-steps" id="homeSteps">
     ${HOME_STEPS.map(
@@ -2568,7 +2581,7 @@ function homeFeaturesHtml() {
   return `
 <section class="home-section home-section-muted">
   <p class="home-kicker">Everything included</p>
-  <h2 class="home-heading">Smart templates built to customise</h2>
+  <h2 class="home-heading">Smart templates built to <em>customise</em></h2>
   <p class="home-lede">Not just a file download — each template comes with the toolkit to launch with confidence.</p>
   <div class="home-features">
     ${HOME_FEATURE_ITEMS.map(
@@ -2610,7 +2623,7 @@ function homeScript() {
 function layout(title, description, canonical, bodyHtml, active = '', cartCatalogJson = null) {
   const isHome = active === 'home';
   const fonts = isHome
-    ? `<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`
+    ? `<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`
     : `<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`;
   return `<!DOCTYPE html>
 <html lang="en">
@@ -2749,11 +2762,11 @@ function homePage() {
       Wix · Shopify · Canva templates for every niche
     </p>
     <p class="home-brand">Bloomie House</p>
-    <h1>Premium templates for brands that mean business.</h1>
+    <h1>Premium templates for brands that <em>mean business</em>.</h1>
     <ul class="home-hero-points">
       <li>
         <span class="home-point-icon tone-a" aria-hidden="true">✓</span>
-        <span><a href="/shop">Pick a template</a> → Edit &amp; publish instantly</span>
+        <span><a href="/shop">Pick a template</a> → Edit &amp; publish <em>instantly</em></span>
       </li>
       <li>
         <span class="home-point-icon tone-b" aria-hidden="true">▣</span>
@@ -2761,7 +2774,7 @@ function homePage() {
       </li>
       <li>
         <span class="home-point-icon tone-c" aria-hidden="true">⚡</span>
-        <span>Responsive, SEO-ready &amp; fast to launch</span>
+        <span>Responsive, SEO-ready &amp; <em>fast to launch</em></span>
       </li>
       <li>
         <span class="home-point-icon tone-d" aria-hidden="true">$</span>
@@ -2783,7 +2796,7 @@ ${homeFeaturesHtml()}
 
 <section class="home-section home-templates">
   <p class="home-kicker">Shop the collection</p>
-  <h2 class="home-heading">Find your perfect template</h2>
+  <h2 class="home-heading">Find your <em>perfect</em> template</h2>
   <p class="home-lede">Designer-made layouts ready to personalise — pick a niche, open the product page, and checkout securely.</p>
   <div class="product-grid">${featured}</div>
   <div class="home-templates-cta">
@@ -2793,7 +2806,7 @@ ${homeFeaturesHtml()}
 
 <section class="home-section home-section-muted">
   <p class="home-kicker">Done-for-you</p>
-  <h2 class="home-heading">Services that ship fast</h2>
+  <h2 class="home-heading">Services that <em>ship</em> fast</h2>
   <p class="home-lede">DIY if you want control. Book us if you want it live without the learning curve.</p>
   <div class="home-services-grid">
     <article class="home-service">
@@ -2815,7 +2828,7 @@ ${homeFeaturesHtml()}
 </section>
 
 <section class="home-final">
-  <h2 class="home-heading">Ready when you are</h2>
+  <h2 class="home-heading">Ready when <em>you</em> are</h2>
   <p class="home-lede">Add templates to your cart and checkout on Bloomie House — or email us for done-for-you setup.</p>
   <div class="home-final-ctas">
     <a class="btn btn-pink" href="/shop">Shop templates</a>
