@@ -1508,31 +1508,35 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 }
 .site-nav {
   position: sticky; top: 0; z-index: 100;
-  padding: .75rem 4vw 0;
+  padding: .85rem clamp(1rem, 4vw, 2rem) 0;
   background: transparent;
   pointer-events: none;
 }
-.site-nav.is-scrolled { padding-top: .45rem; }
+.site-nav.is-scrolled { padding-top: .5rem; }
 .nav-pill {
   pointer-events: auto;
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; padding: .55rem .85rem .55rem 1rem;
-  max-width: 80rem; margin: 0 auto;
-  background: rgba(250,250,248,.92);
+  max-width: 68rem; margin: 0 auto;
+  background: rgba(250,250,248,.94);
   backdrop-filter: blur(16px) saturate(1.3);
   -webkit-backdrop-filter: blur(16px) saturate(1.3);
-  border-radius: 1.35rem;
-  box-shadow: var(--shadow-border);
-  border: 1px solid rgba(0,0,0,.05);
+  border-radius: 1.5rem;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.06),
+    0 10px 28px -8px rgba(0,0,0,.14);
+  border: 1px solid rgba(255,255,255,.7);
   position: relative;
-  transition-property: padding, box-shadow, border-radius;
+  transition-property: padding, box-shadow, border-radius, max-width;
   transition-duration: 280ms;
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 .site-nav.is-scrolled .nav-pill {
   padding: .4rem .75rem .4rem .85rem;
-  border-radius: 1.15rem;
-  box-shadow: var(--shadow-lift);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.07),
+    0 14px 32px -8px rgba(0,0,0,.18);
 }
 .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; flex-shrink: 0; }
 .nav-logo img {
