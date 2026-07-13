@@ -1457,7 +1457,7 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   .page-hero-enter > *:nth-child(2) { animation-delay: 100ms; }
   .page-hero-enter > *:nth-child(3) { animation-delay: 200ms; }
   .page-hero-enter > *:nth-child(4) { animation-delay: 300ms; }
-  .site-nav {
+  .site-nav .nav-pill {
     animation: navEnter 520ms cubic-bezier(0.2, 0, 0, 1) backwards;
   }
   .site-nav .nav-logo { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 60ms backwards; }
@@ -1467,45 +1467,90 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   .site-nav .nav-links li:nth-child(4) { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 300ms backwards; }
   .site-nav .nav-actions .btn { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 360ms backwards; }
   .site-nav .nav-actions .cart-link { animation: heroEnter 450ms cubic-bezier(0.2, 0, 0, 1) 420ms backwards; }
+  .home-hero-badge {
+    animation: homeBadgeIn 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+  }
+  .home-hero-word {
+    display: inline-block;
+    animation: homeWordFall 0.8s cubic-bezier(0.39, 0.575, 0.565, 1) backwards;
+  }
+  .home-hero-word:nth-child(1) { animation-delay: 0ms; }
+  .home-hero-word:nth-child(2) { animation-delay: 80ms; }
+  .home-hero-word:nth-child(3) { animation-delay: 160ms; }
+  .home-hero-word:nth-child(4) { animation-delay: 240ms; }
+  .home-hero-word:nth-child(5) { animation-delay: 320ms; }
+  .home-hero-word:nth-child(6) { animation-delay: 400ms; }
+  .home-hero-desc {
+    animation: homeBadgeIn 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.35s backwards;
+  }
+  .home-hero-ctas {
+    animation: homeBadgeIn 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s backwards;
+  }
+  .home-hero-card .home-hero-card-inner {
+    animation: homeCardRise 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) backwards;
+  }
+  .home-hero-card.is-one .home-hero-card-inner { animation-delay: 0.2s; }
+  .home-hero-card.is-two .home-hero-card-inner { animation-delay: 0.35s; }
+  .home-hero-card.is-three .home-hero-card-inner { animation-delay: 0.5s; }
   .glassy-3d-inner.is-idle { animation: glassyFloat 7s ease-in-out infinite; }
+}
+@keyframes homeBadgeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes homeWordFall {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes homeCardRise {
+  from { opacity: 0; transform: translateY(15%); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .site-nav {
   position: sticky; top: 0; z-index: 100;
+  padding: .75rem 4vw 0;
+  background: transparent;
+  pointer-events: none;
+}
+.site-nav.is-scrolled { padding-top: .45rem; }
+.nav-pill {
+  pointer-events: auto;
   display: flex; align-items: center; justify-content: space-between;
-  gap: 1rem; padding: 1rem 4vw;
-  background: rgba(250,250,248,.72);
-  backdrop-filter: blur(14px) saturate(1.25);
-  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  gap: 1rem; padding: .55rem .85rem .55rem 1rem;
+  max-width: 80rem; margin: 0 auto;
+  background: rgba(250,250,248,.92);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border-radius: 1.35rem;
   box-shadow: var(--shadow-border);
-  transition-property: padding, background-color, box-shadow, backdrop-filter, transform;
+  border: 1px solid rgba(0,0,0,.05);
+  position: relative;
+  transition-property: padding, box-shadow, border-radius;
   transition-duration: 280ms;
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
-.site-nav.is-scrolled {
-  padding: .62rem 4vw;
-  background: rgba(250,250,248,.86);
-  backdrop-filter: blur(22px) saturate(1.45);
-  -webkit-backdrop-filter: blur(22px) saturate(1.45);
+.site-nav.is-scrolled .nav-pill {
+  padding: .4rem .75rem .4rem .85rem;
+  border-radius: 1.15rem;
   box-shadow: var(--shadow-lift);
-  transform: translateZ(0);
 }
-.nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+.nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; flex-shrink: 0; }
 .nav-logo img {
-  height: 44px; width: auto;
+  height: 40px; width: auto;
   transition-property: height, transform;
   transition-duration: 280ms;
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
-.site-nav.is-scrolled .nav-logo img { height: 38px; }
+.site-nav.is-scrolled .nav-logo img { height: 34px; }
 .nav-logo span {
-  font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em;
+  font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.1rem; letter-spacing: -.02em;
   transition-property: font-size, opacity;
   transition-duration: 280ms;
 }
-.site-nav.is-scrolled .nav-logo span { font-size: 1.05rem; }
-.nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+.site-nav.is-scrolled .nav-logo span { font-size: 1rem; }
+.nav-links { display: flex; gap: 1.25rem; list-style: none; align-items: center; margin: 0; padding: 0; }
 .nav-links a {
-  position: relative; text-decoration: none; font-size: .92rem; color: var(--charcoal);
+  position: relative; text-decoration: none; font-size: .9rem; color: var(--charcoal);
   transition-property: color, transform;
   transition-duration: 150ms; transition-timing-function: ease-out;
 }
@@ -1609,6 +1654,152 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 }
 .page-hero h1 em { font-style: italic; font-weight: 300; color: var(--pink); }
 .page-hero p { color: var(--muted); max-width: 36rem; font-size: 1.05rem; }
+.home-hero {
+  padding: .75rem 4vw 1.25rem;
+  position: relative;
+}
+.home-hero-plane {
+  position: relative;
+  min-height: calc(100svh - 7.5rem);
+  min-height: max(42rem, calc(100svh - 7.5rem));
+  border-radius: 1.75rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6.5rem 1.5rem 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 0%, rgba(214,125,154,.22), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 85% 70%, rgba(200,213,176,.28), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(232,221,208,.55), transparent 50%),
+    linear-gradient(165deg, var(--cream) 0%, var(--white) 48%, #f3ebe3 100%);
+  box-shadow: var(--shadow-border);
+}
+.home-hero-copy {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 42rem;
+  margin: 0 auto;
+}
+.home-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  height: 2rem;
+  padding: .2rem .75rem .2rem .35rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(0,0,0,.06);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  overflow: hidden;
+}
+.home-hero-badge-dot {
+  width: 1.35rem; height: 1.35rem; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink), var(--sage));
+  flex-shrink: 0;
+}
+.home-hero-heading {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  font-size: clamp(2.35rem, 6vw, 4.25rem);
+  line-height: 1.05;
+  margin: 0;
+  overflow: hidden;
+}
+.home-hero-heading em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--pink);
+}
+.home-hero-word { margin-right: .28em; }
+.home-hero-word:last-child { margin-right: 0; }
+.home-hero-desc {
+  color: var(--muted);
+  max-width: 32rem;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  margin: 0;
+}
+.home-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  justify-content: center;
+  margin-top: .5rem;
+}
+.home-hero-visuals {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 18rem;
+  margin-top: 2rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.home-hero-card {
+  display: block;
+  border-radius: 1.25rem;
+  text-decoration: none;
+  transition-property: transform;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+.home-hero-card-inner {
+  display: block;
+  border-radius: inherit;
+  overflow: hidden;
+  background: var(--cream);
+  box-shadow:
+    0 18px 40px -12px rgba(0,0,0,.22),
+    0 0 0 1px rgba(0,0,0,.05);
+  transition-property: box-shadow;
+  transition-duration: 220ms;
+}
+.home-hero-card:hover .home-hero-card-inner {
+  box-shadow:
+    0 24px 48px -12px rgba(0,0,0,.28),
+    0 0 0 1px rgba(0,0,0,.06);
+}
+.home-hero-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  aspect-ratio: 1 / 1;
+}
+.home-hero-card.is-one {
+  position: absolute;
+  width: min(23%, 11.5rem);
+  left: 18%;
+  bottom: 12%;
+  transform: rotate(-9deg);
+  z-index: 1;
+}
+.home-hero-card.is-two {
+  position: relative;
+  width: min(28%, 14rem);
+  z-index: 3;
+  margin-bottom: -2%;
+}
+.home-hero-card.is-three {
+  position: absolute;
+  width: min(24%, 12rem);
+  right: 18%;
+  bottom: 10%;
+  transform: rotate(11deg);
+  z-index: 2;
+}
 .section { padding: 4rem 4vw; }
 .section-label {
   font-size: .75rem; letter-spacing: .16em; text-transform: uppercase;
@@ -1715,28 +1906,47 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .nav-toggle {
-  display: none; background: none; border: none; border-radius: 10px; width: 42px; height: 42px;
+  display: none; background: var(--white); border: none; border-radius: 12px; width: 42px; height: 42px;
   font-size: 1.2rem; box-shadow: var(--shadow-border); cursor: pointer;
   transition-property: transform, box-shadow; transition-duration: 150ms;
+  margin-left: auto;
 }
 .nav-toggle:active { transform: scale(0.96); }
 @media (max-width: 860px) {
   .nav-toggle { display: grid; place-items: center; }
+  .nav-pill { flex-wrap: wrap; }
+  .nav-actions { order: 3; }
   .nav-links {
-    display: none; position: absolute; top: 100%; left: 0; right: 0;
-    background: var(--white); flex-direction: column; padding: 1rem 4vw 1.25rem;
-    border-bottom: 1px solid var(--border); align-items: flex-start;
+    display: none; order: 4; width: 100%;
+    flex-direction: column; padding: .35rem .25rem .6rem;
+    align-items: flex-start; gap: .65rem;
+    border-top: 1px solid var(--border); margin-top: .35rem;
   }
   .nav-links.open { display: flex; }
+  .nav-links a::after { display: none; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .home-funnel-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+  .home-hero-plane { min-height: auto; padding: 5.5rem 1.1rem 1.5rem; border-radius: 1.35rem; }
+  .home-hero-visuals { height: 16rem; margin-top: 1.5rem; }
+  .home-hero-card.is-one { width: 42%; left: 2%; top: 12%; }
+  .home-hero-card.is-two { width: 48%; }
+  .home-hero-card.is-three { width: 40%; right: 2%; top: 28%; }
 }
 @media (max-width: 560px) {
   .footer-grid { grid-template-columns: 1fr; }
+  .nav-logo span { font-size: .95rem; }
+  .home-hero-ctas { flex-direction: column; align-items: stretch; }
+  .home-hero-ctas .btn { width: 100%; }
+  .home-hero-visuals { height: 14rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .announce-marquee-fast,
   .announce-marquee-slow { animation: none; }
+  .home-hero-badge,
+  .home-hero-word,
+  .home-hero-desc,
+  .home-hero-ctas,
+  .home-hero-card-inner { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
 `;
 }
@@ -1844,7 +2054,10 @@ function cartScript(catalogJson) {
     updateBadge();
     var toggle=document.getElementById('navToggle');
     var links=document.getElementById('navLinks');
-    if(toggle && links) toggle.addEventListener('click', function(){ links.classList.toggle('open'); });
+    if(toggle && links) toggle.addEventListener('click', function(){
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
     renderCart();
   });
 })();`;
@@ -1998,23 +2211,25 @@ function siteNav(active) {
     `<li><a href="${href}" class="${active === key ? 'active' : ''}">${label}</a></li>`;
   return `
 <nav class="site-nav" id="siteNav" aria-label="Primary">
-  <a class="nav-logo" href="/">
-    <img src="${LOGO}" alt="Bloomie House">
-    <span>Bloomie House</span>
-  </a>
-  <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
-  <ul class="nav-links" id="navLinks">
-    ${link('/shop', 'Shop', 'shop')}
-    ${link('/services', 'Services', 'services')}
-    ${link('/about', 'About', 'about')}
-    ${link('/contact', 'Contact', 'contact')}
-  </ul>
-  <div class="nav-actions">
-    <a class="btn btn-ghost" href="/login">Account</a>
-    <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book Now</a>
-    <a class="cart-link" href="/cart" aria-label="Cart">
-      🛒<span class="cart-count" id="cartCount">0</span>
+  <div class="nav-pill">
+    <a class="nav-logo" href="/">
+      <img src="${LOGO}" alt="Bloomie House">
+      <span>Bloomie House</span>
     </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+    <ul class="nav-links" id="navLinks" role="list">
+      ${link('/shop', 'Shop', 'shop')}
+      ${link('/services', 'Services', 'services')}
+      ${link('/about', 'About', 'about')}
+      ${link('/contact', 'Contact', 'contact')}
+    </ul>
+    <div class="nav-actions">
+      <a class="btn btn-ghost" href="/login">Account</a>
+      <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book Now</a>
+      <a class="cart-link" href="/cart" aria-label="Cart">
+        🛒<span class="cart-count" id="cartCount">0</span>
+      </a>
+    </div>
   </div>
 </nav>`;
 }
@@ -2090,14 +2305,55 @@ function productCard(t) {
 // ── PAGES ──
 function homePage() {
   const featured = templateData.slice(0, 6).map(productCard).join('');
+  const heroCards = [
+    {
+      slug: 'korean-lash-lift-training-manual',
+      img: `${MOCK}/korean-lash-lift-hero.jpg`,
+      alt: 'Korean Lash Lift training manual template',
+      cls: 'is-one',
+    },
+    {
+      slug: 'luxspa-beauty-nails',
+      img: `${MOCK}/luxspa-devices.jpg`,
+      alt: 'LuxSpa Beauty & Nails website template',
+      cls: 'is-two',
+    },
+    {
+      slug: 'wedding-rsvp',
+      img: `${MOCK}/wedding-rsvp-promo.jpg`,
+      alt: 'Wedding Invitation RSVP Canva template',
+      cls: 'is-three',
+    },
+  ]
+    .map(
+      (c) => `
+    <a class="home-hero-card ${c.cls}" href="/templates/${c.slug}" aria-label="${c.alt}">
+      <span class="home-hero-card-inner">
+        <img src="${c.img}" alt="" loading="eager" decoding="async">
+      </span>
+    </a>`
+    )
+    .join('');
   const body = `
-<section class="page-hero page-hero-enter" style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;">
-  <p class="section-label">Template shop · Est. 2025</p>
-  <h1>Bloomie House<br><em>for online</em> success.</h1>
-  <p>Premium Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies, boutiques &amp; beyond. Buy, personalise, launch — this week.</p>
-  <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.75rem;">
-    <a class="btn btn-pink" href="/shop">Browse Templates →</a>
-    <a class="btn btn-ghost" href="/services">Need us to set it up?</a>
+<section class="home-hero" aria-label="Bloomie House introduction">
+  <div class="home-hero-plane">
+    <div class="home-hero-copy">
+      <div class="home-hero-badge">
+        <span class="home-hero-badge-dot" aria-hidden="true"></span>
+        <span>Templates · Hobart-made</span>
+      </div>
+      <h1 class="home-hero-heading">
+        <span class="home-hero-word">Bloomie</span><span class="home-hero-word">House</span><span class="home-hero-word">for</span><span class="home-hero-word"><em>online</em></span><span class="home-hero-word">success.</span>
+      </h1>
+      <p class="home-hero-desc">Premium Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies, boutiques &amp; beyond. Buy, personalise, launch — this week.</p>
+      <div class="home-hero-ctas">
+        <a class="btn btn-pink" href="/shop">Browse Templates →</a>
+        <a class="btn btn-ghost" href="/services">Need us to set it up?</a>
+      </div>
+    </div>
+    <div class="home-hero-visuals" aria-hidden="false">
+      ${heroCards}
+    </div>
   </div>
 </section>
 
