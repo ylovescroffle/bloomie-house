@@ -5,7 +5,7 @@
 import { escapeHtml } from './db.js';
 
 const LOGO =
-  'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-lash-pink-background-transparent.png';
+  'https://pub-2edc5bff11ae4320afcd629f83ef44ee.r2.dev/Logo/logo-square-house-pink-background-transparent.png';
 
 export function portalStyles() {
   return `
