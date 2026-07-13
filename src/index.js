@@ -1395,6 +1395,13 @@ body {
   white-space: nowrap;
 }
 .announce-item { flex-shrink: 0; }
+.announce-link {
+  text-decoration: none; color: inherit;
+  border-bottom: 1px solid rgba(214,125,154,.45);
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.announce-mid .announce-link { color: #2D3E24; border-bottom-color: var(--pink-deep); font-weight: 600; }
+.announce-mid .announce-link:hover { color: var(--pink-deep); }
 .announce-sep {
   flex-shrink: 0;
   opacity: .4;
@@ -1536,20 +1543,21 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; padding: 1rem 4vw;
-  background: rgba(250,250,248,.72);
-  backdrop-filter: blur(14px) saturate(1.25);
-  -webkit-backdrop-filter: blur(14px) saturate(1.25);
-  box-shadow: var(--shadow-border);
+  background: linear-gradient(135deg, rgba(255,248,250,.72), rgba(236,245,232,.62));
+  backdrop-filter: blur(20px) saturate(1.75);
+  -webkit-backdrop-filter: blur(20px) saturate(1.75);
+  border-bottom: 1px solid rgba(255,255,255,.58);
+  box-shadow: 0 10px 36px rgba(45,62,36,.07);
   transition-property: padding, background-color, box-shadow, backdrop-filter, transform;
   transition-duration: 280ms;
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 .site-nav.is-scrolled {
   padding: .62rem 4vw;
-  background: rgba(250,250,248,.86);
-  backdrop-filter: blur(22px) saturate(1.45);
-  -webkit-backdrop-filter: blur(22px) saturate(1.45);
-  box-shadow: var(--shadow-lift);
+  background: linear-gradient(135deg, rgba(255,252,252,.88), rgba(242,248,238,.82));
+  backdrop-filter: blur(26px) saturate(1.85);
+  -webkit-backdrop-filter: blur(26px) saturate(1.85);
+  box-shadow: 0 12px 40px rgba(45,62,36,.1);
   transform: translateZ(0);
 }
 .nav-logo { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: var(--black); }
@@ -1635,6 +1643,11 @@ img.logo-img { outline: none; }
 .glassy-3d-thumb { border-radius: 12px; aspect-ratio: 1/1; }
 .glassy-3d-thumb img { object-fit: contain; background: var(--cream); transform: translateZ(6px); }
 .nav-actions { display: flex; align-items: center; gap: .75rem; }
+.nav-login {
+  text-decoration: none; font-size: .88rem; font-weight: 600; color: var(--charcoal);
+  letter-spacing: .03em; white-space: nowrap;
+}
+.nav-login:hover { color: var(--pink-deep); }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
   padding: .85rem 1.4rem; border-radius: 999px; text-decoration: none;
@@ -1976,12 +1989,19 @@ img.logo-img { outline: none; }
 .section-tight-footer { padding-bottom: 2rem !important; }
 .email-capture-article { margin-top: 0; }
 .cta-band {
-  text-align: center; background: var(--black); color: #fff; border-radius: 24px;
-  padding: 2.5rem 1.5rem; box-shadow: 6px 6px 0 var(--sage);
+  text-align: center;
+  background: linear-gradient(135deg, rgba(200,213,176,.42), rgba(214,125,154,.22));
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  color: #2D3E24;
+  border-radius: 24px;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid rgba(255,255,255,.55);
+  box-shadow: 0 12px 40px rgba(45,62,36,.1), inset 0 1px 0 rgba(255,255,255,.65);
 }
-.cta-band .script { color: var(--pink); font-size: 1.6rem; }
-.cta-band h2 { font-family: 'Fraunces', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: .5rem 0 0.75rem; }
-.cta-band p { color: rgba(255,255,255,.75); max-width: 34rem; margin: 0 auto 1.25rem; }
+.cta-band .script { color: var(--pink-deep); font-size: 1.6rem; }
+.cta-band h2 { font-family: 'Fraunces', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: .5rem 0 0.75rem; color: #2D3E24; }
+.cta-band p { color: rgba(45,62,36,.78); max-width: 34rem; margin: 0 auto 1.25rem; }
 .collection-block { margin-bottom: 3rem; }
 .collection-block .section-label { margin-bottom: .35rem; }
 
@@ -2039,21 +2059,43 @@ img.logo-img { outline: none; }
 }
 .start-card {
   background: #fff; border-radius: 18px; padding: 1.2rem; box-shadow: var(--shadow-border);
+  transition: transform 280ms ease, box-shadow 280ms ease;
 }
-.start-card .em { font-size: 1.4rem; display: block; margin-bottom: .4rem; }
+.start-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lift); }
+.start-card .em {
+  font-size: 1.4rem; display: block; margin-bottom: .4rem;
+  animation: flowerBounce 2.8s ease-in-out infinite;
+}
+.start-card:nth-child(2) .em { animation-delay: .4s; }
+.start-card:nth-child(3) .em { animation-delay: .8s; }
 .start-card h3 { font-family: 'Fraunces', serif; font-size: 1.1rem; margin-bottom: .35rem; color: #2D3E24; }
 .start-card p { color: var(--muted); font-size: .92rem; margin: 0; }
 .why-grid {
   display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1.5rem 1.25rem; margin-top: 1.5rem;
 }
-.why-item { text-align: center; }
-.why-item .flower { color: var(--pink); font-size: 1.1rem; display: block; margin-bottom: .45rem; }
+.why-item { text-align: center; transition: transform 280ms ease, box-shadow 280ms ease; border-radius: 16px; padding: .35rem; }
+.why-item:hover { transform: translateY(-5px); }
+.why-item .flower {
+  color: var(--pink); font-size: 1.1rem; display: block; margin-bottom: .45rem;
+  animation: flowerBounce 2.6s ease-in-out infinite;
+}
+.why-item:nth-child(2) .flower { animation-delay: .35s; }
+.why-item:nth-child(3) .flower { animation-delay: .7s; }
+.why-item:nth-child(4) .flower { animation-delay: 1.05s; }
+.why-item:nth-child(5) .flower { animation-delay: 1.4s; }
+.why-item:nth-child(6) .flower { animation-delay: 1.75s; }
+@keyframes flowerBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(10deg); }
+}
 .why-item h3 { font-family: 'Fraunces', serif; font-size: 1.15rem; margin-bottom: .4rem; color: #2D3E24; }
 .why-item p { color: var(--muted); font-size: .92rem; }
 .svc-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1.25rem; margin-top: 1.5rem; }
 .svc-card {
   background: #fff; border-radius: 20px; padding: 1.1rem 1.1rem 1.35rem; box-shadow: var(--shadow-border);
+  transition: transform 280ms ease, box-shadow 280ms ease;
 }
+.svc-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
 .svc-card .pic {
   aspect-ratio: 16/10; border-radius: 14px; overflow: hidden; background: var(--cream); margin-bottom: .9rem;
 }
@@ -2068,11 +2110,12 @@ img.logo-img { outline: none; }
 .collage .line-1 { color: #2D3E24; }
 .collage .line-2 { color: var(--pink-deep); }
 .collage-grid {
-  display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .85rem; margin: 1rem 0 1.25rem;
+  display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .65rem;
+  margin: 1rem auto 1.25rem; max-width: 720px;
 }
 .collage-grid .c-img {
-  border-radius: 16px; overflow: hidden; aspect-ratio: 3/4; background: var(--cream);
-  transform: rotate(-2deg); box-shadow: var(--shadow-lift);
+  border-radius: 14px; overflow: hidden; aspect-ratio: 4/5; max-height: 150px;
+  background: var(--cream); transform: rotate(-2deg); box-shadow: var(--shadow-border);
 }
 .collage-grid .c-img:nth-child(2n) { transform: rotate(2deg); }
 .collage-grid img { width: 100%; height: 100%; object-fit: cover; outline: none; }
@@ -2117,27 +2160,32 @@ img.logo-img { outline: none; }
 .step .flower-wm { position: absolute; right: .7rem; bottom: .5rem; opacity: .18; color: var(--pink); font-size: 1.4rem; }
 .testi-marquee { overflow: hidden; margin-top: 1.5rem; display: grid; gap: .85rem; }
 .marquee-row {
-  overflow: hidden; min-width: 0;
-  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  overflow: hidden; min-width: 0; position: relative;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
 }
+.marquee-inner {
+  display: flex; width: max-content; gap: 0;
+  animation: testiScroll 36s linear infinite;
+  will-change: transform;
+}
+.marquee-row.reverse .marquee-inner { animation-direction: reverse; animation-duration: 44s; }
+.marquee-row:hover .marquee-inner { animation-play-state: paused; }
 .marquee-track {
-  display: flex; flex-wrap: nowrap; gap: .85rem; width: max-content;
-  animation: testiScroll 38s linear infinite; will-change: transform;
+  display: flex; flex-wrap: nowrap; gap: .85rem; flex-shrink: 0;
 }
-.marquee-row:hover .marquee-track { animation-play-state: paused; }
-.marquee-row.reverse .marquee-track { animation-direction: reverse; animation-duration: 48s; }
 @keyframes testiScroll {
   0% { transform: translate3d(0, 0, 0); }
   100% { transform: translate3d(-50%, 0, 0); }
 }
 .testi-pill {
-  flex: 0 0 auto; width: min(360px, 80vw); background: #fff; border-radius: 999px;
-  padding: .85rem 1.1rem .85rem .85rem;
-  display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: center; box-shadow: var(--shadow-border);
+  flex: 0 0 auto; width: min(320px, 72vw); background: #fff; border-radius: 999px;
+  padding: .75rem 1rem .75rem .75rem;
+  display: grid; grid-template-columns: auto 1fr; gap: .65rem; align-items: center; box-shadow: var(--shadow-border);
 }
 .testi-pill .avatar {
-  width: 42px; height: 42px; border-radius: 50%; background: var(--pink-soft); display: grid; place-items: center;
+  width: 34px; height: 34px; border-radius: 50%; background: var(--pink-soft); display: grid; place-items: center;
+  font-size: .95rem;
 }
 .testi-pill p { font-size: .88rem; color: var(--charcoal); margin: 0; line-height: 1.45; }
 .testi-pill span { display: block; margin-top: .35rem; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--sage-deep); }
@@ -2217,8 +2265,9 @@ img.logo-img { outline: none; }
   .h-arrow { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none !important; }
+  .marquee-inner { animation: none !important; }
   .reveal { opacity: 1; transform: none; }
+  .why-item .flower, .start-card .em { animation: none; }
 }
 
 @media (max-width: 720px) {
@@ -2419,11 +2468,10 @@ const TOP_ANNOUNCE_SEGMENTS = [
 ];
 
 const MID_ANNOUNCE_SEGMENTS = [
-  '⚡ Last chance — <strong>50% off your one-day website</strong> — ends soon',
-  'Use code: <strong>BLOOM50</strong>',
-  '30% off all templates — code <strong>BLOOM30</strong>',
-  'Templates from A$29',
-  'Ships worldwide from Australia',
+  'Go from someday to live in record time and on budget.',
+  'Designer-made · Drag &amp; drop · Fully customisable',
+  'Get it ready this week',
+  { html: 'Get free AI Glow up guide here', href: '#glow-up-guide' },
 ];
 
 const HOME_FUNNEL_ITEMS = [
@@ -2440,8 +2488,14 @@ const HOME_FUNNEL_ITEMS = [
 ];
 
 function announceMarqueeHtml(segments, variant = 'fast') {
+  const renderSeg = (seg) => {
+    if (seg && typeof seg === 'object' && seg.href) {
+      return `<a class="announce-item announce-link" href="${seg.href}">${seg.html}</a>`;
+    }
+    return `<span class="announce-item">${seg}</span>`;
+  };
   const item = (text) =>
-    `<span class="announce-item">${text}</span><span class="announce-sep" aria-hidden="true">✦</span>`;
+    `${renderSeg(text)}<span class="announce-sep" aria-hidden="true">✦</span>`;
   const track = segments.map(item).join('') + segments.map(item).join('');
   const barClass = variant === 'slow' ? 'announce-mid' : 'announce-top';
   return `
@@ -2496,7 +2550,6 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
 </head>
 <body>
   ${announceMarqueeHtml(TOP_ANNOUNCE_SEGMENTS, 'fast')}
-  ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
   ${siteNav(active)}
   ${bodyHtml}
   ${siteFooter()}
@@ -2534,6 +2587,7 @@ function siteNav(active) {
   </ul>
   <div class="nav-actions">
     <a class="btn btn-pink btn-sm" href="/start-a-project">Start a Project</a>
+    <a class="nav-login" href="/login">Log in</a>
     <a class="cart-link" href="/cart" aria-label="Cart">
       🛒<span class="cart-count" id="cartCount">0</span>
     </a>
@@ -2660,6 +2714,15 @@ function collectionSectionHtml(key) {
 }
 
 // ── PAGES ──
+function testiPill(emoji, quote, name) {
+  return `<div class="testi-pill"><div class="avatar">${emoji}</div><p>“${quote}”<span>${name}</span></p></div>`;
+}
+
+function testiMarqueeRow(pills, reverse = false) {
+  const row = pills.map((p) => testiPill(p[0], p[1], p[2])).join('');
+  return `<div class="marquee-row${reverse ? ' reverse' : ''}"><div class="marquee-inner"><div class="marquee-track">${row}</div><div class="marquee-track" aria-hidden="true">${row}</div></div></div>`;
+}
+
 function homePage() {
   const sliderCards = templateData.map(productCard).join('');
   const collageImgs = templateData.slice(0, 4).map((t) => {
@@ -2767,6 +2830,8 @@ function homePage() {
   </div>
 </section>
 
+${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
+
 <section class="section collage reveal">
   <h2 class="line-1 reveal">Goodbye boring websites</h2>
   <div class="collage-grid">${collageImgs}</div>
@@ -2774,7 +2839,7 @@ function homePage() {
   <div class="bh-center"><a class="btn btn-primary" href="/shop">Check Our Work</a></div>
 </section>
 
-<section class="section reveal">
+<section class="section reveal" id="glow-up-guide">
   <div class="freebie reveal">
     <div>
       <span class="tag-free">Free download</span>
@@ -2826,27 +2891,19 @@ ${homeSellFunnelHtml()}
     <span class="bh-eyebrow pink">Don't just take our word for it</span>
     <h2 class="section-title">Loved by <em>hundreds</em> of artists, brides &amp; tradies</h2>
   </div>
-  <div class="testi-marquee reveal" aria-label="Customer testimonials">
-    <div class="marquee-row"><div class="marquee-track">
-      <div class="testi-pill"><div class="avatar">🌸</div><p>“Bought the lash booking template Tuesday, taking online bookings by Thursday.”<span>Mia — Lash Artist, Melbourne</span></p></div>
-      <div class="testi-pill"><div class="avatar">💍</div><p>“The 1-day customisation was worth every cent — our wedding website matched our invitations.”<span>Sarah &amp; Tom — Hobart</span></p></div>
-      <div class="testi-pill"><div class="avatar">🔧</div><p>“Got three quote requests the first week. The Bloomie team made it dead simple.”<span>Dave — Plumber, Brisbane</span></p></div>
-      <div class="testi-pill"><div class="avatar">📚</div><p>“Students screenshot pages of my training manual for Instagram now.”<span>Chantelle — Lash Educator, Sydney</span></p></div>
-      <div class="testi-pill"><div class="avatar">🌸</div><p>“Bought the lash booking template Tuesday, taking online bookings by Thursday.”<span>Mia — Lash Artist, Melbourne</span></p></div>
-      <div class="testi-pill"><div class="avatar">💍</div><p>“The 1-day customisation was worth every cent — our wedding website matched our invitations.”<span>Sarah &amp; Tom — Hobart</span></p></div>
-      <div class="testi-pill"><div class="avatar">🔧</div><p>“Got three quote requests the first week. The Bloomie team made it dead simple.”<span>Dave — Plumber, Brisbane</span></p></div>
-      <div class="testi-pill"><div class="avatar">📚</div><p>“Students screenshot pages of my training manual for Instagram now.”<span>Chantelle — Lash Educator, Sydney</span></p></div>
-    </div></div>
-    <div class="marquee-row reverse"><div class="marquee-track">
-      <div class="testi-pill"><div class="avatar">🌏</div><p>“We're in New Zealand and everything was seamless — the invitation suite arrived instantly.”<span>Priya &amp; Mark — Auckland</span></p></div>
-      <div class="testi-pill"><div class="avatar">🛍️</div><p>“Best money I've spent on my aftercare brand. They're actual Shopify Partners.”<span>Jess — Beauty Brand, Gold Coast</span></p></div>
-      <div class="testi-pill"><div class="avatar">✨</div><p>“The bio page template doubled my booking link clicks in a fortnight.”<span>Amara — Brow Artist, Perth</span></p></div>
-      <div class="testi-pill"><div class="avatar">🏡</div><p>“Our one-page tradie site was live in a day, exactly as promised.”<span>Liam — Builder, Launceston</span></p></div>
-      <div class="testi-pill"><div class="avatar">🌏</div><p>“We're in New Zealand and everything was seamless — the invitation suite arrived instantly.”<span>Priya &amp; Mark — Auckland</span></p></div>
-      <div class="testi-pill"><div class="avatar">🛍️</div><p>“Best money I've spent on my aftercare brand. They're actual Shopify Partners.”<span>Jess — Beauty Brand, Gold Coast</span></p></div>
-      <div class="testi-pill"><div class="avatar">✨</div><p>“The bio page template doubled my booking link clicks in a fortnight.”<span>Amara — Brow Artist, Perth</span></p></div>
-      <div class="testi-pill"><div class="avatar">🏡</div><p>“Our one-page tradie site was live in a day, exactly as promised.”<span>Liam — Builder, Launceston</span></p></div>
-    </div></div>
+  <div class="testi-marquee" aria-label="Customer testimonials">
+    ${testiMarqueeRow([
+      ['🌸', 'Bought the lash booking template Tuesday, taking online bookings by Thursday.', 'Mia — Lash Artist, Melbourne'],
+      ['💍', 'The 1-day customisation was worth every cent — our wedding website matched our invitations.', 'Sarah &amp; Tom — Hobart'],
+      ['🔧', 'Got three quote requests the first week. The Bloomie team made it dead simple.', 'Dave — Plumber, Brisbane'],
+      ['📚', 'Students screenshot pages of my training manual for Instagram now.', 'Chantelle — Lash Educator, Sydney'],
+    ])}
+    ${testiMarqueeRow([
+      ['🌏', "We're in New Zealand and everything was seamless — the invitation suite arrived instantly.", 'Priya &amp; Mark — Auckland'],
+      ['🛍️', "Best money I've spent on my aftercare brand. They're actual Shopify Partners.", 'Jess — Beauty Brand, Gold Coast'],
+      ['✨', 'The bio page template doubled my booking link clicks in a fortnight.', 'Amara — Brow Artist, Perth'],
+      ['🏡', 'Our one-page tradie site was live in a day, exactly as promised.', 'Liam — Builder, Launceston'],
+    ], true)}
   </div>
 </section>
 
