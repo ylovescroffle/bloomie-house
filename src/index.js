@@ -28,6 +28,7 @@ const AVATARS = `${MOCK}/avatars`;
 const templateData = [
   {
     slug: 'korean-lash-lift-training-manual',
+    collection: 'beauty',
     name: 'Korean Lash Lift & Tint Training Manual',
     niche: 'Lash Training',
     platform: 'Canva',
@@ -56,6 +57,7 @@ const templateData = [
   },
   {
     slug: 'wedding-rsvp',
+    collection: 'wedding',
     name: 'Wedding Invitation RSVP',
     niche: 'Wedding & Events',
     platform: 'Canva',
@@ -83,6 +85,7 @@ const templateData = [
   },
   {
     slug: 'luxspa-beauty-nails',
+    collection: 'beauty',
     name: 'LuxSpa Beauty & Nails',
     niche: 'Spa & Nail Salon',
     platform: 'Wix Studio',
@@ -111,6 +114,7 @@ const templateData = [
   },
   {
     slug: 'lumina-lash-training',
+    collection: 'beauty',
     name: 'Lumina Lash Training',
     niche: 'Lash Lift Training',
     platform: 'Wix Studio',
@@ -133,6 +137,7 @@ const templateData = [
   },
   {
     slug: 'seoul-soft-korean-lash',
+    collection: 'beauty',
     name: 'Seoul Soft Korean Lash Lift',
     niche: 'Korean Lash Lift',
     platform: 'Canva',
@@ -155,6 +160,7 @@ const templateData = [
   },
   {
     slug: 'lash-brows-academy',
+    collection: 'beauty',
     name: 'Lash & Brows Academy',
     niche: 'Lash & Brows Training',
     platform: 'Wix Studio',
@@ -182,6 +188,7 @@ const templateData = [
   },
   {
     slug: 'coaching-service',
+    collection: 'others',
     name: 'Coaching Service',
     niche: 'Coaching & Consulting',
     platform: 'Canva',
@@ -209,6 +216,7 @@ const templateData = [
   },
   {
     slug: 'the-studio',
+    collection: 'beauty',
     name: 'The Studio',
     niche: 'Beauty & Lash Studio',
     platform: 'Wix Studio',
@@ -231,6 +239,7 @@ const templateData = [
   },
   {
     slug: 'the-tradie',
+    collection: 'others',
     name: 'The Tradie',
     niche: 'Trades & Services',
     platform: 'Shopify',
@@ -983,7 +992,26 @@ export default {
         return htmlResponse(servicesPage());
 
       case '/full-custom':
+      case '/bespoke':
         return htmlResponse(fullCustomPage());
+
+      case '/one-day-website':
+        return htmlResponse(oneDayWebsitePage());
+
+      case '/start-a-project':
+        return htmlResponse(startProjectPage());
+
+      case '/beauty':
+        return htmlResponse(collectionPage('beauty'));
+
+      case '/wedding':
+        return htmlResponse(collectionPage('wedding'));
+
+      case '/others':
+        return htmlResponse(collectionPage('others'));
+
+      case '/blog':
+        return htmlResponse(blogPage());
 
       case '/contact':
         return htmlResponse(contactPage());
@@ -1014,6 +1042,11 @@ export default {
         return Response.redirect(LOGO, 301);
 
       default: {
+        if (pathname.startsWith('/blog/')) {
+          const slug = pathname.split('/').pop();
+          const article = blogArticlePage(slug);
+          if (article) return htmlResponse(article);
+        }
         if (pathname.startsWith('/templates/') || pathname.startsWith('/shop/')) {
           const slug = pathname.split('/').pop();
           const tpl = templateData.find((t) => t.slug === slug);
@@ -1077,8 +1110,17 @@ function sitemapResponse() {
   const urls = [
     ['/', '1.0'],
     ['/shop', '0.9'],
+    ['/beauty', '0.85'],
+    ['/wedding', '0.85'],
+    ['/others', '0.85'],
     ['/services', '0.8'],
+    ['/one-day-website', '0.75'],
+    ['/start-a-project', '0.8'],
     ['/full-custom', '0.7'],
+    ['/blog', '0.6'],
+    ['/blog/build-a-website-with-claude-ai', '0.5'],
+    ['/blog/ai-tools-for-lash-artists', '0.5'],
+    ['/blog/template-vs-custom-website', '0.5'],
     ['/contact', '0.6'],
     ['/about', '0.5'],
     ['/cart', '0.3'],
@@ -1263,26 +1305,33 @@ const chatWidget = `
 function baseStyles() {
   return `
 :root {
-  --black: #111111;
-  --white: #FAFAF8;
-  --cream: #F5F0E8;
-  --sage: #C8D5B0;
-  --pink: #D67D9A;
-  --sand: #E8DDD0;
-  --charcoal: #2C2C2C;
-  --muted: #7A7570;
-  --border: rgba(0,0,0,0.08);
+  --black: #0E0E0E;
+  --white: #FFFBF9;
+  --cream: #F8EDE8;
+  --sage: #9DB082;
+  --sage-soft: #E4ECD8;
+  --sage-deep: #6B7A52;
+  --pink: #E8A0A8;
+  --pink-soft: #F7D9DC;
+  --pink-deep: #C97B84;
+  --rose: #7E6363;
+  --mint: #C8D9C4;
+  --sand: #EADFD6;
+  --charcoal: #2A2624;
+  --muted: #7A706C;
+  --border: rgba(126, 99, 99, 0.16);
   --shadow-border:
-    0px 0px 0px 1px rgba(0, 0, 0, 0.06),
-    0px 1px 2px -1px rgba(0, 0, 0, 0.06),
-    0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+    0px 0px 0px 1px rgba(126, 99, 99, 0.08),
+    0px 1px 2px -1px rgba(14, 14, 14, 0.06),
+    0px 2px 4px 0px rgba(14, 14, 14, 0.04);
   --shadow-border-hover:
-    0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-    0px 1px 2px -1px rgba(0, 0, 0, 0.08),
-    0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+    0px 0px 0px 1px rgba(126, 99, 99, 0.14),
+    0px 1px 2px -1px rgba(14, 14, 14, 0.08),
+    0px 2px 4px 0px rgba(14, 14, 14, 0.06);
   --shadow-lift:
-    0px 0px 0px 1px rgba(0, 0, 0, 0.06),
-    0px 10px 28px -6px rgba(0, 0, 0, 0.12);
+    0px 0px 0px 1px rgba(126, 99, 99, 0.1),
+    0px 12px 32px -8px rgba(126, 99, 99, 0.18);
+  --shadow-chunky: 4px 4px 0 var(--sage-deep);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html {
@@ -1291,11 +1340,22 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--white);
+  font-family: 'Outfit', sans-serif;
+  background:
+    radial-gradient(ellipse 70% 45% at 0% 0%, rgba(232,160,168,.18), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 100% 8%, rgba(157,176,130,.16), transparent 50%),
+    linear-gradient(180deg, #FFFBF9 0%, #FBF4F0 48%, #FFFBF9 100%);
   color: var(--black);
   line-height: 1.6;
   overflow-x: hidden;
+  min-height: 100vh;
+}
+.script {
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+  color: var(--sage-deep);
+  letter-spacing: .01em;
+  line-height: 1.1;
 }
 .announce-bar { overflow: hidden; }
 .announce-top {
@@ -1577,10 +1637,15 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 .btn:active:not(:disabled) { transform: scale(0.96); }
 .btn-dark { background: var(--black); color: var(--white); box-shadow: var(--shadow-border); }
 .btn-dark:hover { background: #2a2a2a; }
-.btn-pink { background: var(--pink); color: #fff; box-shadow: 0 8px 20px -6px rgba(214,125,154,.45); }
-.btn-pink:hover { background: #c96b88; }
-.btn-ghost { background: transparent; border-color: var(--border); color: var(--black); box-shadow: var(--shadow-border); }
-.btn-ghost:hover { border-color: rgba(0,0,0,.14); }
+.btn-pink { background: var(--pink); color: #fff; box-shadow: 3px 3px 0 var(--sage-deep); border-radius: 999px; }
+.btn-pink:hover { background: var(--pink-deep); }
+.btn-ghost { background: transparent; border-color: rgba(126,99,99,.28); color: var(--black); box-shadow: var(--shadow-border); }
+.btn-ghost:hover { border-color: var(--pink); color: var(--pink-deep); }
+.btn-outline { background: transparent; border-color: var(--black); color: var(--black); }
+.btn-outline:hover { background: var(--black); color: #fff; }
+.btn-sm { padding: .55rem 1rem; font-size: .8rem; }
+.btn-primary { background: var(--black); color: #fff; box-shadow: 3px 3px 0 var(--pink); }
+.btn-primary:hover { background: #2a2424; }
 .btn-outline-light { background: transparent; border-color: rgba(255,255,255,.5); color: #fff; }
 .cart-link {
   position: relative; width: 44px; height: 44px; border-radius: 50%;
@@ -1682,30 +1747,75 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
 .filter-btn:hover, .filter-btn.active { background: var(--black); color: #fff; box-shadow: none; }
 .filter-btn:active { transform: scale(0.96); }
 .site-footer {
-  margin-top: 3rem; padding: 3.5rem 4vw 2rem;
-  background: var(--black); color: rgba(255,255,255,.78);
+  margin-top: 4rem; padding: 3.5rem 4vw 2rem;
+  background: #fff;
+  color: var(--charcoal);
+  border-top: 1px solid var(--border);
 }
-.footer-grid {
-  display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 2rem;
-  max-width: 1200px; margin: 0 auto 2.5rem;
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 3rem;
+  max-width: 1180px;
+  margin: 0 auto 2.5rem;
+  align-items: start;
 }
-.footer-brand img { height: 52px; margin-bottom: .8rem; }
-.footer-brand strong {
-  display: block; font-family: 'Fraunces', serif; font-size: 1.4rem; color: #fff; margin-bottom: .4rem;
+.footer-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
 }
 .footer-col h4 {
-  color: #fff; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
-  margin-bottom: 1rem;
+  color: var(--black); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
+  margin-bottom: 1rem; font-weight: 700;
 }
 .footer-col ul { list-style: none; display: grid; gap: .55rem; }
-.footer-col a { color: rgba(255,255,255,.7); text-decoration: none; font-size: .92rem; }
-.footer-col a:hover { color: var(--pink); }
-.footer-bottom {
-  max-width: 1200px; margin: 0 auto; padding-top: 1.5rem;
-  border-top: 1px solid rgba(255,255,255,.1);
-  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
-  font-size: .85rem; color: rgba(255,255,255,.5);
+.footer-col a { color: var(--muted); text-decoration: none; font-size: .95rem; }
+.footer-col a:hover { color: var(--pink-deep); }
+.footer-newsletter {
+  background: var(--black);
+  color: rgba(255,255,255,.88);
+  padding: 1.6rem 1.5rem;
+  border-radius: 4px;
 }
+.footer-newsletter p {
+  font-size: .95rem;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  max-width: 28rem;
+}
+.footer-newsletter .btn {
+  background: #fff;
+  color: var(--black);
+  border-radius: 8px;
+  padding: .55rem 1.1rem;
+  font-size: .82rem;
+  box-shadow: none;
+}
+.footer-newsletter .btn:hover { background: var(--pink-soft); }
+.footer-brandmark {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.25rem 0 0.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.footer-brandmark .mark {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2.4rem, 8vw, 5.2rem);
+  color: rgba(126, 99, 99, 0.22);
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.footer-bottom {
+  max-width: 1180px; margin: 0 auto; padding-top: 1rem;
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  font-size: .85rem; color: var(--muted);
+}
+.footer-bottom a { color: var(--muted); text-decoration: none; }
+.footer-bottom a:hover { color: var(--pink-deep); }
 .toast {
   position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(12px);
   background: var(--black); color: #fff; padding: .85rem 1.25rem; border-radius: 999px;
@@ -1728,15 +1838,137 @@ p, li, .product-info, .page-hero p { text-wrap: pretty; }
     border-bottom: 1px solid var(--border); align-items: flex-start;
   }
   .nav-links.open { display: flex; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .has-dropdown .dropdown {
+    position: static; opacity: 1; pointer-events: auto; transform: none;
+    box-shadow: none; border: none; padding: .35rem 0 .35rem 1rem; margin: 0;
+    background: transparent;
+  }
+  .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-cols { grid-template-columns: 1fr 1fr; }
   .home-funnel-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+  .cat-tiles { grid-template-columns: 1fr 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
-  .footer-grid { grid-template-columns: 1fr; }
+  .footer-cols { grid-template-columns: 1fr; }
+  .cat-tiles { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   .announce-marquee-fast,
   .announce-marquee-slow { animation: none; }
+}
+.has-dropdown { position: relative; }
+.has-dropdown > a { cursor: pointer; }
+.has-dropdown .dropdown {
+  position: absolute; top: calc(100% + 10px); left: 0; min-width: 210px;
+  background: #fff; border: 1px solid var(--border); border-radius: 14px;
+  padding: .55rem; list-style: none; box-shadow: var(--shadow-lift);
+  opacity: 0; pointer-events: none; transform: translateY(6px);
+  transition: opacity 160ms ease, transform 160ms ease; z-index: 40;
+}
+.has-dropdown:hover .dropdown,
+.has-dropdown:focus-within .dropdown {
+  opacity: 1; pointer-events: auto; transform: translateY(0);
+}
+.has-dropdown .dropdown a {
+  display: block; padding: .55rem .7rem; border-radius: 10px; font-size: .9rem;
+  text-decoration: none; color: var(--charcoal);
+}
+.has-dropdown .dropdown a::after { display: none; }
+.has-dropdown .dropdown a:hover { background: var(--pink-soft); color: var(--pink-deep); }
+.cat-tiles {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0 2rem;
+}
+.cat-tile {
+  display: flex; flex-direction: column; justify-content: flex-end; gap: .65rem;
+  min-height: 140px; padding: 1.1rem; border-radius: 18px; text-decoration: none;
+  color: var(--black); box-shadow: var(--shadow-border);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.cat-tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.cat-tile .pill {
+  align-self: flex-start; background: rgba(255,255,255,.85); padding: .35rem .7rem;
+  border-radius: 999px; font-size: .82rem; font-weight: 600;
+}
+.cat-tile .emoji { font-size: 1.6rem; }
+.section-center { text-align: center; }
+.section-center .lead { margin: 0 auto 1rem; color: var(--muted); max-width: 36rem; }
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem;
+}
+.price-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 1.6rem 1.4rem;
+  box-shadow: var(--shadow-border); display: flex; flex-direction: column; gap: .75rem;
+}
+.price-card.featured {
+  background: var(--black); color: #fff; border-color: transparent;
+  box-shadow: 5px 5px 0 var(--pink);
+}
+.price-card.featured p, .price-card.featured li { color: rgba(255,255,255,.78); }
+.price-card h3 { font-family: 'Fraunces', serif; font-size: 1.35rem; }
+.price-card .amount {
+  font-family: 'Fraunces', serif; font-size: 1.55rem; font-weight: 700;
+}
+.price-card ul { list-style: none; display: grid; gap: .45rem; margin: .35rem 0 1rem; }
+.price-card li { font-size: .92rem; color: var(--muted); padding-left: 1.1rem; position: relative; }
+.price-card li::before { content: '✿'; position: absolute; left: 0; color: var(--pink); font-size: .7rem; top: .2rem; }
+.price-card .badge {
+  position: static; align-self: flex-start; background: var(--pink); color: #fff;
+}
+.form-card {
+  max-width: 820px; margin: 0 auto; background: #fff; border: 1px solid var(--border);
+  border-radius: 22px; padding: 1.75rem; box-shadow: var(--shadow-lift);
+}
+.form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.1rem;
+}
+.form-field { display: flex; flex-direction: column; gap: .4rem; }
+.form-field.full { grid-column: 1 / -1; }
+.form-field label { font-size: .88rem; font-weight: 500; }
+.form-field input, .form-field select, .form-field textarea {
+  width: 100%; padding: .85rem 1rem; border: 1px solid var(--border); border-radius: 12px;
+  font: inherit; background: var(--cream);
+}
+.form-field textarea { min-height: 140px; resize: vertical; }
+.form-success {
+  display: none; margin-top: 1rem; padding: 1rem 1.1rem; border-radius: 14px;
+  background: var(--sage-soft); color: var(--sage-deep);
+}
+.form-success.show { display: block; }
+.blog-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;
+}
+.blog-card {
+  background: #fff; border-radius: 18px; overflow: hidden; text-decoration: none; color: inherit;
+  box-shadow: var(--shadow-border); transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.blog-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.blog-card .cover {
+  min-height: 120px; display: grid; place-items: center; font-size: 2rem;
+}
+.blog-card .body { padding: 1.1rem 1.15rem 1.35rem; }
+.blog-card .meta { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .45rem; }
+.blog-card h3 { font-family: 'Fraunces', serif; font-size: 1.15rem; margin-bottom: .4rem; }
+.blog-card p { color: var(--muted); font-size: .92rem; }
+.article { max-width: 720px; margin: 0 auto; padding: 2rem 4vw 3rem; }
+.article .meta { color: var(--muted); font-size: .85rem; margin-bottom: 1rem; }
+.article h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 1.25rem; }
+.article h2 { font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 .75rem; }
+.article p { color: var(--charcoal); margin-bottom: 1rem; line-height: 1.8; }
+.article-cta {
+  margin: 1.75rem 0; padding: 1.25rem; border-radius: 16px; background: var(--pink-soft);
+}
+.cta-band {
+  text-align: center; background: var(--black); color: #fff; border-radius: 24px;
+  padding: 2.5rem 1.5rem; box-shadow: 6px 6px 0 var(--sage);
+}
+.cta-band .script { color: var(--pink); font-size: 1.6rem; }
+.cta-band h2 { font-family: 'Fraunces', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: .5rem 0 0.75rem; }
+.cta-band p { color: rgba(255,255,255,.75); max-width: 34rem; margin: 0 auto 1.25rem; }
+.collection-block { margin-bottom: 3rem; }
+.collection-block .section-label { margin-bottom: .35rem; }
+@media (max-width: 720px) {
+  .form-grid { grid-template-columns: 1fr; }
 }
 `;
 }
@@ -1978,7 +2210,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <link rel="icon" type="image/png" href="${LOGO}">
   <link rel="apple-touch-icon" href="${LOGO}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=Outfit:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>${baseStyles()}</style>
 </head>
 <body>
@@ -1996,6 +2228,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
 function siteNav(active) {
   const link = (href, label, key) =>
     `<li><a href="${href}" class="${active === key ? 'active' : ''}">${label}</a></li>`;
+  const shopActive = ['shop', 'beauty', 'wedding', 'others'].includes(active);
   return `
 <nav class="site-nav" id="siteNav" aria-label="Primary">
   <a class="nav-logo" href="/">
@@ -2004,14 +2237,22 @@ function siteNav(active) {
   </a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
   <ul class="nav-links" id="navLinks">
-    ${link('/shop', 'Shop', 'shop')}
-    ${link('/services', 'Services', 'services')}
+    ${link('/', 'Home', 'home')}
+    <li class="has-dropdown">
+      <a href="/shop" class="${shopActive ? 'active' : ''}" aria-haspopup="true">Templates ▾</a>
+      <ul class="dropdown">
+        <li><a href="/shop">All Templates</a></li>
+        <li><a href="/beauty">Beauty · Lash &amp; Brow</a></li>
+        <li><a href="/wedding">Wedding</a></li>
+        <li><a href="/others">Others</a></li>
+      </ul>
+    </li>
+    ${link('/services', 'Services &amp; Pricing', 'services')}
+    ${link('/blog', 'Blog', 'blog')}
     ${link('/about', 'About', 'about')}
-    ${link('/contact', 'Contact', 'contact')}
   </ul>
   <div class="nav-actions">
-    <a class="btn btn-ghost" href="/login">Account</a>
-    <a class="btn btn-ghost" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book Now</a>
+    <a class="btn btn-pink btn-sm" href="/start-a-project">Start a Project</a>
     <a class="cart-link" href="/cart" aria-label="Cart">
       🛒<span class="cart-count" id="cartCount">0</span>
     </a>
@@ -2022,44 +2263,49 @@ function siteNav(active) {
 function siteFooter() {
   return `
 <footer class="site-footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <img src="${LOGO}" alt="Bloomie House">
-      <strong>Bloomie House</strong>
-      <p>Premium website templates &amp; done-for-you design for Australian small businesses. Based in Hobart.</p>
-      <p style="margin-top:1rem"><a href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a></p>
+  <div class="footer-top">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Sitemap</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About us</a></li>
+          <li><a href="/services">Services</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/shop">Shop all</a></li>
+          <li><a href="/beauty">Beauty · Lash &amp; Brow</a></li>
+          <li><a href="/wedding">Wedding</a></li>
+          <li><a href="/others">Others</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/start-a-project">Start a Project</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Accounts</h4>
+        <ul>
+          <li><a href="/login">Member login</a></li>
+          <li><a href="/login/staff">Staff account</a></li>
+          <li><a href="${ETSY_SHOP}" target="_blank" rel="noopener">Etsy store</a></li>
+          <li><a href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Shop</h4>
-      <ul>
-        <li><a href="/shop">All Templates</a></li>
-        <li><a href="/shop?platform=wix">Wix Studio</a></li>
-        <li><a href="/shop?platform=shopify">Shopify</a></li>
-        <li><a href="/shop?platform=canva">Canva</a></li>
-        <li><a href="${ETSY_SHOP}" target="_blank" rel="noopener">Etsy Store</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Services</h4>
-      <ul>
-        <li><a href="/services">One Day Website</a></li>
-        <li><a href="/full-custom">Full Custom Build</a></li>
-        <li><a href="/contact">Free Chat</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <ul>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
-        <li><a href="/login">Member login</a></li>
-        <li><a href="${ETSY_ALT}" target="_blank" rel="noopener">Bloomie Lash</a></li>
-      </ul>
+    <div class="footer-newsletter">
+      <p>Keep up to date with our latest templates, launches and studio notes. Sign up to the newsletter today.</p>
+      <a class="btn" href="mailto:hello@bloomiehouse.com.au?subject=Newsletter%20signup">Sign Up</a>
     </div>
   </div>
+  <div class="footer-brandmark" aria-hidden="true">
+    <div class="mark">Bloomie House</div>
+  </div>
   <div class="footer-bottom">
-    <span>© ${new Date().getFullYear()} Bloomie House</span>
-    <span>Hobart, Australia · English &amp; Vietnamese</span>
+    <span>© ${new Date().getFullYear()} Bloomie House · <span class="script" style="font-size:1.15rem;color:var(--pink-deep);">grow something lovely</span></span>
+    <span>Australia · worldwide delivery · <a href="/login/staff">Staff account</a></span>
   </div>
 </footer>`;
 }
@@ -2069,7 +2315,7 @@ function productCard(t) {
     ? glassyImage(`<img src="${t.images[0]}" alt="${t.name}">`)
     : `<div class="product-thumb-label">${t.name}</div>`;
   return `
-<a class="product-card" href="/templates/${t.slug}" data-platform="${t.category}">
+<a class="product-card" href="/templates/${t.slug}" data-platform="${t.category}" data-collection="${t.collection || 'others'}">
   <div class="product-thumb ${t.mockClass}" style="${t.images ? 'background:var(--cream);' : ''}">
     ${thumb}
     <span class="badge badge-platform">${t.platform}</span>
@@ -2087,65 +2333,127 @@ function productCard(t) {
 </a>`;
 }
 
+const COLLECTIONS = {
+  beauty: {
+    slug: 'beauty',
+    label: 'Beauty · Lash & Brow',
+    script: 'lashes, brows & beauty —',
+    title: 'Beauty & Lash Templates',
+    description:
+      'Booking websites, academy templates and Canva kits for lash artists, brow techs and beauty educators.',
+  },
+  wedding: {
+    slug: 'wedding',
+    label: 'Wedding',
+    script: 'happily ever after —',
+    title: 'Wedding Templates',
+    description:
+      'Romantic invitation and RSVP website templates that keep guests informed and your day beautifully organised.',
+  },
+  others: {
+    slug: 'others',
+    label: 'Others',
+    script: 'good honest work —',
+    title: 'Templates for Every Other Business',
+    description:
+      'Lead-gen sites and landing pages for coaches, tradies and small businesses beyond beauty and weddings.',
+  },
+};
+
+function productsByCollection(key) {
+  return templateData.filter((t) => (t.collection || 'others') === key);
+}
+
+function collectionSectionHtml(key) {
+  const meta = COLLECTIONS[key];
+  const cards = productsByCollection(key).map(productCard).join('');
+  if (!cards) return '';
+  return `
+<div class="collection-block" id="${key}">
+  <p class="section-label">${meta.label}</p>
+  <h2 class="section-title" style="margin-bottom:1rem;">${meta.title}</h2>
+  <div class="product-grid">${cards}</div>
+  <div style="margin-top:1.25rem;">
+    <a class="btn btn-ghost" href="/${key}">View ${meta.label} →</a>
+  </div>
+</div>`;
+}
+
 // ── PAGES ──
 function homePage() {
-  const featured = templateData.slice(0, 6).map(productCard).join('');
+  const featuredBeauty = productsByCollection('beauty').slice(0, 3).map(productCard).join('');
   const body = `
 <section class="page-hero page-hero-enter" style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;">
-  <p class="section-label">Template shop · Est. 2025</p>
-  <h1>Bloomie House<br><em>for online</em> success.</h1>
-  <p>Premium Wix Studio, Shopify &amp; Canva templates for cafes, beauty studios, tradies, boutiques &amp; beyond. Buy, personalise, launch — this week.</p>
+  <p class="script" style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:.35rem;">hello, lovely —</p>
+  <h1>Bloomie House<br><em>websites that bloom</em></h1>
+  <p>Aesthetic, ready-to-launch website templates and bespoke design for <strong>lash artists</strong>, <strong>weddings</strong> and <strong>trade businesses</strong>. Buy a template today, customise it in one day, or let us design something entirely yours.</p>
   <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.75rem;">
-    <a class="btn btn-pink" href="/shop">Browse Templates →</a>
-    <a class="btn btn-ghost" href="/services">Need us to set it up?</a>
+    <a class="btn btn-pink" href="/shop">Shop Templates</a>
+    <a class="btn btn-outline" href="/services">See Pricing &amp; Packages</a>
   </div>
+  <p style="margin-top:1.1rem;font-size:.9rem;color:var(--muted);">✿ Shopify Partners · Canva, Shopify, Wix &amp; custom builds · Based in Australia</p>
 </section>
 
 ${announceMarqueeHtml(MID_ANNOUNCE_SEGMENTS, 'slow')}
-${homeSellFunnelHtml()}
 
 <section class="section">
-  <p class="section-label">Shop the collection</p>
-  <h2 class="section-title">Find your <em>perfect</em> template</h2>
-  <div class="product-grid">${featured}</div>
+  <div class="section-center">
+    <p class="section-label" style="color:var(--pink-deep);">Browse by category</p>
+    <h2 class="section-title">Find your <em>perfect</em> template</h2>
+  </div>
+  <div class="cat-tiles">
+    <a class="cat-tile" href="/beauty" style="background:var(--pink-soft);"><span class="emoji">🌸</span><span class="pill">Beauty &amp; Lash</span></a>
+    <a class="cat-tile" href="/wedding" style="background:var(--sage-soft);"><span class="emoji">💍</span><span class="pill">Wedding</span></a>
+    <a class="cat-tile" href="/others" style="background:linear-gradient(145deg,var(--mint),var(--sage-soft));"><span class="emoji">🔧</span><span class="pill">Others</span></a>
+    <a class="cat-tile" href="/shop" style="background:linear-gradient(145deg,var(--cream),var(--pink-soft));"><span class="emoji">🛍️</span><span class="pill">All Templates</span></a>
+  </div>
+  <div class="product-grid">${featuredBeauty}</div>
   <div style="text-align:center;margin-top:2rem;">
     <a class="btn btn-dark" href="/shop">View all templates →</a>
   </div>
 </section>
 
-<section class="section" style="background:var(--cream);">
-  <p class="section-label">Done-for-you</p>
-  <h2 class="section-title">Services that <em>ship</em> fast</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;">
-    <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">DIY Template</h3>
-      <p style="color:var(--muted);margin-bottom:1rem;">From $37 AUD · Instant download</p>
-      <a class="btn btn-ghost" href="/shop">Shop templates</a>
+${homeSellFunnelHtml()}
+
+<section class="section" style="background:rgba(255,255,255,.55);">
+  <div class="section-center">
+    <p class="section-label">Ways to work with us</p>
+    <h2 class="section-title">From template to <em>totally bespoke</em></h2>
+  </div>
+  <div class="pricing-grid">
+    <article class="price-card">
+      <h3>Ready-Made Template</h3>
+      <div class="amount">From $37</div>
+      <p>Buy a template and make it yours with our guides.</p>
+      <a class="btn btn-outline" href="/shop">Browse Templates</a>
     </article>
-    <article style="background:var(--black);color:#fff;border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">One Day Website</h3>
-      <p style="opacity:.75;margin-bottom:1rem;">$397 AUD · Live in 24 hours</p>
-      <a class="btn btn-pink" href="/services">Book now →</a>
+    <article class="price-card featured">
+      <span class="badge">Most Loved</span>
+      <h3>1-Day Customisation</h3>
+      <div class="amount">Live in 1 day</div>
+      <p>Pick any template — we tailor it to your brand within one business day.</p>
+      <a class="btn btn-pink" href="/start-a-project?package=custom">Start a Project</a>
     </article>
-    <article style="background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem;">
-      <h3 style="font-family:Fraunces,serif;font-size:1.4rem;margin-bottom:.4rem;">Full Custom</h3>
-      <p style="color:var(--muted);margin-bottom:1rem;">From $897 AUD · Built from scratch</p>
-      <a class="btn btn-ghost" href="/full-custom">Let's chat</a>
+    <article class="price-card">
+      <h3>Bespoke Website Design</h3>
+      <div class="amount">By quote</div>
+      <p>Custom design &amp; build, priced on design scope and backend complexity.</p>
+      <a class="btn btn-outline" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Request a Quote</a>
     </article>
   </div>
 </section>
 
-<section class="section" style="text-align:center;">
-  <h2 class="section-title">Ready when <em>you</em> are</h2>
-  <p style="color:var(--muted);max-width:32rem;margin:0 auto 1.5rem;">Add templates to your cart, then checkout securely on Bloomie House — or book a discovery call for done-for-you setup.</p>
-  <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap;">
-    <a class="btn btn-pink" href="/shop">Shop templates</a>
-    <a class="btn btn-ghost" href="mailto:hello@bloomiehouse.com.au">hello@bloomiehouse.com.au</a>
+<section class="section">
+  <div class="cta-band">
+    <span class="script">ready when you are —</span>
+    <h2>Start your project today</h2>
+    <p>Tell us about your business in about five minutes. We'll reply within 3 business days to book your discovery call.</p>
+    <a class="btn btn-pink" href="/start-a-project">Start a Project</a>
   </div>
 </section>`;
   return layout(
-    'Bloomie House — Website Templates for Brands That Mean Business',
-    'Premium Wix Studio & Shopify website templates for cafes, beauty studios, tradies, boutiques & more. Buy, personalise, launch — this week. Based in Hobart, Australia.',
+    'Bloomie House — Aesthetic Website & Template Studio',
+    'Ready-made website templates, 1-day customisation and bespoke website design for lash artists, weddings and trade businesses. Based in Australia, delivered worldwide.',
     '/',
     body,
     'home'
@@ -2154,30 +2462,49 @@ ${homeSellFunnelHtml()}
 
 function shopPage(platform) {
   const active = (platform || 'all').toLowerCase();
-  const cards = templateData.map(productCard).join('');
   const body = `
 <section class="page-hero page-hero-enter">
-  <p class="section-label">Template shop</p>
-  <h1>Shop <em>templates</em></h1>
-  <p>Premium website templates for Australian small businesses. Filter by platform, open a product page, add to cart, then checkout securely.</p>
+  <p class="script" style="font-size:1.6rem;">the template shop</p>
+  <h1>Every template, <em>one lovely place</em></h1>
+  <p>Ready-made designs for Canva, Shopify and Wix. Buy today and launch this week — or have any template customised in one business day.</p>
 </section>
 <section class="section" style="padding-top:1rem;">
   <div class="filters" id="shopFilters">
     <button class="filter-btn ${active === 'all' ? 'active' : ''}" data-filter="all">All</button>
+    <button class="filter-btn ${active === 'beauty' ? 'active' : ''}" data-filter="beauty">Beauty · Lash</button>
+    <button class="filter-btn ${active === 'wedding' ? 'active' : ''}" data-filter="wedding">Wedding</button>
+    <button class="filter-btn ${active === 'others' ? 'active' : ''}" data-filter="others">Others</button>
     <button class="filter-btn ${active === 'wix' ? 'active' : ''}" data-filter="wix">Wix Studio</button>
     <button class="filter-btn ${active === 'shopify' ? 'active' : ''}" data-filter="shopify">Shopify</button>
     <button class="filter-btn ${active === 'canva' ? 'active' : ''}" data-filter="canva">Canva</button>
   </div>
-  <div class="product-grid" id="shopGrid">${cards}</div>
+  ${collectionSectionHtml('beauty')}
+  ${collectionSectionHtml('wedding')}
+  ${collectionSectionHtml('others')}
 </section>
 <script>
 (function(){
   var buttons=document.querySelectorAll('#shopFilters .filter-btn');
-  var cards=document.querySelectorAll('#shopGrid .product-card');
+  var cards=document.querySelectorAll('.product-grid .product-card');
+  var blocks=document.querySelectorAll('.collection-block');
+  var collectionFilters={beauty:1,wedding:1,others:1};
   function apply(f){
     buttons.forEach(function(b){ b.classList.toggle('active', b.dataset.filter===f); });
     cards.forEach(function(c){
-      c.style.display = (f==='all' || c.dataset.platform===f) ? '' : 'none';
+      var show = f==='all'
+        || c.dataset.platform===f
+        || c.dataset.collection===f;
+      c.style.display = show ? '' : 'none';
+    });
+    blocks.forEach(function(block){
+      if(collectionFilters[f]){
+        block.style.display = block.id===f ? '' : 'none';
+      } else if(f==='all'){
+        block.style.display = '';
+      } else {
+        var visible = Array.prototype.some.call(block.querySelectorAll('.product-card'), function(c){ return c.style.display !== 'none'; });
+        block.style.display = visible ? '' : 'none';
+      }
     });
     var url=new URL(window.location.href);
     if(f==='all') url.searchParams.delete('platform'); else url.searchParams.set('platform', f);
@@ -2189,10 +2516,39 @@ function shopPage(platform) {
 </script>`;
   return layout(
     'Shop Templates — Bloomie House',
-    'Browse premium Wix Studio, Shopify & Canva website templates from $37 AUD. Instant digital download.',
+    'Browse premium Wix Studio, Shopify & Canva website templates by beauty, wedding and other categories.',
     '/shop',
     body,
     'shop'
+  );
+}
+
+function collectionPage(key) {
+  const meta = COLLECTIONS[key];
+  const cards = productsByCollection(key).map(productCard).join('');
+  const body = `
+<section class="page-hero page-hero-enter">
+  <p class="script" style="font-size:1.6rem;">${meta.script}</p>
+  <h1>${meta.title}</h1>
+  <p>${meta.description}</p>
+</section>
+<section class="section" style="padding-top:1rem;">
+  <div class="product-grid">${cards || '<p style="color:var(--muted);">Templates coming soon.</p>'}</div>
+</section>
+<section class="section">
+  <div class="cta-band">
+    <span class="script">want it done for you?</span>
+    <h2>Any template, customised in 1 business day</h2>
+    <p>Choose a template, fill in the project form with your brand details, and we'll deliver it tailored to your business within one business day.</p>
+    <a class="btn btn-pink" href="/start-a-project">Start a Project</a>
+  </div>
+</section>`;
+  return layout(
+    `${meta.title} — Bloomie House`,
+    meta.description,
+    `/${key}`,
+    body,
+    key
   );
 }
 
@@ -3280,46 +3636,74 @@ function cartPage() {
 function servicesPage() {
   const body = `
 <section class="page-hero">
-  <p class="section-label">Done-for-you</p>
-  <h1>Website <em>design</em> services</h1>
-  <p>Prefer we handle the setup? Book a discovery call for One Day Website ($397) or chat about a full custom build.</p>
+  <p class="script" style="font-size:1.6rem;">simple, honest pricing —</p>
+  <h1>Services &amp; <em>Pricing</em></h1>
+  <p>Start with a template, add a 1-day customisation, or go fully bespoke. Every path is designed to get you online beautifully — without agency price tags or agency timelines.</p>
 </section>
 <section class="section" style="padding-top:1rem;">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-bottom:3rem;">
-    <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">One Day Website</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">$397 <span style="font-size:1rem;color:var(--muted);text-decoration:line-through;font-weight:400;">$497</span></p>
-      <p style="color:var(--muted);margin-bottom:1rem;">We install &amp; personalise a template for your brand — live in ~24 hours.</p>
-      <a class="btn btn-pink" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Book now →</a>
+  <div class="pricing-grid">
+    <article class="price-card">
+      <h3>Ready-Made Template</h3>
+      <div class="amount">From $37</div>
+      <p>Buy a template and make it yours with our step-by-step guides.</p>
+      <ul>
+        <li>Instant delivery, worldwide</li>
+        <li>Canva, Shopify, Wix &amp; spreadsheet formats</li>
+        <li>Fully editable colours, fonts &amp; content</li>
+        <li>Setup guide included</li>
+      </ul>
+      <a class="btn btn-outline" href="/shop">Browse Templates</a>
     </article>
-    <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:var(--black);color:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">Full Custom</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">From $897</p>
-      <p style="opacity:.75;margin-bottom:1rem;">Built from scratch — up to 6 pages, strategy session, SEO foundation, 30 days support.</p>
-      <a class="btn btn-pink" href="/full-custom">View details →</a>
+    <article class="price-card featured">
+      <span class="badge">Most Loved</span>
+      <h3>1-Day Customisation</h3>
+      <div class="amount">Template + setup</div>
+      <p>Pick any template — we tailor it to your brand and deliver within one business day.</p>
+      <ul>
+        <li>Your logo, colours, fonts &amp; content applied</li>
+        <li>Set up on your platform, ready to publish</li>
+        <li>One round of refinements included</li>
+        <li>Handover walkthrough so you can self-edit</li>
+      </ul>
+      <a class="btn btn-pink" href="/start-a-project?package=custom">Start My Customisation</a>
     </article>
-    <article style="border:1px solid var(--border);border-radius:18px;padding:1.6rem;background:#fff;">
-      <h2 style="font-family:Fraunces,serif;font-size:1.5rem;">DIY Templates</h2>
-      <p style="font-family:Fraunces,serif;font-size:2rem;font-weight:900;margin:.5rem 0;">From $37</p>
-      <p style="color:var(--muted);margin-bottom:1rem;">Buy a template, personalise it yourself, launch this week.</p>
-      <a class="btn btn-ghost" href="/shop">Browse shop</a>
+    <article class="price-card">
+      <h3>Bespoke Website Design</h3>
+      <div class="amount">By quote</div>
+      <p>Custom design &amp; build, priced on design scope and backend complexity.</p>
+      <ul>
+        <li>Original design — no template</li>
+        <li>Shopify, Wix or fully custom development</li>
+        <li>Booking systems, e-commerce, integrations</li>
+        <li>Discovery call to scope your project</li>
+      </ul>
+      <a class="btn btn-outline" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Request a Quote</a>
     </article>
   </div>
-  <h2 class="section-title" style="text-align:center;">Discovery <em>form</em></h2>
-  <p style="text-align:center;color:var(--muted);max-width:36rem;margin:0 auto 1.5rem;">Tell us about your business and we’ll recommend the right path.</p>
-  <div style="max-width:900px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:18px;padding:1rem;overflow:hidden;">
-    <iframe
-      id="JotFormIFrame-243655997068176"
-      title="Website Design Discovery Form"
-      allow="geolocation; microphone; camera; fullscreen"
-      src="${JOTFORM_DISCOVERY}"
-      style="min-width:100%;max-width:100%;height:640px;border:none;"
-    ></iframe>
+  <p style="text-align:center;margin-top:1.5rem;color:var(--muted);font-size:.92rem;">All prices in AUD. Website pricing covers design and build — hosting, domains and platform subscriptions are billed separately.</p>
+</section>
+<section class="section" style="background:var(--sage-soft);">
+  <div class="section-center">
+    <p class="section-label" style="color:var(--pink-deep);">The process</p>
+    <h2 class="section-title">From project form to <em>launch</em></h2>
+  </div>
+  <div class="pricing-grid">
+    <article class="price-card"><h3>1. Project form</h3><p>Tell us about your business, style and goals in about 5 minutes.</p></article>
+    <article class="price-card"><h3>2. Discovery call</h3><p>We contact you within 3 business days to confirm scope &amp; quote.</p></article>
+    <article class="price-card"><h3>3. Design &amp; build</h3><p>1-day customisations return in one business day; bespoke follows an agreed timeline.</p></article>
+  </div>
+</section>
+<section class="section">
+  <div class="cta-band">
+    <span class="script">ready when you are —</span>
+    <h2>Let's find the right fit for your project</h2>
+    <p>Fill in the project form and we'll come back within 3 business days to book your discovery call.</p>
+    <a class="btn btn-pink" href="/start-a-project">Start a Project</a>
   </div>
 </section>`;
   return layout(
-    'Website Design Services — Bloomie House',
-    'One Day Website from $397 and full custom builds from $897. Wix Studio & Shopify specialists in Hobart, Australia.',
+    'Services & Pricing — Bloomie House',
+    'Three ways to work with Bloomie House: ready-made templates, 1-day customisation, or bespoke website design.',
     '/services',
     body,
     'services'
@@ -3329,9 +3713,9 @@ function servicesPage() {
 function fullCustomPage() {
   const body = `
 <section class="page-hero">
-  <p class="section-label">Bespoke</p>
-  <h1>Full <em>custom</em> build</h1>
-  <p>Built from scratch for your brand — your vision, your voice, no template limits. From $897 AUD.</p>
+  <p class="script" style="font-size:1.6rem;">bespoke —</p>
+  <h1>Bespoke <em>Website</em> Design</h1>
+  <p>Built from scratch for your brand — your vision, your voice, no template limits. Priced on design scope and backend complexity.</p>
 </section>
 <section class="section" style="padding-top:1rem;">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2.5rem;">
@@ -3347,13 +3731,17 @@ function fullCustomPage() {
       )
       .join('')}
   </div>
+  <div style="text-align:center;margin-bottom:2rem;">
+    <a class="btn btn-pink" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Request a Quote</a>
+    <a class="btn btn-ghost" href="/start-a-project?package=bespoke" style="margin-left:.6rem;">Or start a project form</a>
+  </div>
   <div style="max-width:900px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:18px;padding:1rem;">
     <script type="text/javascript" src="${JOTFORM_CUSTOM}"><\/script>
   </div>
 </section>`;
   return layout(
-    'Full Custom Website Build — Bloomie House',
-    'Get a fully custom website built from scratch. Up to 6 pages, brand strategy, SEO foundation & 30 days support. From $897 AUD.',
+    'Bespoke Website Design — Bloomie House',
+    'Get a fully custom website built from scratch. Up to 6 pages, brand strategy, SEO foundation & 30 days support.',
     '/full-custom',
     body,
     'services'
@@ -3419,29 +3807,268 @@ document.getElementById('contactForm').addEventListener('submit', function(e){
 function aboutPage() {
   const body = `
 <section class="page-hero">
-  <p class="section-label">Our story</p>
-  <h1>About <em>Bloomie</em> House</h1>
-  <p>We’re a Hobart-based studio helping small businesses look polished online — without the agency price tag or endless timelines.</p>
+  <p class="script" style="font-size:1.6rem;">nice to meet you —</p>
+  <h1>The studio behind the <em>blooms</em></h1>
+  <p>Bloomie House is a small Australian design studio with one big belief: beautiful, effective websites shouldn't be reserved for businesses with agency budgets.</p>
 </section>
-<section class="section" style="max-width:760px;margin:0 auto;">
+<section class="section" style="max-width:900px;margin:0 auto;">
   <p style="font-size:1.1rem;color:var(--charcoal);line-height:1.85;margin-bottom:1.25rem;">
-    Bloomie House started from a simple idea: beautiful websites shouldn’t take months or cost a fortune. We design premium templates for real Australian businesses — cafes, beauty studios, tradies, boutiques — and offer done-for-you setup when you want us to handle the details.
+    We started Bloomie House after watching brilliant small businesses lose clients to mediocre competitors with better websites. So we built a studio around three things we know deeply: <strong>beauty businesses</strong>, <strong>weddings</strong> and <strong>trades</strong>.
   </p>
   <p style="color:var(--muted);line-height:1.85;margin-bottom:2rem;">
-    Shop templates for instant download, book a One Day Website, or start a full custom build. Either way, you’ll launch looking like you meant it.
+    Templates when you need speed, one-day customisation when you need it done for you, and bespoke design when you're ready to grow. Based in Australia, delivering worldwide.
   </p>
   <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
-    <a class="btn btn-pink" href="/shop">Shop templates</a>
-    <a class="btn btn-ghost" href="/services">View services</a>
+    <a class="btn btn-pink" href="/start-a-project">Start a Project</a>
+    <a class="btn btn-ghost" href="/shop">Shop templates</a>
   </div>
 </section>`;
   return layout(
     'About — Bloomie House',
-    'Bloomie House is a Hobart studio selling premium website templates and done-for-you web design for Australian small businesses.',
+    'Bloomie House is an Australian website & template studio helping lash artists, couples and trade businesses bloom online.',
     '/about',
     body,
     'about'
   );
+}
+
+function startProjectPage() {
+  const options = templateData
+    .map((t) => `<option value="${t.slug}">${t.name}</option>`)
+    .join('');
+  const body = `
+<section class="page-hero">
+  <p class="script" style="font-size:1.6rem;">let's begin —</p>
+  <h1>Start your <em>project</em></h1>
+  <p>Tell us about your business and what you need — it takes about 5 minutes. We'll review everything and contact you <strong>within 3 business days</strong> to book your discovery call.</p>
+</section>
+<section class="section" style="padding-top:1rem;">
+  <div class="form-card">
+    <form id="projectForm">
+      <div class="form-grid">
+        <div class="form-field"><label for="name">Your name *</label><input id="name" name="name" required></div>
+        <div class="form-field"><label for="email">Email *</label><input id="email" name="email" type="email" required></div>
+        <div class="form-field"><label for="business">Business / wedding name</label><input id="business" name="business" placeholder="e.g. Lashed by Luna"></div>
+        <div class="form-field"><label for="location">Where are you based?</label><input id="location" name="location" placeholder="City, country"></div>
+        <div class="form-field">
+          <label for="type">Project type *</label>
+          <select id="type" name="type" required>
+            <option value="">Please choose…</option>
+            <option>Beauty · Lash &amp; Brow</option>
+            <option>Wedding</option>
+            <option>Others (trades &amp; more)</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="package">Which service? *</label>
+          <select id="package" name="package" required>
+            <option value="">Please choose…</option>
+            <option value="template">Ready-made template (DIY)</option>
+            <option value="custom">1-day template customisation</option>
+            <option value="bespoke">Bespoke website design</option>
+            <option value="unsure">Not sure yet — advise me</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="template">Template you're interested in</label>
+          <select id="template" name="template">
+            <option value="">Optional</option>
+            ${options}
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="platform">Preferred platform</label>
+          <select id="platform" name="platform">
+            <option value="">No preference — recommend one</option>
+            <option>Canva</option>
+            <option>Shopify</option>
+            <option>Wix</option>
+            <option>Custom build</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="budget">Budget range (AUD)</label>
+          <select id="budget" name="budget">
+            <option value="">Prefer to discuss</option>
+            <option>Under $250</option>
+            <option>$250 – $750</option>
+            <option>$750 – $2,000</option>
+            <option>$2,000+</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="timeline">When do you need it?</label>
+          <select id="timeline" name="timeline">
+            <option value="">Flexible</option>
+            <option>ASAP — this week</option>
+            <option>Within a month</option>
+            <option>1–3 months</option>
+            <option>Just exploring</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label for="details">Tell us about your project *</label>
+          <textarea id="details" name="details" required placeholder="What does your business do? What pages or features do you need?"></textarea>
+        </div>
+        <div class="form-field full">
+          <label for="inspo">Websites or styles you love</label>
+          <input id="inspo" name="inspo" placeholder="Paste links, separated by commas (optional)">
+        </div>
+      </div>
+      <div style="margin-top:1.5rem;text-align:center;">
+        <button class="btn btn-primary" type="submit">Send My Project Form</button>
+        <p style="font-size:.85rem;color:var(--muted);margin-top:14px;">We'll reply within 3 business days. Hosting &amp; domains not included.</p>
+      </div>
+    </form>
+    <div class="form-success" id="projectSuccess">🌸 <strong>Thank you — your project form is in!</strong> We'll be in touch within 3 business days.</div>
+  </div>
+</section>
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  if (q.get('package')) {
+    var pkg = document.getElementById('package');
+    if (pkg) pkg.value = q.get('package');
+  }
+  if (q.get('template')) {
+    var tpl = document.getElementById('template');
+    if (tpl) tpl.value = q.get('template');
+  }
+  var form = document.getElementById('projectForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var data = new FormData(form);
+    var lines = [];
+    data.forEach(function(v,k){ if(v) lines.push(k + ': ' + v); });
+    var subject = encodeURIComponent('Bloomie House project form');
+    var body = encodeURIComponent(lines.join('\n'));
+    window.location.href = 'mailto:hello@bloomiehouse.com.au?subject=' + subject + '&body=' + body;
+    document.getElementById('projectSuccess').classList.add('show');
+    form.reset();
+  });
+})();
+</script>`;
+  return layout(
+    'Start a Project — Bloomie House',
+    'Fill in the Bloomie House project form for template customisation or bespoke website design.',
+    '/start-a-project',
+    body,
+    'services'
+  );
+}
+
+function oneDayWebsitePage() {
+  const body = `
+<section class="page-hero">
+  <p class="script" style="font-size:1.6rem;">everything done for you —</p>
+  <h1>Your website, live in <em>1 day</em></h1>
+  <p>Love a Bloomie House template but no time to DIY? We customise and launch your website in just one business day.</p>
+  <div style="margin-top:1.5rem;display:flex;gap:.75rem;flex-wrap:wrap;">
+    <a class="btn btn-primary" href="/start-a-project?package=custom">I'm Ready To Launch</a>
+    <a class="btn btn-outline" href="/services">See The Pricing</a>
+  </div>
+</section>
+<section class="section">
+  <div class="section-center">
+    <p class="section-label" style="color:var(--pink-deep);">Is this you?</p>
+    <h2 class="section-title">Who this is <em>perfect</em> for</h2>
+  </div>
+  <div class="pricing-grid">
+    <article class="price-card"><h3>You need a polished website — fast</h3><p>You're ready to look more professional online, without spending weeks building it yourself.</p></article>
+    <article class="price-card"><h3>You want to sell or take bookings</h3><p>Products, kits, courses or appointments — sold from your site, not your DMs.</p></article>
+    <article class="price-card"><h3>You want to elevate your brand</h3><p>Your work is high-quality, but your online presence doesn't match it yet.</p></article>
+  </div>
+</section>
+<section class="section">
+  <div class="cta-band">
+    <span class="script">ready when you are —</span>
+    <h2>Let's launch your website tomorrow</h2>
+    <p>Fill in the project form, tell us which template you love, and we'll get your website live within one business day.</p>
+    <a class="btn btn-pink" href="/start-a-project?package=custom">Start My 1-Day Website</a>
+  </div>
+</section>`;
+  return layout(
+    'Website in 1 Day — Bloomie House',
+    'We customise and launch your Bloomie House template in one business day.',
+    '/one-day-website',
+    body,
+    'services'
+  );
+}
+
+function blogPage() {
+  const posts = [
+    { href: '/blog/build-a-website-with-claude-ai', cover: '🤖', bg: 'var(--sage-soft)', meta: 'AI · Tutorial', title: 'How to Build a Website with Claude AI', excerpt: 'Plan, write and build a small business website — even with zero code experience.' },
+    { href: '/blog/ai-tools-for-lash-artists', cover: '🌸', bg: 'var(--pink-soft)', meta: 'Beauty · AI Tips', title: '7 Ways Lash Artists Can Use AI to Get More Bookings', excerpt: 'From caption writing to aftercare automation — practical AI workflows.' },
+    { href: '/blog/template-vs-custom-website', cover: '🌿', bg: 'var(--sage-soft)', meta: 'Guides', title: 'Template vs Custom Website', excerpt: 'An honest breakdown of cost, speed and results for small businesses.' },
+  ].map((p) => `
+    <a class="blog-card" href="${p.href}">
+      <div class="cover" style="background:${p.bg};">${p.cover}</div>
+      <div class="body">
+        <div class="meta">${p.meta}</div>
+        <h3>${p.title}</h3>
+        <p>${p.excerpt}</p>
+      </div>
+    </a>`).join('');
+  const body = `
+<section class="page-hero">
+  <p class="script" style="font-size:1.6rem;">the bloomie blog —</p>
+  <h1>Learn, launch &amp; <em>grow</em></h1>
+  <p>Practical guides on building websites, growing your beauty business and getting more out of your templates.</p>
+</section>
+<section class="section" style="padding-top:1rem;">
+  <div class="blog-grid">${posts}</div>
+</section>`;
+  return layout('Blog — Bloomie House', 'Website tips, AI workflows and small business guides from Bloomie House.', '/blog', body, 'blog');
+}
+
+function blogArticlePage(slug) {
+  const articles = {
+    'build-a-website-with-claude-ai': {
+      meta: 'AI · Tutorial · 12 min read',
+      title: 'How to Build a Website with Claude AI (Beginner Guide)',
+      html: `<p>AI can help you plan structure, draft copy and even generate layout ideas for a small business site. Start with your offer, audience and one clear call-to-action — then let Claude help you turn that brief into pages.</p>
+      <h2>1. Write a clear brief</h2>
+      <p>Tell the AI who you serve, what you sell, and what action you want visitors to take (book, buy, enquire).</p>
+      <h2>2. Outline pages</h2>
+      <p>Ask for a homepage, services, about and contact outline with section-by-section goals.</p>
+      <h2>3. Draft conversion copy</h2>
+      <p>Generate headlines and body text, then edit in your voice. Pretty words still need your expertise.</p>
+      <div class="article-cta"><h3>Prefer a head start?</h3><p>Browse Bloomie House templates and customise one in a day.</p><a class="btn btn-primary btn-sm" href="/shop">Shop Templates</a></div>`,
+    },
+    'ai-tools-for-lash-artists': {
+      meta: 'Beauty · AI Tips · 8 min read',
+      title: '7 Ways Lash Artists Can Use AI to Get More Bookings',
+      html: `<p>You became a lash artist to do lashes — not to be a full-time copywriter and admin assistant. AI can handle the boring 80%.</p>
+      <h2>1. Captions on demand</h2>
+      <p>Feed a photo description and vibe, then save your favourite captions as templates.</p>
+      <h2>2. DM quick replies</h2>
+      <p>Draft polished answers to pricing, infills and aftercare questions once, then reuse them.</p>
+      <h2>3. Clear policies clients actually read</h2>
+      <p>Turn messy notes into a friendly-but-firm policies page that protects your calendar.</p>
+      <div class="article-cta"><h3>Want the website that converts?</h3><p>Explore beauty &amp; lash templates built for bookings.</p><a class="btn btn-primary btn-sm" href="/beauty">Browse Beauty Templates</a></div>`,
+    },
+    'template-vs-custom-website': {
+      meta: 'Guides · 6 min read',
+      title: 'Template vs Custom Website: What Your Small Business Actually Needs',
+      html: `<p>Templates win on speed and budget. Custom wins when your offer, brand or integrations are too specific for a ready-made layout.</p>
+      <h2>Choose a template when…</h2>
+      <p>You need to launch this week, your offer is clear, and you can work within a proven structure.</p>
+      <h2>Choose custom when…</h2>
+      <p>You're scaling, selling online at volume, or need unique flows that templates can't stretch into.</p>
+      <div class="article-cta"><h3>Still unsure?</h3><p>Start a project and we'll recommend the right path.</p><a class="btn btn-primary btn-sm" href="/start-a-project">Start a Project</a></div>`,
+    },
+  };
+  const a = articles[slug];
+  if (!a) return null;
+  const body = `
+<article class="article">
+  <div class="meta">${a.meta}</div>
+  <h1>${a.title}</h1>
+  ${a.html}
+</article>`;
+  return layout(`${a.title} — Bloomie House`, a.title, `/blog/${slug}`, body, 'blog');
 }
 
 function notFoundPage() {
