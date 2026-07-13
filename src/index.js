@@ -2416,29 +2416,52 @@ function homeStyles() {
 
 @media (max-width: 960px) {
   .page-home .home-hero {
-    grid-template-columns: 1fr;
-    min-height: 0;
-    gap: 1.75rem;
-    padding-top: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: 1.5rem;
+    min-height: calc(100vh - 6.5rem);
+    padding: 1.5rem 4vw 1.25rem;
+    align-items: center;
   }
   .page-home .home-whisper {
-    height: 420px;
-    min-height: 360px;
-    order: -1;
+    height: min(70vh, 560px);
+    min-height: 380px;
   }
+  .page-home .home-whisper-col:nth-child(3) { display: none; }
+  .page-home .home-whisper { grid-template-columns: 1fr 1fr; }
+  .page-home .home-brand { font-size: clamp(2rem, 5vw, 2.8rem); }
+  .page-home .home-hero h1 { font-size: clamp(1.15rem, 2.2vw, 1.45rem); }
   .page-home .home-proof { grid-template-columns: repeat(2, 1fr); }
   .page-home .home-steps,
   .page-home .home-features,
   .page-home .home-services-grid { grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 640px) {
-  .page-home .home-hero-copy { padding-bottom: 1rem; }
-  .page-home .home-whisper {
-    height: 320px;
-    min-height: 280px;
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 720px) {
+  .page-home .home-hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 1rem;
+    padding: 1.25rem 4vw 1rem;
   }
-  .page-home .home-whisper-col:nth-child(3) { display: none; }
+  .page-home .home-hero-points { gap: .55rem; }
+  .page-home .home-hero-points li { font-size: .88rem; }
+  .page-home .home-whisper {
+    height: min(62vh, 460px);
+    min-height: 320px;
+  }
+  .page-home .home-hero-social { gap: .55rem; }
+  .page-home .home-social-meta span { font-size: .78rem; }
+}
+@media (max-width: 560px) {
+  .page-home .home-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 1.25rem;
+  }
+  .page-home .home-hero-copy { padding-bottom: .5rem; }
+  .page-home .home-whisper {
+    height: 280px;
+    min-height: 240px;
+    order: -1;
+  }
   .page-home .home-proof { grid-template-columns: 1fr 1fr; gap: .75rem; }
   .page-home .home-steps,
   .page-home .home-features,
