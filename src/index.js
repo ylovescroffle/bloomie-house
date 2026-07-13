@@ -1799,38 +1799,6 @@ img.logo-img { outline: none; }
   box-shadow: none;
 }
 .footer-newsletter .btn:hover { background: var(--pink-soft); }
-.footer-brandmark {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 1.5rem 0 0.75rem;
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-.footer-brandmark .mark {
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(2.4rem, 8vw, 5.2rem);
-  color: rgba(126, 99, 99, 0.22);
-  letter-spacing: -.03em;
-  line-height: 1;
-}
-.footer-logo-strip {
-  max-width: 1180px;
-  margin: 0 auto 1.5rem;
-  background: #0E0E0E;
-  border-radius: 12px;
-  padding: 1.4rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-.footer-logo-strip img {
-  height: clamp(72px, 14vw, 110px);
-  width: auto;
-  outline: none;
-}
 .footer-bottom {
   max-width: 1180px; margin: 0 auto; padding-top: 1rem;
   display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
