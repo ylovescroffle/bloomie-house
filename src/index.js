@@ -976,6 +976,22 @@ export default {
       case '/':
         return htmlResponse(homePage());
 
+      case '/assets/site.css':
+        return new Response(baseStyles(), {
+          headers: {
+            'Content-Type': 'text/css;charset=UTF-8',
+            'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        });
+
+      case '/assets/site.js':
+        return new Response(layoutScript(), {
+          headers: {
+            'Content-Type': 'application/javascript;charset=UTF-8',
+            'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        });
+
       case '/shop':
       case '/templates':
       case '/digital-templates':
@@ -1858,11 +1874,22 @@ img.logo-img { outline: none; }
   background: #fff; border: 1px solid var(--border); border-radius: 14px;
   padding: .55rem; list-style: none; box-shadow: var(--shadow-lift);
   opacity: 0; pointer-events: none; transform: translateY(6px);
-  transition: opacity 160ms ease, transform 160ms ease; z-index: 40;
+  transition: opacity 160ms ease 100ms, transform 160ms ease 100ms; z-index: 40;
+}
+/* Invisible bridge so the pointer can travel from the trigger into the menu
+   without crossing a dead zone that closes the submenu. */
+.has-dropdown .dropdown::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14px;
+  height: 14px;
 }
 .has-dropdown:hover .dropdown,
 .has-dropdown:focus-within .dropdown {
   opacity: 1; pointer-events: auto; transform: translateY(0);
+  transition-delay: 0ms;
 }
 .has-dropdown .dropdown a {
   display: block; padding: .55rem .7rem; border-radius: 10px; font-size: .9rem;
@@ -2416,10 +2443,13 @@ function layoutScript() {
     if (el.dataset.marqueeInit) return;
     el.dataset.marqueeInit = '1';
     el.style.animation = 'none';
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var dir = reverse ? 1 : -1;
     var x = 0;
     var loop = 0;
     var paused = false;
+    var visible = true;
+    var raf = 0;
     function measure() { loop = el.scrollWidth / 2; }
     measure();
     window.addEventListener('resize', measure);
@@ -2427,7 +2457,7 @@ function layoutScript() {
     el.addEventListener('mouseleave', function(){ paused = false; });
     var last = performance.now();
     function frame(now) {
-      if (!paused) {
+      if (!paused && visible) {
         var dt = Math.min(0.05, (now - last) / 1000);
         x += dir * speedPxPerSec * dt;
         if (loop > 0) {
@@ -2437,9 +2467,25 @@ function layoutScript() {
         el.style.transform = 'translate3d(' + x + 'px,0,0)';
       }
       last = now;
-      requestAnimationFrame(frame);
+      raf = requestAnimationFrame(frame);
     }
-    requestAnimationFrame(frame);
+    if ('IntersectionObserver' in window) {
+      var host = el.closest('.announce-bar, .marquee-row, .testi-marquee') || el;
+      var mio = new IntersectionObserver(function(entries){
+        visible = !!(entries[0] && entries[0].isIntersecting);
+      }, { rootMargin: '80px 0px' });
+      mio.observe(host);
+    }
+    raf = requestAnimationFrame(frame);
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      } else if (!raf) {
+        last = performance.now();
+        raf = requestAnimationFrame(frame);
+      }
+    });
   }
   document.querySelectorAll('.marquee-inner').forEach(function(el) {
     var reverse = el.closest('.marquee-row') && el.closest('.marquee-row').classList.contains('reverse');
@@ -2563,8 +2609,9 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   <link rel="icon" type="image/png" href="${LOGO}">
   <link rel="apple-touch-icon" href="${LOGO}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=Outfit:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-  <style>${baseStyles()}</style>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,400&family=Outfit:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
   ${announceMarqueeHtml(TOP_ANNOUNCE_SEGMENTS, 'fast')}
@@ -2572,7 +2619,7 @@ function layout(title, description, canonical, bodyHtml, active = '', cartCatalo
   ${bodyHtml}
   ${siteFooter()}
   <div class="toast" id="toast" role="status"></div>
-  <script>${layoutScript()}</script>
+  <script src="/assets/site.js"></script>
   <script>${cartScript(cartCatalogJson)}</script>
 </body>
 </html>`;
@@ -2585,7 +2632,7 @@ function siteNav(active) {
   return `
 <nav class="site-nav" id="siteNav" aria-label="Primary">
   <a class="nav-logo logo-only" href="/" aria-label="Bloomie House home">
-    <img class="logo-img nav-wordmark" src="${LOGO_WORDMARK}" alt="Bloomie House">
+    <img class="logo-img nav-wordmark" src="${LOGO_WORDMARK}" alt="Bloomie House" width="180" height="48" decoding="async">
   </a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
   <ul class="nav-links" id="navLinks">
@@ -2664,7 +2711,7 @@ function siteFooter() {
 
 function productCard(t) {
   const thumb = t.images?.[0]
-    ? glassyImage(`<img src="${t.images[0]}" alt="${t.name}">`)
+    ? glassyImage(`<img src="${t.images[0]}" alt="${t.name}" loading="lazy" decoding="async" width="640" height="480">`)
     : `<div class="product-thumb-label">${t.name}</div>`;
   return `
 <a class="product-card" href="/templates/${t.slug}" data-platform="${t.category}" data-collection="${t.collection || 'others'}">
@@ -2743,9 +2790,10 @@ function testiMarqueeRow(pills, reverse = false) {
 
 function homePage() {
   const sliderCards = templateData.map(productCard).join('');
-  const collageImgs = templateData.slice(0, 4).map((t) => {
+  const collageImgs = templateData.slice(0, 4).map((t, i) => {
     const srcImg = t.images?.[0] || LOGO;
-    return `<div class="c-img reveal"><img src="${srcImg}" alt="${t.name}"></div>`;
+    const lazy = i === 0 ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"';
+    return `<div class="c-img reveal"><img src="${srcImg}" alt="${t.name}" ${lazy}></div>`;
   }).join('');
   const body = `
 <section class="page-hero page-hero-enter" style="min-height:72vh;display:flex;flex-direction:column;justify-content:center;">
@@ -2828,19 +2876,19 @@ function homePage() {
   </div>
   <div class="svc-cards">
     <article class="svc-card reveal">
-      <div class="pic"><img src="${templateData[0]?.images?.[0] || LOGO}" alt="Template shop preview"></div>
+      <div class="pic"><img src="${templateData[0]?.images?.[0] || LOGO}" alt="Template shop preview" loading="lazy" decoding="async"></div>
       <h3>Template Shop</h3>
       <p>Take control of your design and go live directly. 100% customisable, easy-to-use, high-converting templates for Canva, Wix &amp; Shopify — made to help you stand out and sell.</p>
       <a class="svc-link" href="/shop">Shop Now →</a>
     </article>
     <article class="svc-card reveal">
-      <div class="pic"><img src="${templateData[2]?.images?.[0] || LOGO}" alt="One day website preview"></div>
+      <div class="pic"><img src="${templateData[2]?.images?.[0] || LOGO}" alt="One day website preview" loading="lazy" decoding="async"></div>
       <h3>Get It Ready in 1 Day</h3>
       <p>Don't have the time or energy to DIY your website, but love one of our templates? We take care of everything for you — content, colours, setup — in just one business day.</p>
       <a class="svc-link" href="/one-day-website">Give Me The Price →</a>
     </article>
     <article class="svc-card reveal">
-      <div class="pic"><img src="${templateData[1]?.images?.[0] || LOGO}" alt="Bespoke website preview"></div>
+      <div class="pic"><img src="${templateData[1]?.images?.[0] || LOGO}" alt="Bespoke website preview" loading="lazy" decoding="async"></div>
       <h3>Bespoke Websites</h3>
       <p>A premium custom design &amp; build experience for ambitious businesses that have outgrown templates — booking systems, e-commerce and integrations, priced on scope.</p>
       <a class="svc-link" href="${JOTFORM_DISCOVERY}" target="_blank" rel="noopener">Request a Quote →</a>

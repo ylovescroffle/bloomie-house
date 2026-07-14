@@ -207,18 +207,26 @@ export async function dashboardStats(env) {
 }
 
 /** Seed catalog products from the static templateData once. */
+let collectionsSynced = false;
+
 export async function ensureProductSeed(env, templateData) {
   if (!env.DB || !templateData?.length) return;
   const count = await env.DB.prepare(`SELECT COUNT(*) AS c FROM products`).first();
-  if (count && count.c > 0) return;
+  if (count && count.c > 0) {
+    if (!collectionsSynced) {
+      await syncProductCollections(env, templateData);
+      collectionsSynced = true;
+    }
+    return;
+  }
 
   let order = 0;
   for (const t of templateData) {
     await env.DB.prepare(
       `INSERT INTO products (
-        slug, name, niche, platform, category, badge, price, original_price,
+        slug, name, niche, platform, category, collection, badge, price, original_price,
         description, features_json, images_json, published, sort_order
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`
     )
       .bind(
         t.slug,
@@ -226,6 +234,7 @@ export async function ensureProductSeed(env, templateData) {
         t.niche || '',
         t.platform || '',
         t.category || 'canva',
+        t.collection || 'others',
         t.badge || '',
         t.price || 0,
         t.originalPrice ?? null,
@@ -236,4 +245,21 @@ export async function ensureProductSeed(env, templateData) {
       )
       .run();
   }
+  collectionsSynced = true;
+}
+
+/** One-time-ish backfill of collection for seeded products. */
+async function syncProductCollections(env, templateData) {
+  const stmts = [];
+  for (const t of templateData) {
+    if (!t.slug || !t.collection) continue;
+    stmts.push(
+      env.DB.prepare(
+        `UPDATE products SET collection = ?
+         WHERE slug = ? AND (collection IS NULL OR collection = '' OR collection = 'others')
+           AND ? != 'others'`
+      ).bind(t.collection, t.slug, t.collection)
+    );
+  }
+  if (stmts.length) await env.DB.batch(stmts);
 }

@@ -25,6 +25,34 @@ export function redirect(location, headers = {}) {
   });
 }
 
+/**
+ * Read POST body as a FormData-like object.
+ * Accepts multipart, urlencoded, or JSON so APIs don't 500 on Content-Type mismatches.
+ */
+export async function readForm(request) {
+  const ct = (request.headers.get('Content-Type') || '').toLowerCase();
+  if (ct.includes('application/json')) {
+    let data = {};
+    try {
+      data = await request.json();
+    } catch {
+      data = {};
+    }
+    const map = data && typeof data === 'object' && !Array.isArray(data) ? data : {};
+    return {
+      get(key) {
+        const v = map[key];
+        return v == null ? null : v;
+      },
+    };
+  }
+  try {
+    return await request.formData();
+  } catch {
+    return { get() { return null; } };
+  }
+}
+
 export function parseCookies(request) {
   const header = request.headers.get('Cookie') || '';
   const out = {};
