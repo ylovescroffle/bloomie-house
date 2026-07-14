@@ -1428,6 +1428,24 @@ body {
 .announce-marquee-fast,
 .announce-marquee-slow {
   will-change: transform;
+  /* CSS animation = compositor thread; no JS rAF tax */
+  animation: marqueeScroll linear infinite;
+}
+.announce-marquee-fast { animation-duration: 38s; }
+.announce-marquee-slow { animation-duration: 52s; }
+.announce-bar:hover .announce-marquee-track { animation-play-state: paused; }
+.announce-marquee-track.is-offscreen { animation-play-state: paused; }
+@keyframes marqueeScroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .announce-marquee-fast,
+  .announce-marquee-slow,
+  .marquee-inner,
+  .testi-marquee-track {
+    animation: none !important;
+  }
 }
 .home-funnel {
   background: linear-gradient(165deg, var(--cream) 0%, var(--white) 55%, rgba(200,213,176,.18) 100%);
@@ -2188,7 +2206,11 @@ img.logo-img { outline: none; }
 .marquee-inner {
   display: flex; width: max-content; gap: 0;
   will-change: transform;
+  animation: marqueeScroll 42s linear infinite;
 }
+.marquee-row.reverse .marquee-inner { animation-direction: reverse; animation-duration: 48s; }
+.marquee-row:hover .marquee-inner { animation-play-state: paused; }
+.marquee-inner.is-offscreen { animation-play-state: paused; }
 .marquee-track {
   display: flex; flex-wrap: nowrap; gap: .85rem; flex-shrink: 0;
 }
@@ -2416,11 +2438,12 @@ function layoutScript() {
   onScroll();
 
   var canHover = window.matchMedia('(hover: hover)').matches;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('.glassy-3d').forEach(function(el){
     var inner = el.querySelector('.glassy-3d-inner');
     if(!inner) return;
-    if(!canHover){
-      inner.classList.add('is-idle');
+    if(!canHover || reduceMotion){
+      if (!reduceMotion) inner.classList.add('is-idle');
       return;
     }
     el.addEventListener('mousemove', function(e){
@@ -2439,62 +2462,21 @@ function layoutScript() {
     inner.classList.add('is-idle');
   });
 
-  function driveMarquee(el, speedPxPerSec, reverse) {
-    if (el.dataset.marqueeInit) return;
-    el.dataset.marqueeInit = '1';
-    el.style.animation = 'none';
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var dir = reverse ? 1 : -1;
-    var x = 0;
-    var loop = 0;
-    var paused = false;
-    var visible = true;
-    var raf = 0;
-    function measure() { loop = el.scrollWidth / 2; }
-    measure();
-    window.addEventListener('resize', measure);
-    el.addEventListener('mouseenter', function(){ paused = true; });
-    el.addEventListener('mouseleave', function(){ paused = false; });
-    var last = performance.now();
-    function frame(now) {
-      if (!paused && visible) {
-        var dt = Math.min(0.05, (now - last) / 1000);
-        x += dir * speedPxPerSec * dt;
-        if (loop > 0) {
-          while (x <= -loop) x += loop;
-          while (x >= 0) x -= loop;
-        }
-        el.style.transform = 'translate3d(' + x + 'px,0,0)';
-      }
-      last = now;
-      raf = requestAnimationFrame(frame);
-    }
-    if ('IntersectionObserver' in window) {
-      var host = el.closest('.announce-bar, .marquee-row, .testi-marquee') || el;
-      var mio = new IntersectionObserver(function(entries){
-        visible = !!(entries[0] && entries[0].isIntersecting);
-      }, { rootMargin: '80px 0px' });
-      mio.observe(host);
-    }
-    raf = requestAnimationFrame(frame);
+  /* Pause CSS marquees when off-screen / tab hidden — keeps motion without main-thread cost */
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var marquees = document.querySelectorAll('.announce-marquee-track, .marquee-inner, .testi-marquee-track');
+    var mio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        en.target.classList.toggle('is-offscreen', !en.isIntersecting);
+      });
+    }, { rootMargin: '100px 0px' });
+    marquees.forEach(function(el){ mio.observe(el); });
     document.addEventListener('visibilitychange', function(){
-      if (document.hidden) {
-        cancelAnimationFrame(raf);
-        raf = 0;
-      } else if (!raf) {
-        last = performance.now();
-        raf = requestAnimationFrame(frame);
-      }
+      marquees.forEach(function(el){
+        el.style.animationPlayState = document.hidden ? 'paused' : '';
+      });
     });
   }
-  document.querySelectorAll('.marquee-inner').forEach(function(el) {
-    var reverse = el.closest('.marquee-row') && el.closest('.marquee-row').classList.contains('reverse');
-    driveMarquee(el, reverse ? 42 : 50, !!reverse);
-  });
-  document.querySelectorAll('.announce-marquee-track').forEach(function(el) {
-    var slow = el.classList.contains('announce-marquee-slow');
-    driveMarquee(el, slow ? 32 : 58, false);
-  });
 
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries){
@@ -3295,6 +3277,7 @@ function productPage(t) {
     display:flex; gap:1rem; width:max-content;
     animation:testiMarquee 55s ease-in-out infinite alternate;
   }
+  .testi-marquee-track.is-offscreen { animation-play-state: paused; }
   @keyframes testiMarquee {
     from { transform:translateX(0); }
     to { transform:translateX(-50%); }
