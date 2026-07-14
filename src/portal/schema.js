@@ -76,9 +76,6 @@ export async function ensureSchema(env) {
     env.DB.prepare(
       `CREATE INDEX IF NOT EXISTS idx_products_published ON products(published)`
     ),
-    env.DB.prepare(
-      `CREATE INDEX IF NOT EXISTS idx_products_collection ON products(collection)`
-    ),
     env.DB.prepare(`
       CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -169,7 +166,8 @@ export async function ensureSchema(env) {
     `),
   ]);
 
-  // Backfill collection for DBs created before migration 0002.
+  // Existing production DBs were created before migration 0002 — add the column
+  // before creating any index that references it (CREATE TABLE IF NOT EXISTS is a no-op).
   const cols = await env.DB.prepare(`PRAGMA table_info(products)`).all();
   const hasCollection = (cols.results || []).some((c) => c.name === 'collection');
   if (!hasCollection) {
@@ -177,6 +175,9 @@ export async function ensureSchema(env) {
       `ALTER TABLE products ADD COLUMN collection TEXT NOT NULL DEFAULT 'others'`
     ).run();
   }
+  await env.DB.prepare(
+    `CREATE INDEX IF NOT EXISTS idx_products_collection ON products(collection)`
+  ).run();
 
   schemaReady = true;
 }
