@@ -1,9 +1,12 @@
 /**
  * Ensure portal schema exists (idempotent). Used when migrations were not
  * applied yet on a fresh D1 binding / local SQLite file.
+ * Cached per isolate so portal pages don't re-run CREATE on every request.
  */
+let schemaReady = false;
+
 export async function ensureSchema(env) {
-  if (!env.DB) return;
+  if (!env.DB || schemaReady) return;
   await env.DB.batch([
     env.DB.prepare(`
       CREATE TABLE IF NOT EXISTS users (
@@ -56,6 +59,7 @@ export async function ensureSchema(env) {
         niche TEXT NOT NULL DEFAULT '',
         platform TEXT NOT NULL DEFAULT '',
         category TEXT NOT NULL DEFAULT 'canva',
+        collection TEXT NOT NULL DEFAULT 'others',
         badge TEXT NOT NULL DEFAULT '',
         price REAL NOT NULL DEFAULT 0,
         original_price REAL,
@@ -71,6 +75,9 @@ export async function ensureSchema(env) {
     `),
     env.DB.prepare(
       `CREATE INDEX IF NOT EXISTS idx_products_published ON products(published)`
+    ),
+    env.DB.prepare(
+      `CREATE INDEX IF NOT EXISTS idx_products_collection ON products(collection)`
     ),
     env.DB.prepare(`
       CREATE TABLE IF NOT EXISTS orders (
@@ -161,4 +168,15 @@ export async function ensureSchema(env) {
       )
     `),
   ]);
+
+  // Backfill collection for DBs created before migration 0002.
+  const cols = await env.DB.prepare(`PRAGMA table_info(products)`).all();
+  const hasCollection = (cols.results || []).some((c) => c.name === 'collection');
+  if (!hasCollection) {
+    await env.DB.prepare(
+      `ALTER TABLE products ADD COLUMN collection TEXT NOT NULL DEFAULT 'others'`
+    ).run();
+  }
+
+  schemaReady = true;
 }

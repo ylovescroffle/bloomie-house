@@ -2,7 +2,7 @@
  * Staff CMS — products, orders, downloads, guidelines, members, requests.
  */
 
-import { json, redirect } from './auth.js';
+import { json, readForm, redirect } from './auth.js';
 import {
   dashboardStats,
   escapeHtml,
@@ -30,6 +30,11 @@ const ADMIN_NAV = [
 
 const PLATFORM_PRESETS = ['Canva', 'Wix Studio', 'Shopify', 'Squarespace', 'WordPress'];
 const CATEGORY_PRESETS = ['canva', 'wix', 'shopify'];
+const COLLECTION_PRESETS = [
+  ['beauty', 'Beauty · Lash & Brow'],
+  ['wedding', 'Wedding'],
+  ['others', 'Others'],
+];
 
 function adminPage(user, active, title, body, flash, flashError) {
   return htmlResponse(
@@ -103,7 +108,7 @@ export async function adminProducts(env, user, flash, flashError) {
             (p) => `<tr>
           <td>
             <strong>${escapeHtml(p.name)}</strong>
-            <p class="muted">${escapeHtml(p.slug)} · ${escapeHtml(p.platform || p.category)}</p>
+            <p class="muted">${escapeHtml(p.slug)} · ${escapeHtml(p.platform || p.category)} · ${escapeHtml(p.collection || 'others')}</p>
           </td>
           <td>${money(p.price)}</td>
           <td><span class="badge ${p.published ? 'badge-completed' : 'badge-closed'}">${p.published ? 'published' : 'draft'}</span></td>
@@ -254,6 +259,7 @@ function productForm(product = null) {
     niche: '',
     platform: '',
     category: 'canva',
+    collection: 'others',
     badge: '',
     price: 0,
     original_price: '',
@@ -267,6 +273,7 @@ function productForm(product = null) {
   const featuresText = (p.features || []).join('\n');
   const platformFields = platformFieldValues(p.platform);
   const categoryFields = categoryFieldValues(p.category);
+  const collection = p.collection || 'others';
   return `
 <form class="form-grid" method="POST" action="${product ? `/api/admin/products/${product.id}` : '/api/admin/products'}">
   <div class="form-row two">
@@ -310,8 +317,23 @@ function productForm(product = null) {
       <input class="field-other" id="category_custom" name="category_custom" value="${escapeHtml(categoryFields.custom)}" placeholder="Custom category" style="${categoryFields.select === 'other' ? '' : 'display:none'}">
     </div>
     <div class="form-row">
+      <label for="collection">Shop collection</label>
+      <select id="collection" name="collection">
+        ${COLLECTION_PRESETS.map(
+          ([value, label]) =>
+            `<option value="${value}" ${collection === value ? 'selected' : ''}>${escapeHtml(label)}</option>`
+        ).join('')}
+      </select>
+    </div>
+  </div>
+  <div class="form-row two">
+    <div class="form-row">
       <label for="badge">Badge</label>
       <input id="badge" name="badge" value="${escapeHtml(p.badge || '')}" placeholder="New, Bestseller…">
+    </div>
+    <div class="form-row">
+      <label for="sort_order">Sort order</label>
+      <input id="sort_order" name="sort_order" type="number" value="${escapeHtml(p.sort_order || 0)}">
     </div>
   </div>
   <div class="form-row two">
@@ -337,24 +359,25 @@ function productForm(product = null) {
     <label for="video_url">Video URL</label>
     <input id="video_url" name="video_url" value="${escapeHtml(p.video_url || '')}" placeholder="https://…">
   </div>
-  <div class="form-row two">
-    <div class="form-row">
-      <label for="sort_order">Sort order</label>
-      <input id="sort_order" name="sort_order" type="number" value="${escapeHtml(p.sort_order || 0)}">
-    </div>
-    <div class="form-row">
-      <label for="published">Visibility</label>
-      <select id="published" name="published">
-        <option value="1" ${p.published ? 'selected' : ''}>Published</option>
-        <option value="0" ${!p.published ? 'selected' : ''}>Draft</option>
-      </select>
-    </div>
+  <div class="form-row">
+    <label for="published">Visibility</label>
+    <select id="published" name="published">
+      <option value="1" ${p.published ? 'selected' : ''}>Published</option>
+      <option value="0" ${!p.published ? 'selected' : ''}>Draft</option>
+    </select>
   </div>
   <div class="actions">
     <button class="btn btn-pink" type="submit">${product ? 'Save product' : 'Create product'}</button>
     <a class="btn btn-ghost" href="/admin/products">Cancel</a>
   </div>
 </form>
+${
+  product
+    ? `<form method="POST" action="/api/admin/products/${product.id}/delete" onsubmit="return confirm('Delete this product? Orders keep the product name, but the catalog entry is removed.');" style="margin-top:1rem">
+  <button class="btn btn-ghost btn-sm" type="submit" style="color:#a33">Delete product</button>
+</form>`
+    : ''
+}
 <script>
 (function(){
   function toggleOther(selectId, inputId, otherValue) {
@@ -744,13 +767,19 @@ function slugify(text) {
     .slice(0, 80);
 }
 
+function resolveCollection(form) {
+  const value = String(form.get('collection') || 'others').trim();
+  if (COLLECTION_PRESETS.some(([v]) => v === value)) return value;
+  return 'others';
+}
+
 export async function handleAdminApi(request, env, user, pathname) {
   if (pathname === '/api/admin/upload-image' && request.method === 'POST') {
     return handleProductImageUpload(request, env);
   }
 
   if (pathname === '/api/admin/profile' && request.method === 'POST') {
-    const form = await request.formData();
+    const form = await readForm(request);
     const name = String(form.get('name') || '').trim();
     const phone = String(form.get('phone') || '').trim();
     if (!name) {
@@ -766,7 +795,7 @@ export async function handleAdminApi(request, env, user, pathname) {
 
   // Create product
   if (pathname === '/api/admin/products' && request.method === 'POST') {
-    const form = await request.formData();
+    const form = await readForm(request);
     const name = String(form.get('name') || '').trim();
     let slug = String(form.get('slug') || '').trim() || slugify(name);
     const features = linesToArray(form.get('features'));
@@ -775,9 +804,9 @@ export async function handleAdminApi(request, env, user, pathname) {
     try {
       await env.DB.prepare(
         `INSERT INTO products (
-          slug, name, niche, platform, category, badge, price, original_price,
+          slug, name, niche, platform, category, collection, badge, price, original_price,
           description, features_json, images_json, video_url, published, sort_order
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
         .bind(
           slug,
@@ -785,6 +814,7 @@ export async function handleAdminApi(request, env, user, pathname) {
           String(form.get('niche') || '').trim(),
           resolvePlatform(form),
           resolveCategory(form),
+          resolveCollection(form),
           String(form.get('badge') || '').trim(),
           Number(form.get('price') || 0),
           original === '' || original == null ? null : Number(original),
@@ -805,16 +835,23 @@ export async function handleAdminApi(request, env, user, pathname) {
     return redirect('/admin/products?ok=' + encodeURIComponent('Product created.'));
   }
 
+  const productDelete = pathname.match(/^\/api\/admin\/products\/(\d+)\/delete$/);
+  if (productDelete && request.method === 'POST') {
+    const id = Number(productDelete[1]);
+    await env.DB.prepare(`DELETE FROM products WHERE id = ?`).bind(id).run();
+    return redirect('/admin/products?ok=' + encodeURIComponent('Product deleted.'));
+  }
+
   const productMatch = pathname.match(/^\/api\/admin\/products\/(\d+)$/);
   if (productMatch && request.method === 'POST') {
     const id = Number(productMatch[1]);
-    const form = await request.formData();
+    const form = await readForm(request);
     const features = linesToArray(form.get('features'));
     const images = linesToArray(form.get('images'));
     const original = form.get('original_price');
     await env.DB.prepare(
       `UPDATE products SET
-        slug = ?, name = ?, niche = ?, platform = ?, category = ?, badge = ?,
+        slug = ?, name = ?, niche = ?, platform = ?, category = ?, collection = ?, badge = ?,
         price = ?, original_price = ?, description = ?, features_json = ?,
         images_json = ?, video_url = ?, published = ?, sort_order = ?,
         updated_at = datetime('now')
@@ -826,6 +863,7 @@ export async function handleAdminApi(request, env, user, pathname) {
         String(form.get('niche') || '').trim(),
         resolvePlatform(form),
         resolveCategory(form),
+        resolveCollection(form),
         String(form.get('badge') || '').trim(),
         Number(form.get('price') || 0),
         original === '' || original == null ? null : Number(original),
@@ -846,7 +884,7 @@ export async function handleAdminApi(request, env, user, pathname) {
   // Create order
   if (pathname === '/api/admin/orders' && request.method === 'POST') {
     const { findOrCreateMember } = await import('./auth.js');
-    const form = await request.formData();
+    const form = await readForm(request);
     const email = String(form.get('email') || '')
       .trim()
       .toLowerCase();
@@ -893,7 +931,7 @@ export async function handleAdminApi(request, env, user, pathname) {
   const orderMatch = pathname.match(/^\/api\/admin\/orders\/(\d+)$/);
   if (orderMatch && request.method === 'POST') {
     const id = Number(orderMatch[1]);
-    const form = await request.formData();
+    const form = await readForm(request);
     await env.DB.prepare(
       `UPDATE orders SET status = ?, total = ?, notes = ?, updated_at = datetime('now') WHERE id = ?`
     )
@@ -910,7 +948,7 @@ export async function handleAdminApi(request, env, user, pathname) {
   const dlAdd = pathname.match(/^\/api\/admin\/orders\/(\d+)\/downloads$/);
   if (dlAdd && request.method === 'POST') {
     const orderId = Number(dlAdd[1]);
-    const form = await request.formData();
+    const form = await readForm(request);
     await env.DB.prepare(
       `INSERT INTO downloads (order_id, title, file_url) VALUES (?, ?, ?)`
     )
@@ -926,7 +964,7 @@ export async function handleAdminApi(request, env, user, pathname) {
   const gAdd = pathname.match(/^\/api\/admin\/orders\/(\d+)\/guidelines$/);
   if (gAdd && request.method === 'POST') {
     const orderId = Number(gAdd[1]);
-    const form = await request.formData();
+    const form = await readForm(request);
     await env.DB.prepare(
       `INSERT INTO guidelines (order_id, title, body, file_url) VALUES (?, ?, ?, ?)`
     )
@@ -967,7 +1005,7 @@ export async function handleAdminApi(request, env, user, pathname) {
   const reqMatch = pathname.match(/^\/api\/admin\/requests\/(\d+)$/);
   if (reqMatch && request.method === 'POST') {
     const id = Number(reqMatch[1]);
-    const form = await request.formData();
+    const form = await readForm(request);
     await env.DB.prepare(
       `UPDATE template_requests SET status = ?, updated_at = datetime('now') WHERE id = ?`
     )

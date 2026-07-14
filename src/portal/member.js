@@ -8,6 +8,7 @@ import {
   findOrCreateMember,
   isSecureRequest,
   json,
+  readForm,
   redirect,
   sendMagicLinkEmail,
   sessionCookieHeader,
@@ -102,7 +103,7 @@ export function loginPage({ flash, flashError, mode = 'member', magicLink } = {}
 
 export async function handleAuthApi(request, env, pathname) {
   if (pathname === '/api/auth/magic-link' && request.method === 'POST') {
-    const form = await request.formData();
+    const form = await readForm(request);
     const email = String(form.get('email') || '')
       .trim()
       .toLowerCase();
@@ -132,7 +133,7 @@ export async function handleAuthApi(request, env, pathname) {
   }
 
   if (pathname === '/api/auth/staff-login' && request.method === 'POST') {
-    const form = await request.formData();
+    const form = await readForm(request);
     const email = String(form.get('email') || '')
       .trim()
       .toLowerCase();
@@ -599,7 +600,7 @@ export function memberSupport(user) {
 
 export async function handleMemberApi(request, env, user, pathname) {
   if (pathname === '/api/member/profile' && request.method === 'POST') {
-    const form = await request.formData();
+    const form = await readForm(request);
     const name = String(form.get('name') || '').trim();
     const phone = String(form.get('phone') || '').trim();
     const business_name = String(form.get('business_name') || '').trim();
@@ -612,7 +613,7 @@ export async function handleMemberApi(request, env, user, pathname) {
   }
 
   if (pathname === '/api/member/requests' && request.method === 'POST') {
-    const form = await request.formData();
+    const form = await readForm(request);
     const title = String(form.get('title') || '').trim();
     const description = String(form.get('description') || '').trim();
     const niche = String(form.get('niche') || '').trim();
