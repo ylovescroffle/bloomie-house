@@ -312,7 +312,7 @@ export async function memberInvoiceDetail(env, user, orderId) {
   <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem">
     <div>
       <p class="muted" style="margin-bottom:.25rem">Bloomie House</p>
-      <h1 style="font-family:Fraunces,serif;font-size:1.65rem;margin:0">Tax invoice</h1>
+      <h1 style="font-family:var(--font-family-heading);font-size:1.65rem;margin:0">Tax invoice</h1>
       <p class="muted" style="margin-top:.35rem">${escapeHtml(order.order_number)}</p>
     </div>
     <div style="text-align:right">
