@@ -10,18 +10,21 @@ const LOGO =
 export function portalStyles() {
   return `
 :root {
-  --black: #111; --charcoal: #2a2a2a; --muted: #666;
-  --cream: #FAFAF8; --pink: #D67D9A; --sage: #C8D5B0;
-  --border: rgba(0,0,0,0.08); --white: #fff;
-  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+  /* Matcha theme */
+  --black: #3E481D; --charcoal: #3E481D; --muted: #707E46;
+  --cream: #F0F0E0; --pink: #3E481D; --sage: #C0CBA9;
+  --border: #DCE3CE; --white: #fff;
+  --font-family-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-family-heading: "Playwrite US Trad", Georgia, "Times New Roman", Times, serif;
+  --shadow: 0 2px 4px #3E481D0D, 0 4px 12px #3E481D1A;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { overflow-x: hidden; }
 body {
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: var(--font-family-body);
   background:
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(214,125,154,.12), transparent 55%),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(200,213,176,.18), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(192,203,169,.35), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(112,126,70,.12), transparent 50%),
     var(--cream);
   color: var(--black); min-height: 100vh; line-height: 1.5;
   overflow-x: hidden;
@@ -113,7 +116,7 @@ a:hover { text-decoration: underline; }
 .portal-side a:hover, .portal-side a.active { background: #fff; color: var(--black); box-shadow: var(--shadow); text-decoration: none; }
 .portal-main { padding: 1.75rem 4vw 3rem; max-width: 1100px; min-width: 0; width: 100%; }
 .portal-main h1 {
-  font-family: Fraunces, Georgia, serif; font-size: clamp(1.75rem, 3vw, 2.35rem);
+  font-family: var(--font-family-heading); font-size: clamp(1.75rem, 3vw, 2.35rem);
   font-weight: 900; margin-bottom: .35rem; text-wrap: balance;
 }
 .portal-main .lead { color: var(--muted); margin-bottom: 1.5rem; max-width: 40rem; }
@@ -129,7 +132,7 @@ a.stat-card {
   transition: transform 150ms ease, box-shadow 150ms ease;
 }
 a.stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.1); text-decoration: none; }
-.stat-card strong { display: block; font-family: Fraunces, serif; font-size: 1.75rem; margin-bottom: .15rem; }
+.stat-card strong { display: block; font-family: var(--font-family-heading); font-size: 1.75rem; margin-bottom: .15rem; }
 .stat-card span { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .image-preview-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: .65rem;
@@ -148,7 +151,7 @@ a.stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0
 .image-upload-panel .muted { margin-top: .5rem; font-size: .82rem; }
 .field-other { margin-top: .35rem; }
 .panel { margin-bottom: 1.25rem; }
-.panel h2 { font-family: Fraunces, serif; font-size: 1.25rem; margin-bottom: .85rem; }
+.panel h2 { font-family: var(--font-family-heading); font-size: 1.25rem; margin-bottom: .85rem; }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: .92rem; }
 th, td { text-align: left; padding: .7rem .5rem; border-bottom: 1px solid var(--border); vertical-align: top; }
@@ -193,7 +196,7 @@ textarea { min-height: 110px; resize: vertical; }
 .auth-card {
   background: #fff; border-radius: 20px; padding: 2rem 1.75rem; box-shadow: var(--shadow);
 }
-.auth-card h1 { font-family: Fraunces, serif; font-size: 1.85rem; margin-bottom: .35rem; }
+.auth-card h1 { font-family: var(--font-family-heading); font-size: 1.85rem; margin-bottom: .35rem; }
 .auth-card p.lead { color: var(--muted); margin-bottom: 1.25rem; font-size: .95rem; }
 .muted { color: var(--muted); font-size: .9rem; }
 .stack { display: grid; gap: .75rem; }
@@ -204,7 +207,7 @@ textarea { min-height: 110px; resize: vertical; }
 .list-item:last-child { border-bottom: none; }
 .empty { color: var(--muted); padding: 1rem 0; }
 .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
-.vote-count { font-family: Fraunces, serif; font-weight: 700; font-size: 1.15rem; }
+.vote-count { font-family: var(--font-family-heading); font-weight: 700; font-size: 1.15rem; }
 .invoice-doc { max-width: 48rem; }
 @media print {
   .portal-top, .portal-side, .no-print { display: none !important; }
@@ -239,7 +242,7 @@ export function portalLayout({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)} — Bloomie House</title>
   <link rel="icon" type="image/png" href="${LOGO}">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playwrite+US+Trad&display=swap" rel="stylesheet">
   <style>${portalStyles()}</style>
 </head>
 <body>
@@ -266,7 +269,7 @@ export function portalLayout({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)} — Bloomie House</title>
   <link rel="icon" type="image/png" href="${LOGO}">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playwrite+US+Trad&display=swap" rel="stylesheet">
   <style>${portalStyles()}</style>
 </head>
 <body>
